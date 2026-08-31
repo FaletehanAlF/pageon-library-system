@@ -1,28 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pageon</title>
+<?php
 
-    <link rel="stylesheet" href="assets/css/output.css">
-</head>
+$title = "Dashboard";
 
-<body class="min-h-screen bg-gray-100 flex items-center justify-center">
+require_once "views/layouts/header.php";
+?>
 
-    <div class="text-center">
-        <h1 class="text-5xl font-bold text-gray-900">
-            Pageon
-        </h1>
+<div class="flex min-h-screen">
 
-        <p class="mt-3 text-gray-500">
-            Library Management System
-        </p>
+    <?php require_once "views/layouts/sidebar.php"; ?>
 
-        <button class="mt-6 rounded-lg bg-black px-6 py-3 text-white hover:bg-gray-800">
-            Get Started
-        </button>
+    <div class="flex flex-1 flex-col">
+
+        <?php require_once "views/layouts/navbar.php"; ?>
+
+        <main class="flex-1 p-6">
+
+            <h2 class="text-2xl font-bold">
+                Dashboard
+            </h2>
+
+            <p class="mt-2 text-gray-500">
+                Welcome to Pageon.
+            </p>
+
+        </main>
+
     </div>
 
-</body>
-</html>
+</div>
+
+<?php require_once "views/layouts/footer.php"; ?>
