@@ -162,8 +162,55 @@ INSERT INTO settings (`key`, `value`) VALUES
 ('loan_days', '7'),
 ('fine_per_day', '1000'),
 ('max_loans', '3'),
-('max_renew', '1')
+('max_renew', '1'),
+('lost_book_fee', '50000')
 ON DUPLICATE KEY UPDATE `value` = `value`;
+
+-- ── Fine payments (kas denda) ─────────────────────────────────
+CREATE TABLE IF NOT EXISTS fine_payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    borrowing_id INT NULL,
+    user_id INT NOT NULL,
+    book_id INT NULL,
+    amount INT NOT NULL DEFAULT 0 CHECK (amount >= 0),
+    type ENUM('overdue','lost','damage') NOT NULL DEFAULT 'overdue',
+    status ENUM('unpaid','paid','waived') NOT NULL DEFAULT 'unpaid',
+    note VARCHAR(255) NULL,
+    created_by INT NULL,
+    paid_at TIMESTAMP NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_fine_borrowing FOREIGN KEY (borrowing_id) REFERENCES borrowings(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_fine_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_fine_book FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    INDEX idx_fine_user (user_id, status),
+    INDEX idx_fine_borrowing (borrowing_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ── Activity logs (audit admin) ───────────────────────────────
+CREATE TABLE IF NOT EXISTS activity_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NULL,
+    action VARCHAR(50) NOT NULL,
+    detail TEXT NULL,
+    ip VARCHAR(45) NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_log_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    INDEX idx_log_user (user_id),
+    INDEX idx_log_action (action),
+    INDEX idx_log_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ── Password resets (lupa password mandiri) ───────────────────
+CREATE TABLE IF NOT EXISTS password_resets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token_hash VARCHAR(255) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used_at DATETIME NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_reset_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    INDEX idx_reset_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
