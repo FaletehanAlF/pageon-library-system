@@ -26,12 +26,17 @@
         $icoUsers = '<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6-4a3 3 0 11-3-3"/></svg>';
         $icoBell = '<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>';
         $icoGear = '<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.3 4.3a1 1 0 011.4 0l1 1a1 1 0 001.4 0l.7-.7a1 1 0 011.4 0l1.5 1.5a1 1 0 010 1.4l-.7.7a1 1 0 000 1.4l1 1a1 1 0 010 1.4l-1 1a1 1 0 000 1.4l.7.7a1 1 0 010 1.4l-1.5 1.5a1 1 0 01-1.4 0l-.7-.7a1 1 0 00-1.4 0l-1 1a1 1 0 01-1.4 0l-1-1a1 1 0 00-1.4 0l-.7.7a1 1 0 01-1.4 0L4.7 17a1 1 0 010-1.4l.7-.7a1 1 0 000-1.4l-1-1a1 1 0 010-1.4l1-1a1 1 0 000-1.4l-.7-.7a1 1 0 010-1.4l1.5-1.5a1 1 0 011.4 0l.7.7a1 1 0 001.4 0l1-1z"/><circle cx="12" cy="12" r="3"/></svg>';
+        $icoCart = '<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6a1 1 0 00.9 1.4H19M9 22a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/></svg>';
+        $icoMoney = '<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-2.7 0-5 1.1-5 2.5S9.3 13 12 13s5 1.1 5 2.5S14.7 18 12 18m0-10V6m0 12v2m9-8a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+        $icoLog = '<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0zM4 4l3 3m13-3l-3 3"/></svg>';
 
         $link('/', 'dashboard', 'Dashboard', $icoHome);
         $link('/books', 'books', 'Buku', $icoBook);
+        $link('/cart', 'cart', 'Keranjang' . (cart_count() > 0 ? ' (' . cart_count() . ')' : ''), $icoCart);
         $link('/my-borrowings', 'my-borrowings', 'Peminjaman Saya', $icoBorrow);
         $link('/reservations', 'reservations', 'Reservasi', $icoClock);
         $link('/wishlist', 'wishlist', 'Wishlist', $icoHeart);
+        $link('/fines', 'fines', 'Denda', $icoMoney);
         $link('/notifications', 'notifications', 'Notifikasi', $icoBell);
         $icoHelp = '<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.3 10a3.7 3.7 0 017.3 0c0 2-2.7 2.4-2.7 4m-.3 3.5h.01M12 21a9 9 0 100-18 9 9 0 000 18z"/></svg>';
         $link('/bantuan', 'bantuan', 'Bantuan', $icoHelp);
@@ -46,8 +51,10 @@
         $link('/admin/reservations', 'reservations-manage', 'Kelola Reservasi', $icoClock);
         $link('/categories', 'categories', 'Kategori', $icoTag);
         $link('/reports', 'reports', 'Laporan', $icoChart);
+        $link('/fines', 'fines', 'Kas Denda', $icoMoney);
         $link('/users', 'users', 'Kelola User', $icoUsers);
         $link('/announcements', 'announcements', 'Pengumuman', $icoBell);
+        $link('/logs', 'logs', 'Log Aktivitas', $icoLog);
         $link('/settings', 'settings', 'Pengaturan', $icoGear);
         ?>
         <?php endif; ?>

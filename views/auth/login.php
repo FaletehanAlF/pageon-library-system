@@ -45,7 +45,10 @@
                 </div>
 
                 <div>
-                    <label for="password" class="mb-1.5 block text-sm font-medium text-gray-700">Password</label>
+                    <div class="mb-1.5 flex items-center justify-between">
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <a href="<?= e(url('/forgot-password')) ?>" class="text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline">Lupa password?</a>
+                    </div>
                     <input
                         type="password"
                         id="password"

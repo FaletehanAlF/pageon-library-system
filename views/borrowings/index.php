@@ -15,8 +15,9 @@ $totalFine = 0;
 foreach (($borrowings ?? []) as $tmp) { $totalFine += (int) ($tmp['fine'] ?? 0); }
 ?>
 <?php if ($totalFine > 0): ?>
-    <div class="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-        Total denda berjalan: <span class="font-bold"><?= e(format_rupiah($totalFine)) ?></span>. Segera kembalikan buku terlambat.
+    <div class="mb-6 flex flex-col gap-2 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 sm:flex-row sm:items-center sm:justify-between">
+        <span>Total denda berjalan: <span class="font-bold"><?= e(format_rupiah($totalFine)) ?></span>. Segera kembalikan buku terlambat.</span>
+        <a href="<?= e(url('/fines')) ?>" class="rounded-xl bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700">Lihat Tagihan →</a>
     </div>
 <?php endif; ?>
 

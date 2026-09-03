@@ -92,8 +92,17 @@
                             <form method="POST" action="<?= e(url('/borrowings')) ?>" class="inline">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="book_id" value="<?= (int) $book['id'] ?>">
-                                <button type="submit" class="rounded-xl bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition">Pinjam Buku</button>
+                                <button type="submit" class="rounded-xl bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition">Pinjam Langsung</button>
                             </form>
+                            <?php if (cart_has((int) $book['id'])): ?>
+                                <a href="<?= e(url('/cart')) ?>" class="rounded-xl border border-gray-900 px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 transition">Di Keranjang — Lihat</a>
+                            <?php else: ?>
+                                <form method="POST" action="<?= e(url('/cart/add')) ?>" class="inline">
+                                    <?= csrf_field() ?>
+                                    <input type="hidden" name="book_id" value="<?= (int) $book['id'] ?>">
+                                    <button type="submit" class="rounded-xl border border-gray-200 px-6 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition">+ Keranjang</button>
+                                </form>
+                            <?php endif; ?>
                         <?php else: ?>
                             <?php if (!empty($hasReservation)): ?>
                                 <span class="inline-flex rounded-xl bg-blue-100 px-6 py-3 text-sm font-medium text-blue-800">Anda dalam antrean (<?= (int) ($queueCount ?? 0) ?> menunggu)</span>
