@@ -8,6 +8,9 @@ final class DashboardController extends Controller
     {
         $this->requireAuth();
 
+        // Pengingat jatuh tempo ≤ 2 hari (anti-duplikat, aman diabaikan bila gagal)
+        ensure_due_notifications((int) Session::get('user_id', 0));
+
         $bookModel = new Book();
         $borrowingModel = new Borrowing();
         $announcementModel = new Announcement();

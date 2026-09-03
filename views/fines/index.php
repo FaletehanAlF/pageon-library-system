@@ -47,6 +47,32 @@
         </div>
     </div>
 
+    <?php if (!empty($history)): ?>
+    <h2 class="mt-8 mb-3 text-lg font-semibold">Riwayat (lunas / dibebaskan)</h2>
+    <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead><tr class="border-b bg-gray-50 text-left text-gray-500">
+                    <th class="px-6 py-3 font-medium">Buku</th>
+                    <th class="px-6 py-3 font-medium">Nominal</th>
+                    <th class="px-6 py-3 font-medium">Status</th>
+                    <th class="px-6 py-3 font-medium">Tanggal</th>
+                </tr></thead>
+                <tbody>
+                    <?php foreach ($history as $h): ?>
+                        <tr class="border-b border-gray-50">
+                            <td class="px-6 py-3"><?= e($h['book_title'] ?? '-') ?></td>
+                            <td class="px-6 py-3"><?= e(format_rupiah((int) $h['amount'])) ?></td>
+                            <td class="px-6 py-3"><span class="rounded-full <?= $h['status'] === 'paid' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600' ?> px-2.5 py-1 text-xs font-medium"><?= e($h['status']) ?></span></td>
+                            <td class="px-6 py-3 text-gray-500"><?= e(format_date(substr((string) $h['created_at'], 0, 10))) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <?php endif; ?>
+
 <?php else: ?>
     <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>

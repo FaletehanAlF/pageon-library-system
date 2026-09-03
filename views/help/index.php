@@ -7,8 +7,10 @@
     <?php
     $guides = [
         ['Dashboard', 'Ringkasan angka (total buku, dipinjam, terlambat), grafik 14 hari, buku terbaru & terpopuler, pengumuman, dan peringatan stok menipis. Mulai hari dari sini.', '/'],
-        ['Buku', 'Katalog + cari (judul/penulis/penerbit), filter kategori & stok, urutkan. Klik buku untuk detail, pinjam, reservasi (jika habis), ulas, atau wishlist.', '/books'],
+        ['Buku', 'Katalog + cari (judul/penulis/penerbit), filter kategori & stok, urutkan. Klik buku untuk detail, pinjam langsung / + keranjang, reservasi (jika habis), ulas, atau wishlist.', '/books'],
+        ['Keranjang', 'Kumpulkan beberapa buku dulu, lalu “Pinjam Semua Sekaligus”. Dicek otomatis: batas maks pinjam, denda lunas, stok & antrean reservasi.', '/cart'],
         ['Peminjaman Saya', 'Daftar pinjaman Anda: batas kembali, denda berjalan, tombol Perpanjang (maks sesuai aturan) dan Kembalikan, plus tombol Struk untuk bukti print.', '/my-borrowings'],
+        ['Denda', 'Lihat tagihan denda (telat / hilang). Lunasi ke petugas. Selama ada tagihan, pinjam & checkout dikunci.', '/fines'],
         ['Reservasi', 'Antrean saat buku habis. Anda otomatis diprioritaskan saat stok kembali dan dapat notifikasi. Bisa dibatalkan kapan saja.', '/reservations'],
         ['Wishlist', 'Simpan buku incaran. Buka lagi nanti tanpa harus mencari ulang.', '/wishlist'],
         ['Notifikasi', 'Info reservasi siap + pengumuman admin. Bell di atas ikut menghitung yang belum dibaca.', '/notifications'],
@@ -29,14 +31,16 @@
 <div class="grid gap-4 lg:grid-cols-2">
     <?php
     $adminGuides = [
-        ['Kelola Peminjaman', 'Lihat semua pinjaman user, kembalikan atas nama user, pantau denda & keterlambatan.', '/borrowings'],
+        ['Kelola Peminjaman', 'Lihat semua pinjaman user, kembalikan atas nama user (pilih kondisi baik/rusak/hilang), pantau denda & keterlambatan.', '/borrowings'],
         ['Kelola Reservasi', 'Lihat antrean semua buku. Antrean otomatis jadi "ready" saat buku dikembalikan.', '/admin/reservations'],
         ['Tambah Buku', 'Via halaman Buku → + Tambah Buku. Isi judul/penulis/kategori/stok, upload cover, isi rak agar mudah ditemukan.', '/books/create'],
         ['Kategori', 'Tambah/ubah/hapus kategori. Kategori yang masih dipakai buku tidak bisa dihapus.', '/categories'],
         ['Laporan', 'Filter periode + status, print untuk arsip, export CSV untuk Excel.', '/reports'],
+        ['Kas Denda', 'Lihat semua tagihan. Tandai Lunas saat user membayar, atau Bebaskan bila kebijakan. Total lunas vs belum lunas terpantau.', '/fines'],
         ['Kelola User', 'Ubah role (kuota admin maks 2), suspend/aktifkan, reset password user yang lupa.', '/users'],
         ['Pengumuman', 'Tulis info (libur, aturan baru). Otomatis masuk notifikasi semua user + dashboard.', '/announcements'],
-        ['Pengaturan', 'Ubah lama pinjam, denda/hari, maks pinjam & perpanjang tanpa edit kode.', '/settings'],
+        ['Log Aktivitas', 'Audit siapa berbuat apa (pinjam, kembali, bayar denda, ubah setting). Filter per aksi.', '/logs'],
+        ['Pengaturan', 'Ubah nama perpustakaan, lama pinjam, denda/hari, maks pinjam & perpanjang, dan ganti rugi buku hilang tanpa edit kode.', '/settings'],
     ];
     foreach ($adminGuides as [$t, $d, $href]):
     ?>
@@ -51,10 +55,11 @@
 <?php endif; ?>
 
 <div class="mt-8 rounded-2xl border border-gray-200 bg-white p-6">
-    <h2 class="font-semibold">Alur standar user (3 langkah)</h2>
+    <h2 class="font-semibold">Alur standar user (4 langkah)</h2>
     <ol class="mt-2 list-decimal list-inside space-y-1 text-sm text-gray-600">
         <li><strong>Cari buku</strong> di halaman Buku → buka Detail.</li>
-        <li><strong>Pinjam</strong> (atau Reservasi jika stok habis) → cek tanggal kembali di Peminjaman Saya.</li>
-        <li><strong>Kembalikan</strong> tepat waktu agar tidak kena denda. Butuh waktu? pakai Perpanjang sebelum jatuh tempo.</li>
+        <li><strong>Pinjam langsung</strong> atau <strong>+ Keranjang</strong> untuk pinjam beberapa sekaligus → checkout di Keranjang.</li>
+        <li><strong>Pantau</strong> tanggal kembali di Peminjaman Saya. Jika stok habis, pakai <strong>Reservasi</strong>.</li>
+        <li><strong>Kembalikan</strong> tepat waktu agar tidak kena denda. Butuh waktu? pakai Perpanjang sebelum jatuh tempo. Cek tagihan di halaman Denda.</li>
     </ol>
 </div>

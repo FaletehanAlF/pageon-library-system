@@ -19,6 +19,21 @@ final class FinePayment extends Model
         return $stmt->fetchAll();
     }
 
+    public function historyByUser(int $userId, int $limit = 20): array
+    {
+        $limit = max(1, min(50, $limit));
+        $stmt = $this->db->prepare("
+            SELECT fp.*, b.title AS book_title
+            FROM fine_payments fp
+            LEFT JOIN books b ON b.id = fp.book_id
+            WHERE fp.user_id = ? AND fp.status != 'unpaid'
+            ORDER BY fp.created_at DESC
+            LIMIT {$limit}
+        ");
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll();
+    }
+
     public function unpaidTotalByUser(int $userId): int
     {
         $stmt = $this->db->prepare("SELECT COALESCE(SUM(amount),0) FROM fine_payments WHERE user_id = ? AND status = 'unpaid'");

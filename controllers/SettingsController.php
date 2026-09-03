@@ -24,6 +24,7 @@ final class SettingsController extends Controller
         $fine = max(0, min(100000, (int) ($_POST['fine_per_day'] ?? 1000)));
         $maxLoans = max(1, min(20, (int) ($_POST['max_loans'] ?? 3)));
         $maxRenew = max(0, min(5, (int) ($_POST['max_renew'] ?? 1)));
+        $lostFee = max(0, min(1000000, (int) ($_POST['lost_book_fee'] ?? 50000)));
         $library = sanitize_string($_POST['library_name'] ?? 'Pageon', 100);
         if ($library === '') {
             $library = 'Pageon';
@@ -32,7 +33,9 @@ final class SettingsController extends Controller
         $model->set('fine_per_day', $fine);
         $model->set('max_loans', $maxLoans);
         $model->set('max_renew', $maxRenew);
+        $model->set('lost_book_fee', $lostFee);
         $model->set('library_name', $library);
+        log_activity('settings_update', "loan_days={$loanDays}, fine={$fine}, max_loans={$maxLoans}, max_renew={$maxRenew}, lost_fee={$lostFee}");
         Session::flash('success', 'Pengaturan disimpan.');
         redirect('/settings');
     }

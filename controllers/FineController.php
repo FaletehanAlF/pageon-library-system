@@ -37,6 +37,7 @@ final class FineController extends Controller
             'page' => 'fines',
             'fines' => $model->unpaidByUser($userId),
             'myTotal' => $model->unpaidTotalByUser($userId),
+            'history' => $model->historyByUser($userId, 20),
         ]);
     }
 
