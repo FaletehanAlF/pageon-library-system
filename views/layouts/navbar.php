@@ -63,7 +63,6 @@ $navQ = isset($_GET['q']) ? trim((string) $_GET['q']) : '';
                         <?php endforeach; ?>
                         <button type="submit" class="btn btn-primary btn-sm shrink-0">Cari</button>
                     </form>
-                    <p class="px-3 pb-1.5 pt-2 text-xs leading-relaxed text-gray-400">Tekan <kbd class="rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-semibold">Enter</kbd> untuk mencari · <kbd class="rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-semibold">Esc</kbd> untuk menutup</p>
                 </div>
             </div>
 
