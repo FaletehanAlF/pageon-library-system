@@ -2,8 +2,9 @@
 <aside id="sidebar" class="w-64 border-r border-gray-200 bg-white flex-shrink-0 transition-all duration-200">
 
     <div class="flex h-16 items-center border-b border-gray-200 px-6">
-        <a href="<?= e(url('/')) ?>" class="text-xl font-bold tracking-tight">
-            📚 <?= e(setting('library_name', 'Pageon')) ?>
+        <a href="<?= e(url('/')) ?>" class="flex items-center gap-2 text-xl font-bold tracking-tight">
+            <?= icon('book', 'h-7 w-7') ?>
+            <span><?= e(setting('library_name', 'Pageon')) ?></span>
         </a>
     </div>
 

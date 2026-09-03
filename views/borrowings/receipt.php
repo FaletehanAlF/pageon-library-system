@@ -1,7 +1,7 @@
 <div class="rounded-2xl border border-gray-200 bg-white p-8">
     <div class="flex items-start justify-between">
         <div>
-            <p class="text-xl font-bold">📚 <?= e(setting('library_name', 'Pageon')) ?></p>
+            <p class="flex items-center gap-2 text-xl font-bold"><?= icon('book', 'h-6 w-6') ?><span><?= e(setting('library_name', 'Pageon')) ?></span></p>
             <p class="text-sm text-gray-500">Bukti Peminjaman Buku</p>
         </div>
         <div class="text-right">

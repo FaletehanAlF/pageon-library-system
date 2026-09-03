@@ -1,6 +1,6 @@
 <div class="overflow-hidden rounded-2xl border-2 border-gray-900 bg-white">
     <div class="bg-gray-900 px-6 py-4 text-white">
-        <p class="font-bold">📚 <?= e(setting('library_name', 'Pageon')) ?></p>
+        <p class="flex items-center gap-2 font-bold"><?= icon('book', 'h-5 w-5') ?><span><?= e(setting('library_name', 'Pageon')) ?></span></p>
         <p class="text-xs opacity-70">Kartu Anggota Perpustakaan</p>
     </div>
     <div class="flex items-center gap-5 p-6">

@@ -1,6 +1,6 @@
 <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
-        <h1 class="text-2xl font-bold tracking-tight">Cari &amp; Pinjam Buku 📖</h1>
+        <h1 class="text-2xl font-bold tracking-tight">Cari &amp; Pinjam Buku</h1>
         <p class="mt-1 text-gray-500">Klik salah satu buku untuk melihat detail, lalu tekan <strong>Pinjam</strong>.<?= isset($totalCount) ? ' Ada <span class="font-semibold text-gray-700">' . (int) $totalCount . '</span> buku.' : '' ?></p>
     </div>
     <?php if (isAdmin()): ?>
@@ -50,7 +50,7 @@
             </select>
         </div>
         <div class="md:col-span-12 flex items-center gap-2">
-            <button type="submit" class="rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800">🔍 Cari</button>
+            <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800"><?= icon('search', 'h-4 w-4') ?> Cari</button>
             <?php if (!empty($filters['q']) || !empty($filters['category_id']) || !empty($filters['availability'])): ?>
                 <a href="<?= e(url('/books')) ?>" class="rounded-xl border border-gray-200 px-5 py-2.5 text-sm text-gray-600 hover:bg-gray-50">Reset</a>
             <?php endif; ?>
@@ -63,7 +63,7 @@
     <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center">
         <div class="mx-auto max-w-sm">
             <p class="text-gray-500">
-                <?= !empty($filters['q']) ? '😕 Tidak ketemu. Coba kata lain yang lebih pendek, misalnya judul atau nama penulisnya saja.' : '📭 Belum ada buku tersedia.' ?>
+                <?= !empty($filters['q']) ? 'Tidak ketemu. Coba kata lain yang lebih pendek, misalnya judul atau nama penulisnya saja.' : 'Belum ada buku tersedia.' ?>
             </p>
             <?php if (isAdmin() && empty($filters['q'])): ?>
                 <a href="<?= e(url('/books/create')) ?>" class="mt-4 inline-flex rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800">Tambah Buku Pertama</a>
@@ -92,8 +92,8 @@
                         <?= e($book['author']) ?><?= !empty($book['year']) ? ' · ' . (int) $book['year'] : '' ?><?= !empty($book['rack']) ? ' · Rak ' . e($book['rack']) : '' ?>
                     </p>
                     <div class="mt-3 flex items-center justify-between">
-                        <span class="inline-block rounded-full <?= (int) $book['stock'] > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?> px-2.5 py-1 text-xs font-medium">
-                            <?= (int) $book['stock'] > 0 ? '✅ Bisa dipinjam' : '⏳ Habis — bisa reservasi' ?>
+                        <span class="inline-flex items-center gap-1 rounded-full <?= (int) $book['stock'] > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?> px-2.5 py-1 text-xs font-medium">
+                            <?= (int) $book['stock'] > 0 ? icon('check', 'h-3 w-3') . ' Bisa dipinjam' : icon('clock', 'h-3 w-3') . ' Habis — bisa reservasi' ?>
                         </span>
                         <div class="flex items-center gap-2">
                             <a href="<?= e(url('/books/' . $book['id'])) ?>" class="rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-700">Lihat &amp; Pinjam →</a>

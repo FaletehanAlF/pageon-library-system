@@ -15,18 +15,18 @@
                 <?php $cUrl = book_cover_url($book); ?>
                 <img src="<?= e($cUrl) ?>" alt="Cover <?= e($book['title']) ?>" class="h-64 w-full rounded-xl object-cover">
                 <div class="mt-4 flex flex-wrap gap-2">
-                    <span class="inline-block rounded-full <?= (int) $book['stock'] > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?> px-3 py-1 text-sm font-medium">
-                        <?= (int) $book['stock'] > 0 ? '✅ Bisa dipinjam (sisa ' . (int) $book['stock'] . ')' : '⏳ Stok habis' ?>
+                    <span class="inline-flex items-center gap-1 rounded-full <?= (int) $book['stock'] > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?> px-3 py-1 text-sm font-medium">
+                        <?= (int) $book['stock'] > 0 ? icon('check', 'h-3.5 w-3.5') . ' Bisa dipinjam (sisa ' . (int) $book['stock'] . ')' : icon('clock', 'h-3.5 w-3.5') . ' Stok habis' ?>
                     </span>
                     <?php if (($rating['count'] ?? 0) > 0): ?>
-                        <span class="inline-block rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-800">★ <?= e((string) $rating['avg']) ?> (<?= (int) $rating['count'] ?>)</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-800"><?= stars((float) ($rating['avg'] ?? 0), 'h-3.5 w-3.5') ?> <?= e((string) $rating['avg']) ?> (<?= (int) $rating['count'] ?>)</span>
                     <?php endif; ?>
                 </div>
                 <?php if (isAuth()): ?>
                     <form method="POST" action="<?= e(url('/wishlist/toggle')) ?>" class="mt-3 text-center">
                         <?= csrf_field() ?>
                         <input type="hidden" name="book_id" value="<?= (int) $book['id'] ?>">
-                        <button class="text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline"><?= !empty($inWishlist) ? '♥ Hapus dari Wishlist' : '♡ Simpan ke Wishlist' ?></button>
+                        <button class="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline"><?= icon(!empty($inWishlist) ? 'heart-solid' : 'heart', 'h-3.5 w-3.5') ?> <?= !empty($inWishlist) ? 'Hapus dari Wishlist' : 'Simpan ke Wishlist' ?></button>
                     </form>
                 <?php endif; ?>
             </div>
@@ -86,7 +86,7 @@
                             <form method="POST" action="<?= e(url('/borrowings')) ?>" class="inline" onsubmit="return confirm('Pinjam &quot;<?= e(addslashes($book['title'])) ?>&quot;? Kembalikan sebelum <?= e(format_date(date('Y-m-d', strtotime('+' . max(1, (int) ($loanDays ?? 7)) . ' days')))) ?> agar GRATIS — telat kena denda progresif mulai <?= e(format_rupiah((int) ($finePerDay ?? 1000))) ?>/hari.')">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="book_id" value="<?= (int) $book['id'] ?>">
-                                <button type="submit" class="rounded-xl bg-gray-900 px-8 py-3.5 text-base font-bold text-white hover:bg-gray-800 transition">📥 Pinjam Sekarang — Gratis</button>
+                                <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-8 py-3.5 text-base font-bold text-white hover:bg-gray-800 transition"><?= icon('inbox', 'h-5 w-5') ?> Pinjam Sekarang — Gratis</button>
                             </form>
                             <?php if (cart_has((int) $book['id'])): ?>
                                 <a href="<?= e(url('/cart')) ?>" class="rounded-xl border border-gray-900 px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 transition">Di Keranjang — Lihat</a>
@@ -97,7 +97,7 @@
                                     <button type="submit" class="rounded-xl border border-gray-200 px-6 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition">+ Keranjang</button>
                                 </form>
                             <?php endif; ?>
-                            <p class="w-full text-xs text-gray-500">✅ Gratis jika dikembalikan sebelum <strong><?= e(format_date(date('Y-m-d', strtotime('+' . max(1, (int) ($loanDays ?? 7)) . ' days')))) ?></strong>. Telat = denda progresif mulai <?= e(format_rupiah((int) ($finePerDay ?? 1000))) ?>/hari<?php if ((int) ($fineIncrement ?? 0) > 0): ?>, naik <?= e(format_rupiah((int) $fineIncrement)) ?> tiap harinya<?php endif; ?>.</p>
+                            <p class="flex w-full items-start gap-1.5 text-xs text-gray-500"><?= icon('check', 'h-3.5 w-3.5 mt-0.5 shrink-0') ?><span>Gratis jika dikembalikan sebelum <strong><?= e(format_date(date('Y-m-d', strtotime('+' . max(1, (int) ($loanDays ?? 7)) . ' days')))) ?></strong>. Telat = denda progresif mulai <?= e(format_rupiah((int) ($finePerDay ?? 1000))) ?>/hari<?php if ((int) ($fineIncrement ?? 0) > 0): ?>, naik <?= e(format_rupiah((int) $fineIncrement)) ?> tiap harinya<?php endif; ?>.</span></p>
                         <?php else: ?>
                             <?php if (!empty($hasReservation)): ?>
                                 <span class="inline-flex rounded-xl bg-blue-100 px-6 py-3 text-sm font-medium text-blue-800">Anda dalam antrean (<?= (int) ($queueCount ?? 0) ?> menunggu)</span>

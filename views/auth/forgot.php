@@ -2,7 +2,7 @@
     <div class="w-full max-w-md">
 
         <div class="mb-8 text-center">
-            <a href="<?= e(url('/')) ?>" class="text-3xl font-bold tracking-tight">📚 Pageon</a>
+            <a href="<?= e(url('/')) ?>" class="inline-flex items-center gap-2 text-3xl font-bold tracking-tight"><?= icon('book', 'h-9 w-9') ?><span>Pageon</span></a>
             <p class="mt-2 text-gray-500">Lupa password? Masukkan email akun Anda.</p>
         </div>
 

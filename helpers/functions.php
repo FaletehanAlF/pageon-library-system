@@ -436,6 +436,58 @@ function book_cover_url(array $book): string
 }
 
 /**
+ * Ikon SVG inline (gaya outline, mengikuti warna teks).
+ * Dipakai agar tampilan konsisten tanpa emoji.
+ */
+function icon(string $name, string $class = 'h-4 w-4'): string
+{
+    $paths = [
+        'book' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.25v13m0-13C10.83 5.48 9.25 5 7.5 5S4.17 5.48 3 6.25v13C4.17 18.48 5.75 18 7.5 18s3.33.48 4.5 1.25m0-13C13.17 5.48 14.75 5 16.5 5c1.75 0 3.33.48 4.5 1.25v13C19.83 18.48 18.25 18 16.5 18c-1.75 0-3.33.48-4.5 1.25"/>',
+        'search' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>',
+        'clipboard' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>',
+        'help' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8.3 10a3.7 3.7 0 017.3 0c0 2-2.7 2.4-2.7 4m-.3 3.5h.01M12 21a9 9 0 100-18 9 9 0 000 18z"/>',
+        'flag' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 21V4m0 1h12l-2.5 4L17 13H5"/>',
+        'wallet' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-2.7 0-5 1.1-5 2.5S9.3 13 12 13s5 1.1 5 2.5S14.7 18 12 18m0-10V6m0 12v2m9-8a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+        'alert' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/>',
+        'card' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm0 3h18M7 15h4"/>',
+        'chart' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 17l6-6 4 4 8-8m0 0h-5m5 0v5"/>',
+        'archive' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 4h16v4H4zM6 8v11a1 1 0 001 1h10a1 1 0 001-1V8m-8 4h4"/>',
+        'inbox' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 13l2.5-8h13L21 13v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zm0 0h6l1.5 2h3L15 13h6"/>',
+        'cart' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6a1 1 0 00.9 1.4H19M9 22a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>',
+        'check' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>',
+        'check-circle' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+        'clock' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+        'bell' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>',
+        'calendar' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 2v4m8-4v4M3 9h18M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>',
+        'doc' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.6a1 1 0 01.7.3l5.4 5.4a1 1 0 01.3.7V19a2 2 0 01-2 2z"/>',
+        'heart' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.3 12.5l7.7 7.7 7.7-7.7a4.5 4.5 0 00-6.4-6.4l-1.3 1.3-1.3-1.3a4.5 4.5 0 00-6.4 6.4z"/>',
+        'heart-solid' => '<path stroke-width="1.8" fill="currentColor" stroke="currentColor" d="M12 20.5l-1.4-1.3C5.4 14.5 2 11.4 2 7.6 2 4.2 4.7 2 7.8 2c1.7 0 3.4.8 4.2 2.1C12.8 2.8 14.5 2 16.2 2 19.3 2 22 4.2 22 7.6c0 3.8-3.4 6.9-8.6 11.6L12 20.5z"/>',
+        'star' => '<path stroke-width="1.5" d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9 2.9-6z"/>',
+    ];
+
+    $inner = $paths[$name] ?? $paths['help'];
+    $cls = htmlspecialchars($class, ENT_QUOTES, 'UTF-8');
+
+    return '<svg class="' . $cls . '" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">' . $inner . '</svg>';
+}
+
+/**
+ * Deretan 5 bintang nilai (ikon SVG, kuning = terisi).
+ */
+function stars(float|int $rating, string $class = 'h-4 w-4'): string
+{
+    $full = (int) round(max(0, min(5, $rating)));
+    $out = '<span class="inline-flex items-center gap-0.5" role="img" aria-label="Nilai ' . $full . ' dari 5">';
+    for ($i = 1; $i <= 5; $i++) {
+        $color = $i <= $full ? 'text-amber-400' : 'text-gray-300';
+        $cls = htmlspecialchars(trim($class . ' ' . $color), ENT_QUOTES, 'UTF-8');
+        $out .= '<svg class="' . $cls . '" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9 2.9-6z"/></svg>';
+    }
+
+    return $out . '</span>';
+}
+
+/**
  * Handle book cover upload. Returns filename or null. Throws on invalid.
  * @return array{filename: ?string, error: ?string}
  */

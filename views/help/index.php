@@ -1,14 +1,14 @@
 <div class="mb-8">
-    <h1 class="text-2xl font-bold tracking-tight">Bantuan — Cara Pakai Pageon ❓</h1>
+    <h1 class="text-2xl font-bold tracking-tight">Bantuan — Cara Pakai Pageon</h1>
     <p class="mt-1 text-gray-500">Panduan singkat dengan bahasa sederhana. Baru pertama kali? Baca <strong>Pertanyaan Umum</strong> di bawah dulu.</p>
 </div>
 
 <div class="mb-8 rounded-2xl border border-gray-200 bg-white p-6">
-    <h2 class="font-semibold">❓ Pertanyaan Umum</h2>
+    <h2 class="font-semibold">Pertanyaan Umum</h2>
     <div class="mt-3 space-y-3 text-sm text-gray-600">
         <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Apakah saya harus daftar dulu?</p><p class="mt-1">Ya. Tekan <strong>Daftar</strong>, isi nama + email + password. Setelah itu Anda bisa langsung pinjam buku.</p></div>
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Bagaimana cara meminjam buku?</p><p class="mt-1">Buka <strong>Buku</strong> → klik bukunya → tekan <strong>Pinjam Langsung</strong>. Mau pinjam banyak? Tekan <strong>+ Keranjang</strong> di tiap buku, lalu buka <strong>Keranjang</strong> dan tekan <strong>Pinjam Semua Sekaligus</strong>.</p></div>
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Buku yang saya mau stoknya habis, bagaimana?</p><p class="mt-1">Tekan <strong>Reservasi</strong> untuk ikut antrean. Kalau bukunya kembali, Anda otomatis diprioritaskan dan dapat notifikasi. 🔔</p></div>
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Bagaimana cara meminjam buku?</p><p class="mt-1">Buka <strong>Buku</strong> → klik bukunya → tekan <strong>Pinjam Sekarang</strong>. Mau pinjam banyak? Tekan <strong>+ Keranjang</strong> di tiap buku, lalu buka <strong>Keranjang</strong> dan tekan <strong>Pinjam Semua Sekaligus</strong>.</p></div>
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Buku yang saya mau stoknya habis, bagaimana?</p><p class="mt-1">Tekan <strong>Reservasi</strong> untuk ikut antrean. Kalau bukunya kembali, Anda otomatis diprioritaskan dan dapat notifikasi.</p></div>
         <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Kapan harus mengembalikan?</p><p class="mt-1">Lihat tanggalnya di <strong>Pinjaman Saya</strong>. Butuh waktu lebih lama? Tekan <strong>Perpanjang</strong> <em>sebelum</em> tanggalnya lewat.</p></div>
         <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Apa yang terjadi kalau telat mengembalikan?</p><p class="mt-1">Kena <strong>denda yang naik setiap hari</strong> (hari ke-1 murah, hari berikutnya makin mahal — besarnya lihat di halaman <strong>Denda</strong>). Selama masih ada tagihan, Anda belum bisa pinjam lagi. <strong>Segera bayar ke petugas</strong> agar tidak makin besar.</p></div>
         <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Bagaimana kalau bukunya rusak / hilang?</p><p class="mt-1">Petugas mencatat kondisinya saat Anda mengembalikan. Buku <strong>rusak</strong> kena denda kerusakan, buku <strong>hilang</strong> kena ganti rugi — Anda langsung dapat <strong>notifikasi tagihan</strong> dan wajib segera membayar.</p></div>
@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<h2 class="mb-4 text-lg font-semibold">📖 Fungsi Tiap Halaman</h2>
+<h2 class="mb-4 text-lg font-semibold">Fungsi Tiap Halaman</h2>
 
 <div class="grid gap-4 lg:grid-cols-2">
     <?php
