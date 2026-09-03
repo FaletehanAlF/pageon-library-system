@@ -455,6 +455,7 @@ function icon(string $name, string $class = 'h-4 w-4'): string
         'inbox' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 13l2.5-8h13L21 13v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zm0 0h6l1.5 2h3L15 13h6"/>',
         'cart' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6a1 1 0 00.9 1.4H19M9 22a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>',
         'check' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>',
+        'x' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>',
         'check-circle' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>',
         'clock' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>',
         'bell' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>',
@@ -552,46 +553,6 @@ function log_activity(string $action, string $detail = ''): void
     } catch (Throwable) {
         // abaikan
     }
-}
-
-/* ── Keranjang pinjam (session) ───────────────────────────── */
-
-function cart_items(): array
-{
-    $items = Session::get('cart', []);
-    return is_array($items) ? array_values(array_unique(array_map('intval', $items))) : [];
-}
-
-function cart_count(): int
-{
-    return count(cart_items());
-}
-
-function cart_has(int $bookId): bool
-{
-    return in_array($bookId, cart_items(), true);
-}
-
-function cart_add(int $bookId): void
-{
-    $items = cart_items();
-    if (!in_array($bookId, $items, true)) {
-        $items[] = $bookId;
-        Session::set('cart', $items);
-    }
-}
-
-function cart_remove(int $bookId): void
-{
-    Session::set('cart', array_values(array_filter(
-        cart_items(),
-        static fn(int $id): bool => $id !== $bookId
-    )));
-}
-
-function cart_clear(): void
-{
-    Session::remove('cart');
 }
 
 /**

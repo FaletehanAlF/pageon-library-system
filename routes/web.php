@@ -42,13 +42,6 @@ $router->post('/borrowings/{id}/renew', 'BorrowingController@renew');
 $router->get('/my-borrowings', 'BorrowingController@myBorrowings');
 $router->get('/riwayat', 'BorrowingController@history');
 
-// Cart (keranjang pinjam — semua user login)
-$router->get('/cart', 'CartController@index');
-$router->post('/cart/add', 'CartController@add');
-$router->post('/cart/remove', 'CartController@remove');
-$router->post('/cart/clear', 'CartController@clear');
-$router->post('/cart/checkout', 'CartController@checkout');
-
 // Fines / Denda (user lihat tagihan sendiri, admin kelola kas)
 $router->get('/fines', 'FineController@index');
 $router->post('/fines/{id}/pay', 'FineController@pay');

@@ -93,15 +93,6 @@
                                     <input type="hidden" name="book_id" value="<?= (int) $book['id'] ?>">
                                     <button type="submit" class="btn btn-primary btn-lg w-full sm:w-auto"><?= icon('inbox', 'h-5 w-5') ?> Pinjam Sekarang — Gratis</button>
                                 </form>
-                                <?php if (cart_has((int) $book['id'])): ?>
-                                    <a href="<?= e(url('/cart')) ?>" class="btn btn-secondary">Di Keranjang — Lihat</a>
-                                <?php else: ?>
-                                    <form method="POST" action="<?= e(url('/cart/add')) ?>">
-                                        <?= csrf_field() ?>
-                                        <input type="hidden" name="book_id" value="<?= (int) $book['id'] ?>">
-                                        <button type="submit" class="btn btn-secondary w-full sm:w-auto">+ Keranjang</button>
-                                    </form>
-                                <?php endif; ?>
                             </div>
                             <p class="flex items-start gap-2 rounded-xl bg-green-50/70 p-3.5 text-xs leading-relaxed text-gray-600 ring-1 ring-green-100"><?= icon('check', 'h-4 w-4 mt-0.5 shrink-0 text-green-600') ?><span>Gratis jika dikembalikan sebelum <strong><?= e(format_date(date('Y-m-d', strtotime('+' . max(1, (int) ($loanDays ?? 7)) . ' days')))) ?></strong>. Telat = denda progresif mulai <?= e(format_rupiah((int) ($finePerDay ?? 1000))) ?>/hari<?php if ((int) ($fineIncrement ?? 0) > 0): ?>, naik <?= e(format_rupiah((int) $fineIncrement)) ?> tiap harinya<?php endif; ?>.</span></p>
                         <?php else: ?>

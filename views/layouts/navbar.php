@@ -1,15 +1,12 @@
 <?php
 $user = currentUser();
 $unread = 0;
-$cartCount = 0;
 try {
     if ($user) {
         $unread = (new Notification())->unreadCount((int) $user['id']);
-        $cartCount = cart_count();
     }
 } catch (Throwable) {
     $unread = 0;
-    $cartCount = 0;
 }
 $heading = $pageTitle ?? 'Dashboard';
 ?>
@@ -40,13 +37,6 @@ $heading = $pageTitle ?? 'Dashboard';
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 <span class="text-gray-400">Cari buku…</span>
                 <kbd class="rounded-md border border-gray-200 bg-white px-1.5 py-0.5 text-[11px] font-semibold text-gray-400">/</kbd>
-            </a>
-
-            <a href="<?= e(url('/cart')) ?>" class="icon-btn" aria-label="Keranjang pinjam<?= $cartCount > 0 ? ', ' . (int) $cartCount . ' buku' : '' ?>">
-                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6a1 1 0 00.9 1.4H19M9 22a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/></svg>
-                <?php if ($cartCount > 0): ?>
-                    <span class="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-gray-900 px-1.5 text-[11px] font-bold text-white"><?= $cartCount > 9 ? '9+' : (int) $cartCount ?></span>
-                <?php endif; ?>
             </a>
 
             <a href="<?= e(url('/notifications')) ?>" class="icon-btn" aria-label="Notifikasi<?= $unread > 0 ? ', ' . (int) $unread . ' belum dibaca' : '' ?>">

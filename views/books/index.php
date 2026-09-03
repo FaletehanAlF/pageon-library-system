@@ -57,11 +57,10 @@
             </select>
         </div>
         <div class="flex flex-col gap-2.5 sm:flex-row sm:items-center md:col-span-12">
-            <button type="submit" class="btn btn-primary"><?= icon('search', 'h-4 w-4') ?> Cari</button>
             <?php if (!empty($filters['q']) || !empty($filters['category_id']) || !empty($filters['availability'])): ?>
-                <a href="<?= e(url('/books')) ?>" class="btn btn-secondary">Reset filter</a>
+                <a href="<?= e(url('/books')) ?>" class="btn btn-secondary"><?= icon('x', 'h-4 w-4') ?> Reset filter</a>
             <?php endif; ?>
-            <p class="text-xs text-gray-400 sm:ml-auto">Tips: tekan <kbd class="rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-semibold">/</kbd> untuk fokus ke pencarian</p>
+            <p class="text-xs text-gray-400 sm:ml-auto">Tekan <kbd class="rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-semibold">Enter</kbd> untuk mencari, atau tekan <kbd class="rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-semibold">/</kbd> untuk fokus ke pencarian</p>
         </div>
     </form>
 </div>

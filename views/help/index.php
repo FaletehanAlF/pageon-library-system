@@ -12,7 +12,7 @@
         <?php
         $faqs = [
             ['Apakah saya harus daftar dulu?', 'Ya. Tekan <strong>Daftar</strong>, isi nama + email + password. Setelah itu Anda bisa langsung pinjam buku.'],
-            ['Bagaimana cara meminjam buku?', 'Buka <strong>Buku</strong> → klik bukunya → tekan <strong>Pinjam Sekarang</strong>. Mau pinjam banyak? Tekan <strong>+ Keranjang</strong> di tiap buku, lalu buka <strong>Keranjang</strong> dan tekan <strong>Pinjam Semua Sekaligus</strong>.'],
+            ['Bagaimana cara meminjam buku?', 'Buka <strong>Katalog Buku</strong> → klik bukunya untuk melihat detail → tekan <strong>Pinjam Sekarang — Gratis</strong> dan konfirmasi. Buku langsung tercatat atas nama Anda.'],
             ['Buku yang saya mau stoknya habis, bagaimana?', 'Tekan <strong>Reservasi</strong> untuk ikut antrean. Kalau bukunya kembali, Anda otomatis diprioritaskan dan dapat notifikasi.'],
             ['Kapan harus mengembalikan?', 'Lihat tanggalnya di <strong>Pinjaman Saya</strong>. Butuh waktu lebih lama? Tekan <strong>Perpanjang</strong> <em>sebelum</em> tanggalnya lewat.'],
             ['Apa yang terjadi kalau telat mengembalikan?', 'Kena <strong>denda yang naik setiap hari</strong> (hari ke-1 murah, hari berikutnya makin mahal — besarnya lihat di halaman <strong>Denda</strong>). Selama masih ada tagihan, Anda belum bisa pinjam lagi. <strong>Segera bayar ke petugas</strong> agar tidak makin besar.'],
@@ -39,8 +39,7 @@
     <?php
     $guides = [
         ['Dashboard', 'Ringkasan angka (total buku, dipinjam, terlambat), grafik 14 hari, buku terbaru & terpopuler, pengumuman, dan peringatan stok menipis. Mulai hari dari sini.', '/'],
-        ['Buku', 'Katalog + cari (judul/penulis/penerbit), filter kategori & stok, urutkan. Klik buku untuk detail, pinjam langsung / + keranjang, reservasi (jika habis), ulas, atau wishlist.', '/books'],
-        ['Keranjang', 'Kumpulkan beberapa buku dulu, lalu “Pinjam Semua Sekaligus”. Dicek otomatis: batas maks pinjam, denda lunas, stok & antrean reservasi.', '/cart'],
+        ['Buku', 'Katalog + cari (judul/penulis/penerbit), filter kategori & stok, urutkan. Klik buku untuk detail, pinjam langsung, reservasi (jika habis), ulas, atau wishlist.', '/books'],
         ['Pinjaman Saya', 'Buku yang sedang Anda pinjam: batas kembali, denda berjalan, tombol Perpanjang (maks sesuai aturan) dan Kembalikan, plus tombol Struk untuk bukti print. Tab Riwayat berisi buku yang sudah dikembalikan.', '/my-borrowings'],
         ['Denda', 'Tagihan denda (telat / rusak / hilang). Lunasi SEGERA ke petugas — denda telat naik tiap hari. Selama ada tagihan, Anda belum bisa pinjam lagi.', '/fines'],
         ['Reservasi', 'Antrean saat buku habis. Anda otomatis diprioritaskan saat stok kembali dan dapat notifikasi. Bisa dibatalkan kapan saja.', '/reservations'],
@@ -87,8 +86,8 @@
 <div class="card card-pad">
     <h2 class="font-bold tracking-tight">Alur standar user (4 langkah)</h2>
     <ol class="mt-3 list-decimal space-y-2 pl-5 text-[0.9rem] leading-relaxed text-gray-600">
-        <li><strong>Cari buku</strong> di halaman Buku → buka Detail.</li>
-        <li><strong>Pinjam langsung</strong> atau <strong>+ Keranjang</strong> untuk pinjam beberapa sekaligus → buka Keranjang lalu tekan pinjam.</li>
+        <li><strong>Cari buku</strong> di halaman Katalog Buku → buka Detail.</li>
+        <li><strong>Pinjam langsung</strong> dengan menekan <strong>Pinjam Sekarang</strong> pada halaman detail buku.</li>
         <li><strong>Pantau</strong> tanggal kembali di Pinjaman Saya. Jika stok habis, pakai <strong>Reservasi</strong>.</li>
         <li><strong>Kembalikan</strong> tepat waktu agar tidak kena denda. Butuh waktu? pakai Perpanjang sebelum jatuh tempo. Cek tagihan di halaman Denda.</li>
     </ol>
