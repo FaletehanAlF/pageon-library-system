@@ -9,7 +9,7 @@
 
         <div class="flex items-center gap-4">
             <button class="text-gray-500">
-                🔔
+                N
             </button>
 
             <div class="text-sm font-medium">
