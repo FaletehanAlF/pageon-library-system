@@ -10,7 +10,7 @@
 </div>
 
 <div class="max-w-2xl">
-    <div class="rounded-2xl border border-gray-200 bg-white p-8">
+    <div class="rounded-2xl border border-gray-200 bg-white p-6">
 
         <form method="POST" action="<?= e(url('/books')) ?>" enctype="multipart/form-data" class="space-y-5" novalidate>
             <?= csrf_field() ?>

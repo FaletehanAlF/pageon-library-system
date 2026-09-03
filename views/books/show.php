@@ -33,7 +33,7 @@
         </div>
 
         <div class="lg:col-span-2">
-            <div class="rounded-2xl border border-gray-200 bg-white p-8">
+            <div class="rounded-2xl border border-gray-200 bg-white p-6">
 
                 <p class="mb-2 text-xs font-medium uppercase tracking-wider text-gray-400">
                     <?= e($book['category_name'] ?? 'Umum') ?>
@@ -77,7 +77,7 @@
                     </div>
                 <?php endif; ?>
 
-                <div class="mt-8 flex flex-wrap items-center gap-3 border-t border-gray-100 pt-6">
+                <div class="mt-6 flex flex-wrap items-center gap-3 border-t border-gray-100 pt-6">
                     <?php if (isAuth()): ?>
                         <?php if (($hasBorrowed ?? false) === true): ?>
                             <span class="inline-flex items-center rounded-xl bg-amber-100 px-6 py-3 text-sm font-medium text-amber-800">Sedang Anda pinjam</span>
@@ -138,7 +138,7 @@
             </div>
 
             <!-- Reviews -->
-            <div class="mt-6 rounded-2xl border border-gray-200 bg-white p-8">
+            <div class="mt-6 rounded-2xl border border-gray-200 bg-white p-6">
                 <h3 class="font-semibold mb-1">Ulasan (<?= (int) ($rating['count'] ?? 0) ?>)</h3>
                 <?php if (($rating['count'] ?? 0) > 0): ?>
                     <p class="flex items-center gap-2 text-sm text-gray-500 mb-4"><?= stars((float) ($rating['avg'] ?? 0)) ?> <?= e((string) $rating['avg']) ?>/5</p>

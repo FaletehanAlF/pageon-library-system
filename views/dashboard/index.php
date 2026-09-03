@@ -19,7 +19,7 @@
 </div>
 <?php endif; ?>
 
-<div class="mb-8 rounded-2xl bg-gray-900 p-6 text-white sm:p-8">
+<div class="mb-8 rounded-2xl bg-gray-900 p-6 text-white">
     <h2 class="text-xl font-bold sm:text-2xl">Mau pinjam buku? Gampang!</h2>
     <div class="mt-4 grid gap-3 text-sm sm:grid-cols-3">
         <div class="flex items-start gap-3 rounded-xl bg-white/10 p-4">
@@ -43,7 +43,7 @@
 </div>
 
 <?php if (!empty($showTips) && !empty($firstSteps)): ?>
-<div class="mb-8 rounded-2xl border border-green-200 bg-white p-6">
+<div class="mb-8 rounded-2xl border border-green-200 bg-white p-5">
     <div class="flex items-start justify-between gap-3">
         <div>
             <h2 class="flex items-center gap-2 font-bold"><?= icon('flag', 'h-5 w-5') ?> Target pemula — selesaikan 3 ini!</h2>
@@ -68,55 +68,57 @@
 <?php endif; ?>
 
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-    <div class="rounded-2xl border border-gray-200 bg-white p-6">
+    <div class="rounded-2xl border border-gray-200 bg-white p-5">
         <p class="text-sm text-gray-500">Total Buku</p>
         <h2 class="text-2xl font-bold"><?= (int) $totalBooks ?></h2>
     </div>
-    <div class="rounded-2xl border border-gray-200 bg-white p-6">
+    <div class="rounded-2xl border border-gray-200 bg-white p-5">
         <p class="text-sm text-gray-500">Sedang Dipinjam</p>
         <h2 class="text-2xl font-bold"><?= (int) $totalBorrowed ?></h2>
     </div>
-    <div class="rounded-2xl border border-gray-200 bg-white p-6">
+    <div class="rounded-2xl border border-gray-200 bg-white p-5">
         <p class="text-sm text-gray-500">Terlambat</p>
         <h2 class="text-2xl font-bold text-red-600"><?= (int) ($totalOverdue ?? 0) ?></h2>
     </div>
-    <div class="rounded-2xl border border-gray-200 bg-white p-6">
+    <div class="rounded-2xl border border-gray-200 bg-white p-5">
         <p class="text-sm text-gray-500">Dikembalikan</p>
         <h2 class="text-2xl font-bold"><?= (int) $totalReturned ?></h2>
     </div>
 </div>
 
 <div class="mb-8 rounded-2xl border border-gray-200 bg-white p-6">
-    <div class="mb-4 flex items-center justify-between">
-        <h2 class="font-semibold">Tren Peminjaman (14 hari)</h2>
-    </div>
+    <h2 class="mb-4 font-semibold">Tren Peminjaman (14 hari)</h2>
     <div class="h-64"><canvas id="borrowChart"></canvas></div>
 </div>
-
-<?php if (!empty($overdueBorrowings) && isAdmin()): ?>
-<div class="mb-8 rounded-2xl border border-red-200 bg-red-50 p-6" role="alert">
-    <h3 class="font-semibold text-red-800">Peminjaman Terlambat (<?= count($overdueBorrowings) ?>)</h3>
-    <p class="text-sm text-red-700 mt-1 mb-2">Segera hubungi peminjam berikut.</p>
-    <a href="<?= e(url('/borrowings')) ?>" class="text-sm font-medium text-red-800 underline hover:no-underline">Lihat Semua &rarr;</a>
-</div>
-<?php endif; ?>
 
 <?php
 $low = array_filter(($lowStock ?? []), static fn($b) => (int) $b['stock'] <= 2);
 $low = array_slice(array_values($low), 0, 5);
+$showAttention = (isAdmin() && (!empty($overdueBorrowings) || !empty($low)));
 ?>
-<?php if (!empty($low) && isAdmin()): ?>
-<div class="mb-8 rounded-2xl border border-amber-200 bg-amber-50 p-6">
-    <h3 class="font-semibold text-amber-800">Stok Menipis</h3>
-    <ul class="mt-2 text-sm text-amber-800 list-disc list-inside">
-        <?php foreach ($low as $b): ?>
-            <li><a class="underline" href="<?= e(url('/books/' . $b['id'])) ?>"><?= e($b['title']) ?></a> — sisa <?= (int) $b['stock'] ?></li>
-        <?php endforeach; ?>
-    </ul>
+<?php if ($showAttention): ?>
+<div class="mb-8 rounded-2xl border border-amber-200 bg-white p-6" role="alert">
+    <h3 class="font-semibold">Perlu Perhatian</h3>
+    <?php if (!empty($overdueBorrowings)): ?>
+    <div class="mt-3 rounded-xl bg-red-50 p-4 text-sm">
+        <p class="font-medium text-red-800">Terlambat (<?= count($overdueBorrowings) ?>) — segera hubungi peminjam.</p>
+        <a href="<?= e(url('/borrowings')) ?>" class="mt-1 inline-block font-medium text-red-800 underline hover:no-underline">Lihat Semua &rarr;</a>
+    </div>
+    <?php endif; ?>
+    <?php if (!empty($low)): ?>
+    <div class="mt-3 rounded-xl bg-amber-50 p-4 text-sm">
+        <p class="font-medium text-amber-800">Stok menipis:</p>
+        <ul class="mt-1 list-disc list-inside text-amber-800">
+            <?php foreach ($low as $b): ?>
+                <li><a class="underline" href="<?= e(url('/books/' . $b['id'])) ?>"><?= e($b['title']) ?></a> — sisa <?= (int) $b['stock'] ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php endif; ?>
 </div>
 <?php endif; ?>
 
-<div class="grid gap-8 lg:grid-cols-2">
+<div class="grid gap-6 lg:grid-cols-2">
     <div>
         <div class="mb-4 flex items-center justify-between">
             <h2 class="text-lg font-semibold">Buku Terbaru</h2>

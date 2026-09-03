@@ -3,17 +3,31 @@
     <p class="mt-1 text-gray-500">Panduan singkat dengan bahasa sederhana. Baru pertama kali? Baca <strong>Pertanyaan Umum</strong> di bawah dulu.</p>
 </div>
 
-<div class="mb-8 rounded-2xl border border-gray-200 bg-white p-6">
+<div class="mb-8 rounded-2xl border border-gray-200 bg-white p-5 sm:p-6">
     <h2 class="font-semibold">Pertanyaan Umum</h2>
-    <div class="mt-3 space-y-3 text-sm text-gray-600">
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Apakah saya harus daftar dulu?</p><p class="mt-1">Ya. Tekan <strong>Daftar</strong>, isi nama + email + password. Setelah itu Anda bisa langsung pinjam buku.</p></div>
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Bagaimana cara meminjam buku?</p><p class="mt-1">Buka <strong>Buku</strong> → klik bukunya → tekan <strong>Pinjam Sekarang</strong>. Mau pinjam banyak? Tekan <strong>+ Keranjang</strong> di tiap buku, lalu buka <strong>Keranjang</strong> dan tekan <strong>Pinjam Semua Sekaligus</strong>.</p></div>
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Buku yang saya mau stoknya habis, bagaimana?</p><p class="mt-1">Tekan <strong>Reservasi</strong> untuk ikut antrean. Kalau bukunya kembali, Anda otomatis diprioritaskan dan dapat notifikasi.</p></div>
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Kapan harus mengembalikan?</p><p class="mt-1">Lihat tanggalnya di <strong>Pinjaman Saya</strong>. Butuh waktu lebih lama? Tekan <strong>Perpanjang</strong> <em>sebelum</em> tanggalnya lewat.</p></div>
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Apa yang terjadi kalau telat mengembalikan?</p><p class="mt-1">Kena <strong>denda yang naik setiap hari</strong> (hari ke-1 murah, hari berikutnya makin mahal — besarnya lihat di halaman <strong>Denda</strong>). Selama masih ada tagihan, Anda belum bisa pinjam lagi. <strong>Segera bayar ke petugas</strong> agar tidak makin besar.</p></div>
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Bagaimana kalau bukunya rusak / hilang?</p><p class="mt-1">Petugas mencatat kondisinya saat Anda mengembalikan. Buku <strong>rusak</strong> kena denda kerusakan, buku <strong>hilang</strong> kena ganti rugi — Anda langsung dapat <strong>notifikasi tagihan</strong> dan wajib segera membayar.</p></div>
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Di mana saya lihat buku yang sudah dikembalikan?</p><p class="mt-1">Buka <strong>Pinjaman Saya</strong> lalu pilih tab <strong>Riwayat</strong> — ada ringkasan tepat waktu / telat dan status denda tiap pinjaman (lunas atau belum).</p></div>
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Lupa password?</p><p class="mt-1">Di halaman Masuk, klik <strong>Lupa password?</strong> lalu ikuti langkahnya. Atau minta bantuan admin untuk me-reset password Anda.</p></div>
+    <p class="mt-1 text-sm text-gray-500">Klik pertanyaan untuk melihat jawabannya.</p>
+    <div class="mt-3 space-y-2 text-sm text-gray-600">
+        <?php
+        $faqs = [
+            ['Apakah saya harus daftar dulu?', 'Ya. Tekan <strong>Daftar</strong>, isi nama + email + password. Setelah itu Anda bisa langsung pinjam buku.'],
+            ['Bagaimana cara meminjam buku?', 'Buka <strong>Buku</strong> → klik bukunya → tekan <strong>Pinjam Sekarang</strong>. Mau pinjam banyak? Tekan <strong>+ Keranjang</strong> di tiap buku, lalu buka <strong>Keranjang</strong> dan tekan <strong>Pinjam Semua Sekaligus</strong>.'],
+            ['Buku yang saya mau stoknya habis, bagaimana?', 'Tekan <strong>Reservasi</strong> untuk ikut antrean. Kalau bukunya kembali, Anda otomatis diprioritaskan dan dapat notifikasi.'],
+            ['Kapan harus mengembalikan?', 'Lihat tanggalnya di <strong>Pinjaman Saya</strong>. Butuh waktu lebih lama? Tekan <strong>Perpanjang</strong> <em>sebelum</em> tanggalnya lewat.'],
+            ['Apa yang terjadi kalau telat mengembalikan?', 'Kena <strong>denda yang naik setiap hari</strong> (hari ke-1 murah, hari berikutnya makin mahal — besarnya lihat di halaman <strong>Denda</strong>). Selama masih ada tagihan, Anda belum bisa pinjam lagi. <strong>Segera bayar ke petugas</strong> agar tidak makin besar.'],
+            ['Bagaimana kalau bukunya rusak / hilang?', 'Petugas mencatat kondisinya saat Anda mengembalikan. Buku <strong>rusak</strong> kena denda kerusakan, buku <strong>hilang</strong> kena ganti rugi — Anda langsung dapat <strong>notifikasi tagihan</strong> dan wajib segera membayar.'],
+            ['Di mana saya lihat buku yang sudah dikembalikan?', 'Buka <strong>Pinjaman Saya</strong> lalu pilih tab <strong>Riwayat</strong> — ada ringkasan tepat waktu / telat dan status denda tiap pinjaman (lunas atau belum).'],
+            ['Lupa password?', 'Di halaman Masuk, klik <strong>Lupa password?</strong> lalu ikuti langkahnya. Atau minta bantuan admin untuk me-reset password Anda.'],
+        ];
+        foreach ($faqs as $i => [$q, $a]):
+        ?>
+        <details class="group rounded-xl bg-gray-50" <?= $i === 0 ? 'open' : '' ?>>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-3 p-4 font-medium text-gray-900 [&::-webkit-details-marker]:hidden">
+                <span><?= e($q) ?></span>
+                <svg class="h-4 w-4 shrink-0 text-gray-400 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <p class="px-4 pb-4"><?= $a ?></p>
+        </details>
+        <?php endforeach; ?>
     </div>
 </div>
 
@@ -34,10 +48,9 @@
     ];
     foreach ($guides as [$t, $d, $href]):
     ?>
-        <a href="<?= e(url($href)) ?>" class="block rounded-2xl border border-gray-200 bg-white p-6 hover:shadow-sm transition">
-            <p class="font-semibold"><?= e($t) ?></p>
+        <a href="<?= e(url($href)) ?>" class="block rounded-2xl border border-gray-200 bg-white p-5 transition hover:border-gray-300 hover:shadow-sm">
+            <p class="font-semibold"><?= e($t) ?> <span class="font-normal text-gray-400">&rarr;</span></p>
             <p class="mt-1 text-sm text-gray-600"><?= e($d) ?></p>
-            <p class="mt-2 text-sm font-medium text-gray-900">Buka &rarr;</p>
         </a>
     <?php endforeach; ?>
 </div>
@@ -60,10 +73,9 @@
     ];
     foreach ($adminGuides as [$t, $d, $href]):
     ?>
-        <a href="<?= e(url($href)) ?>" class="block rounded-2xl border border-amber-200 bg-amber-50/50 p-6 hover:shadow-sm transition">
-            <p class="font-semibold"><?= e($t) ?></p>
+        <a href="<?= e(url($href)) ?>" class="block rounded-2xl border border-amber-200 bg-amber-50/50 p-5 transition hover:shadow-sm">
+            <p class="font-semibold"><?= e($t) ?> <span class="font-normal text-gray-400">&rarr;</span></p>
             <p class="mt-1 text-sm text-gray-600"><?= e($d) ?></p>
-            <p class="mt-2 text-sm font-medium text-gray-900">Buka &rarr;</p>
         </a>
     <?php endforeach; ?>
 </div>

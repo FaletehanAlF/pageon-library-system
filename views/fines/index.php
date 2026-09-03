@@ -15,12 +15,18 @@
     <?php endif; ?>
 
     <?php if (setting_int('fine_increment', 0) > 0): ?>
-        <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-            <p class="flex items-start gap-2"><?= icon('chart', 'h-4 w-4 mt-0.5 shrink-0') ?><span><strong>Denda naik tiap hari!</strong> Hari ke-1 telat = <?= e(format_rupiah(setting_int('fine_per_day', 1000))) ?>,
+        <details class="group mb-6 rounded-2xl border border-amber-200 bg-amber-50 text-sm text-amber-800">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-2 p-5 font-medium [&::-webkit-details-marker]:hidden">
+                <span class="flex items-center gap-2"><?= icon('chart', 'h-4 w-4 shrink-0') ?> Bagaimana denda dihitung? (naik tiap hari)</span>
+                <svg class="h-4 w-4 shrink-0 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-5 pb-5">
+            Hari ke-1 telat = <?= e(format_rupiah(setting_int('fine_per_day', 1000))) ?>,
             hari ke-2 = <?= e(format_rupiah(setting_int('fine_per_day', 1000) + setting_int('fine_increment', 0))) ?>,
             hari ke-3 = <?= e(format_rupiah(setting_int('fine_per_day', 1000) + 2 * setting_int('fine_increment', 0))) ?>, dan seterusnya.
-            Contoh: telat 3 hari = <strong><?= e(format_rupiah(fine_preview(3))) ?></strong>.</span></p>
-        </div>
+            Contoh: telat 3 hari = <strong><?= e(format_rupiah(fine_preview(3))) ?></strong>.
+            </div>
+        </details>
     <?php endif; ?>
 
     <?php if ((int) ($myTotal ?? 0) <= 0): ?>

@@ -19,7 +19,8 @@
 
             <?php require __DIR__ . '/navbar.php'; ?>
 
-            <main class="flex-1 p-6 lg:p-8 overflow-auto">
+            <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto">
+                <div class="mx-auto w-full max-w-6xl">
 
                 <?php
                 $flashSuccess = Session::getFlash('success');
@@ -59,6 +60,7 @@
                 Session::getFlash('old');
                 ?>
 
+                </div>
             </main>
 
             <footer class="border-t border-gray-100 bg-white px-6 py-4 text-center text-xs text-gray-400">
