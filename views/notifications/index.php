@@ -1,5 +1,5 @@
 <div class="mb-8 flex items-center justify-between">
-<div><h1 class="text-2xl font-bold">Notifikasi</h1><p class="text-gray-500 mt-1">Info reservasi dan pengumuman.</p></div>
+<div><h1 class="text-2xl font-bold">Notifikasi</h1><p class="text-gray-500 mt-1">Tagihan, pengingat, dan info perpustakaan untuk Anda.</p></div>
 <form method="POST" action="<?= e(url('/notifications/read-all')) ?>"><?= csrf_field() ?><button class="rounded-xl border px-4 py-2 text-sm hover:bg-gray-50">Tandai semua dibaca</button></form>
 </div>
 <div class="space-y-3">
@@ -10,19 +10,19 @@
 $title = (string) ($n['title'] ?? '');
 if (stripos($title, 'denda') !== false || stripos($title, 'tagihan') !== false) {
     $accent = 'border-red-300 bg-red-50/50';
-    $badge = '<span class="inline-block rounded-full bg-red-600 px-2.5 py-0.5 text-xs font-bold text-white">💸 Tagihan</span> ';
+    $badge = '<span class="inline-flex items-center gap-1 rounded-full bg-red-600 px-2.5 py-0.5 text-xs font-bold text-white">' . icon('wallet', 'h-3 w-3') . ' Tagihan</span> ';
 } elseif (stripos($title, 'tempo') !== false || stripos($title, 'terlambat') !== false) {
     $accent = 'border-amber-300 bg-amber-50/50';
-    $badge = '<span class="inline-block rounded-full bg-amber-500 px-2.5 py-0.5 text-xs font-bold text-white">⏰ Pengingat</span> ';
+    $badge = '<span class="inline-flex items-center gap-1 rounded-full bg-amber-500 px-2.5 py-0.5 text-xs font-bold text-white">' . icon('clock', 'h-3 w-3') . ' Pengingat</span> ';
 } elseif (stripos($title, 'reservasi') !== false || stripos($title, 'siap') !== false) {
     $accent = 'border-blue-300 bg-blue-50/50';
-    $badge = '<span class="inline-block rounded-full bg-blue-600 px-2.5 py-0.5 text-xs font-bold text-white">📚 Reservasi</span> ';
+    $badge = '<span class="inline-flex items-center gap-1 rounded-full bg-blue-600 px-2.5 py-0.5 text-xs font-bold text-white">' . icon('book', 'h-3 w-3') . ' Reservasi</span> ';
 } elseif (stripos($title, 'lunas') !== false || stripos($title, 'bebas') !== false) {
     $accent = 'border-green-300 bg-green-50/50';
-    $badge = '<span class="inline-block rounded-full bg-green-600 px-2.5 py-0.5 text-xs font-bold text-white">✅ Beres</span> ';
+    $badge = '<span class="inline-flex items-center gap-1 rounded-full bg-green-600 px-2.5 py-0.5 text-xs font-bold text-white">' . icon('check', 'h-3 w-3') . ' Beres</span> ';
 } else {
     $accent = '';
-    $badge = '<span class="inline-block rounded-full bg-gray-200 px-2.5 py-0.5 text-xs font-bold text-gray-700">ℹ️ Info</span> ';
+    $badge = '<span class="inline-flex items-center gap-1 rounded-full bg-gray-200 px-2.5 py-0.5 text-xs font-bold text-gray-700">' . icon('bell', 'h-3 w-3') . ' Info</span> ';
 }
 ?>
 <div class="rounded-2xl border bg-white p-4 flex items-start justify-between gap-3 <?= (int) $n['is_read'] === 0 ? $accent !== '' ? $accent : 'border-gray-900' : '' ?>">

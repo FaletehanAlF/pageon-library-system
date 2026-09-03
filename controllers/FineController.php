@@ -55,7 +55,7 @@ final class FineController extends Controller
             if ($row !== null) {
                 (new Notification())->notify(
                     (int) $row['user_id'],
-                    'Denda lunas ✅',
+                    'Denda lunas',
                     'Tagihan ' . format_rupiah((int) $row['amount']) . ' sudah lunas. Terima kasih — Anda bisa meminjam lagi.',
                     url('/fines')
                 );

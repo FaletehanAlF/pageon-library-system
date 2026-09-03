@@ -20,7 +20,7 @@
 <?php endif; ?>
 
 <div class="mb-8 rounded-2xl bg-gray-900 p-6 text-white sm:p-8">
-    <h2 class="text-xl font-bold sm:text-2xl">Mau pinjam buku? Gampang! 📚</h2>
+    <h2 class="text-xl font-bold sm:text-2xl">Mau pinjam buku? Gampang!</h2>
     <div class="mt-4 grid gap-3 text-sm sm:grid-cols-3">
         <div class="flex items-start gap-3 rounded-xl bg-white/10 p-4">
             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white font-bold text-gray-900">1</span>
@@ -36,9 +36,9 @@
         </div>
     </div>
     <div class="mt-5 flex flex-wrap gap-3">
-        <a href="<?= e(url('/books')) ?>" class="rounded-xl bg-white px-6 py-3 text-sm font-bold text-gray-900 hover:bg-gray-100 transition">🔍 Cari Buku Sekarang</a>
-        <a href="<?= e(url('/my-borrowings')) ?>" class="rounded-xl border border-white/40 px-6 py-3 text-sm font-medium text-white hover:bg-white/10 transition">📋 Pinjaman Saya</a>
-        <a href="<?= e(url('/bantuan')) ?>" class="rounded-xl border border-white/40 px-6 py-3 text-sm font-medium text-white hover:bg-white/10 transition">❓ Bantuan</a>
+        <a href="<?= e(url('/books')) ?>" class="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-gray-900 hover:bg-gray-100 transition"><?= icon('search', 'h-4 w-4') ?> Cari Buku Sekarang</a>
+        <a href="<?= e(url('/my-borrowings')) ?>" class="inline-flex items-center gap-2 rounded-xl border border-white/40 px-6 py-3 text-sm font-medium text-white hover:bg-white/10 transition"><?= icon('clipboard', 'h-4 w-4') ?> Pinjaman Saya</a>
+        <a href="<?= e(url('/bantuan')) ?>" class="inline-flex items-center gap-2 rounded-xl border border-white/40 px-6 py-3 text-sm font-medium text-white hover:bg-white/10 transition"><?= icon('help', 'h-4 w-4') ?> Bantuan</a>
     </div>
 </div>
 
@@ -46,15 +46,15 @@
 <div class="mb-8 rounded-2xl border border-green-200 bg-white p-6">
     <div class="flex items-start justify-between gap-3">
         <div>
-            <h2 class="font-bold">🎯 Target pemula — selesaikan 3 ini!</h2>
+            <h2 class="flex items-center gap-2 font-bold"><?= icon('flag', 'h-5 w-5') ?> Target pemula — selesaikan 3 ini!</h2>
             <p class="mt-1 text-sm text-gray-500">Centang otomatis begitu Anda melakukannya.</p>
         </div>
-        <form method="POST" action="<?= e(url('/tips/hide')) ?>"><?= csrf_field() ?><button class="text-xs text-gray-400 hover:text-gray-600 hover:underline">Sembunyikan ✕</button></form>
+        <form method="POST" action="<?= e(url('/tips/hide')) ?>"><?= csrf_field() ?><button class="text-xs text-gray-400 hover:text-gray-600 hover:underline">Sembunyikan</button></form>
     </div>
     <div class="mt-4 grid gap-3 sm:grid-cols-3">
-        <?php foreach ($firstSteps as $step): ?>
+        <?php foreach ($firstSteps as $idx => $step): ?>
             <div class="flex items-center gap-3 rounded-xl <?= !empty($step['done']) ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200' ?> p-4">
-                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg <?= !empty($step['done']) ? 'bg-green-600 text-white' : 'bg-white border border-gray-300 text-gray-400' ?>"><?= !empty($step['done']) ? '✓' : '○' ?></span>
+                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold <?= !empty($step['done']) ? 'bg-green-600 text-white' : 'bg-white border border-gray-300 text-gray-400' ?>"><?= !empty($step['done']) ? icon('check', 'h-4 w-4') : ($idx + 1) ?></span>
                 <div class="min-w-0">
                     <p class="text-sm font-medium <?= !empty($step['done']) ? 'text-green-800 line-through' : 'text-gray-800' ?>"><?= e($step['label']) ?></p>
                     <?php if (empty($step['done'])): ?>

@@ -4,17 +4,17 @@
 </div>
 
 <div class="mb-6 flex gap-2 rounded-2xl border border-gray-200 bg-white p-2 text-sm font-medium">
-    <a href="<?= e(url('/my-borrowings')) ?>" class="flex-1 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? '') === 'aktif' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>">📥 Sedang Dipinjam</a>
-    <a href="<?= e(url('/riwayat')) ?>" class="flex-1 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? '') === 'riwayat' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>">📜 Riwayat</a>
+    <a href="<?= e(url('/my-borrowings')) ?>" class="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? '') === 'aktif' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>"><?= icon('inbox', 'h-4 w-4') ?> Sedang Dipinjam</a>
+    <a href="<?= e(url('/riwayat')) ?>" class="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? '') === 'riwayat' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>"><?= icon('archive', 'h-4 w-4') ?> Riwayat</a>
 </div>
 
 <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
     <div class="rounded-2xl border border-gray-200 bg-white p-5">
-        <p class="text-sm text-gray-500">Tepat waktu ✅</p>
+        <p class="text-sm text-gray-500">Tepat waktu</p>
         <p class="text-2xl font-bold text-green-700"><?= (int) ($onTime ?? 0) ?></p>
     </div>
     <div class="rounded-2xl border border-gray-200 bg-white p-5">
-        <p class="text-sm text-gray-500">Pernah telat ⏰</p>
+        <p class="text-sm text-gray-500">Pernah telat</p>
         <p class="text-2xl font-bold text-amber-700"><?= (int) ($late ?? 0) ?></p>
     </div>
     <div class="rounded-2xl border border-gray-200 bg-white p-5">
@@ -48,7 +48,7 @@
                     <tr>
                         <td colspan="6" class="px-6 py-12 text-center">
                             <div class="mx-auto max-w-xs">
-                                <div class="text-5xl">📜</div>
+                                <span class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-400"><?= icon('archive', 'h-8 w-8') ?></span>
                                 <p class="mt-4 font-medium">Belum ada riwayat.</p>
                                 <p class="mt-1 text-sm text-gray-500">Buku yang sudah Anda kembalikan akan tercatat di sini.</p>
                                 <a href="<?= e(url('/books')) ?>" class="mt-4 inline-flex rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800">Pinjam Buku Pertama →</a>
@@ -80,7 +80,7 @@
                                     <?php if ((int) ($r['fine_unpaid'] ?? 0) > 0): ?>
                                         <div class="text-xs text-red-500">belum lunas</div>
                                     <?php else: ?>
-                                        <div class="text-xs text-green-600">lunas ✓</div>
+                                        <div class="flex items-center gap-1 text-xs text-green-600"><?= icon('check', 'h-3 w-3') ?> lunas</div>
                                     <?php endif; ?>
                                 <?php else: ?>
                                     <span class="text-gray-400">—</span>

@@ -121,15 +121,6 @@
                     <?php endif; ?>
                 </div>
 
-                <?php if (isAuth() && !isAdmin()): ?>
-                    <div class="mt-4 rounded-xl bg-blue-50 p-4 text-xs leading-relaxed text-blue-800">
-                        💡 <strong>Baru pertama kali pinjam?</strong> Tekan <strong>📥 Pinjam Sekarang</strong> — buku langsung tercatat atas nama Anda, gratis.
-                        Mau pinjam banyak sekaligus? Tekan <strong>+ Keranjang</strong> di tiap buku, lalu buka
-                        <a class="font-medium underline" href="<?= e(url('/cart')) ?>">Keranjang</a>.
-                        Batas kembali bisa dilihat di <a class="font-medium underline" href="<?= e(url('/my-borrowings')) ?>">Pinjaman Saya</a>.
-                    </div>
-                <?php endif; ?>
-
                 <?php if (isAdmin() && !empty($copies)): ?>
                     <div class="mt-6 rounded-xl bg-gray-50 p-4">
                         <h4 class="text-sm font-semibold mb-2">Eksemplar (<?= count($copies) ?>)</h4>
@@ -150,7 +141,7 @@
             <div class="mt-6 rounded-2xl border border-gray-200 bg-white p-8">
                 <h3 class="font-semibold mb-1">Ulasan (<?= (int) ($rating['count'] ?? 0) ?>)</h3>
                 <?php if (($rating['count'] ?? 0) > 0): ?>
-                    <p class="text-sm text-gray-500 mb-4">Rata-rata ★ <?= e((string) $rating['avg']) ?>/5</p>
+                    <p class="flex items-center gap-2 text-sm text-gray-500 mb-4"><?= stars((float) ($rating['avg'] ?? 0)) ?> <?= e((string) $rating['avg']) ?>/5</p>
                 <?php endif; ?>
                 <?php if (isAuth()): ?>
                     <form method="POST" action="<?= e(url('/reviews')) ?>" class="mb-6 rounded-xl bg-gray-50 p-4 space-y-3">
@@ -159,9 +150,9 @@
                         <div class="flex items-center gap-3">
                             <label class="text-sm font-medium">Rating Anda:</label>
                             <select name="rating" class="rounded-lg border px-3 py-2 text-sm">
-                                <?php for ($i = 5; $i >= 1; $i--): ?>
-                                    <option value="<?= $i ?>" <?= ((int) ($userReview['rating'] ?? 0) === $i) ? 'selected' : '' ?>><?= $i ?> ★</option>
-                                <?php endfor; ?>
+                                <?php foreach ([5 => 'Sangat bagus', 4 => 'Bagus', 3 => 'Cukup', 2 => 'Kurang', 1 => 'Buruk'] as $i => $label): ?>
+                                    <option value="<?= $i ?>" <?= ((int) ($userReview['rating'] ?? 0) === $i) ? 'selected' : '' ?>><?= $i ?> — <?= $label ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <textarea name="comment" rows="2" maxlength="1000" placeholder="Tulis ulasan..." class="w-full rounded-xl border px-4 py-3 text-sm"><?= e($userReview['comment'] ?? '') ?></textarea>
@@ -175,7 +166,7 @@
                         <?php foreach ($reviews as $rv): ?>
                             <div class="border-b border-gray-100 pb-4">
                                 <div class="flex items-center justify-between">
-                                    <p class="text-sm font-medium"><?= e($rv['user_name']) ?> <span class="text-amber-500"><?= str_repeat('★', (int) $rv['rating']) ?></span></p>
+                                    <p class="flex items-center gap-2 text-sm font-medium"><?= e($rv['user_name']) ?> <?= stars((int) $rv['rating'], 'h-3.5 w-3.5') ?></p>
                                     <?php if (isAdmin() || (isAuth() && (int) $rv['user_id'] === (int) Session::get('user_id'))): ?>
                                         <form method="POST" action="<?= e(url('/reviews/' . $rv['id'] . '/delete')) ?>" onsubmit="return confirm('Hapus ulasan?')">
                                             <?= csrf_field() ?>

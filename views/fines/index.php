@@ -2,13 +2,13 @@
 
 <?php if (!$isAdminView): ?>
     <div class="mb-8">
-        <h1 class="text-2xl font-bold tracking-tight">Denda Saya 💸</h1>
+        <h1 class="text-2xl font-bold tracking-tight">Denda Saya</h1>
         <p class="mt-1 text-gray-500">Tagihan denda yang belum lunas. Lunasi ke petugas/admin sebelum meminjam lagi.</p>
     </div>
 
     <?php if ((int) ($myTotal ?? 0) > 0): ?>
         <div class="mb-6 rounded-2xl border border-red-300 bg-red-600 p-6 text-white" role="alert">
-            <p class="font-bold">⚠️ SEGERA BAYAR ke petugas!</p>
+            <p class="flex items-center gap-2 font-bold"><?= icon('alert', 'h-5 w-5') ?> SEGERA BAYAR ke petugas!</p>
             <p class="mt-1 text-sm text-red-100">Selama masih ada tagihan, Anda <strong>belum bisa pinjam buku lagi</strong>. Denda keterlambatan <strong>naik setiap hari</strong>, jadi semakin cepat bayar semakin murah.</p>
             <p class="mt-2 text-2xl font-bold"><?= e(format_rupiah((int) ($myTotal ?? 0))) ?></p>
         </div>
@@ -16,30 +16,28 @@
 
     <?php if (setting_int('fine_increment', 0) > 0): ?>
         <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
-            📈 <strong>Denda naik tiap hari!</strong> Hari ke-1 telat = <?= e(format_rupiah(setting_int('fine_per_day', 1000))) ?>,
+            <p class="flex items-start gap-2"><?= icon('chart', 'h-4 w-4 mt-0.5 shrink-0') ?><span><strong>Denda naik tiap hari!</strong> Hari ke-1 telat = <?= e(format_rupiah(setting_int('fine_per_day', 1000))) ?>,
             hari ke-2 = <?= e(format_rupiah(setting_int('fine_per_day', 1000) + setting_int('fine_increment', 0))) ?>,
             hari ke-3 = <?= e(format_rupiah(setting_int('fine_per_day', 1000) + 2 * setting_int('fine_increment', 0))) ?>, dan seterusnya.
-            Contoh: telat 3 hari = <strong><?= e(format_rupiah(fine_preview(3))) ?></strong>.
+            Contoh: telat 3 hari = <strong><?= e(format_rupiah(fine_preview(3))) ?></strong>.</span></p>
         </div>
     <?php endif; ?>
 
-    <div class="mb-6 rounded-2xl border <?= ((int) ($myTotal ?? 0) > 0) ? 'border-red-200 bg-red-50' : 'border-green-200 bg-green-50' ?> p-6">
-        <p class="text-sm <?= ((int) ($myTotal ?? 0) > 0) ? 'text-red-700' : 'text-green-700' ?>">Total belum lunas</p>
-        <p class="text-2xl font-bold <?= ((int) ($myTotal ?? 0) > 0) ? 'text-red-800' : 'text-green-800' ?>"><?= e(format_rupiah((int) ($myTotal ?? 0))) ?></p>
-        <?php if ((int) ($myTotal ?? 0) > 0): ?>
-            <p class="mt-1 text-xs text-red-600">Anda tidak bisa meminjam lagi selama masih ada tagihan.</p>
-        <?php else: ?>
-            <p class="mt-1 text-xs text-green-700">Bersih. Anda bisa meminjam seperti biasa.</p>
-        <?php endif; ?>
+    <?php if ((int) ($myTotal ?? 0) <= 0): ?>
+    <div class="mb-6 rounded-2xl border border-green-200 bg-green-50 p-6">
+        <p class="text-sm text-green-700">Total belum lunas</p>
+        <p class="text-2xl font-bold text-green-800"><?= e(format_rupiah(0)) ?></p>
+        <p class="mt-1 text-xs text-green-700">Bersih. Anda bisa meminjam seperti biasa.</p>
     </div>
+    <?php endif; ?>
 
     <?php if ((int) ($myTotal ?? 0) > 0): ?>
     <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-6">
-        <h2 class="font-semibold">💳 Cara membayar (3 langkah)</h2>
+        <h2 class="flex items-center gap-2 font-semibold"><?= icon('card', 'h-5 w-5') ?> Cara membayar (3 langkah)</h2>
         <ol class="mt-2 list-decimal list-inside space-y-1 text-sm text-gray-600">
             <li>Datang ke <strong>petugas perpustakaan</strong> dan sebutkan <strong>nama + judul buku</strong> yang didenda.</li>
             <li>Bayar tunai sebesar nominal di atas, lalu minta struk/bukti.</li>
-            <li>Petugas menandai <strong>Lunas</strong> — tagihan di halaman ini langsung hilang dan Anda bisa pinjam lagi. ✅</li>
+            <li>Petugas menandai <strong>Lunas</strong> — tagihan di halaman ini langsung hilang dan Anda bisa pinjam lagi.</li>
         </ol>
     </div>
     <?php endif; ?>

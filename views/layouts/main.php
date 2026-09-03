@@ -28,16 +28,16 @@
                 ?>
 
                 <?php if ($flashSuccess): ?>
-                    <div id="flash-success" role="alert" class="mb-6 flex items-center justify-between rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800">
-                        <span><?= e((string) $flashSuccess) ?></span>
-                        <button type="button" onclick="this.parentElement.remove()" aria-label="Tutup" class="ml-4 text-green-600 hover:text-green-800">&times;</button>
+                    <div id="flash-success" role="alert" class="mb-6 flex items-center justify-between gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800">
+                        <span class="flex items-start gap-2"><?= icon('check-circle', 'h-5 w-5 shrink-0') ?><span><?= e((string) $flashSuccess) ?></span></span>
+                        <button type="button" onclick="this.parentElement.remove()" aria-label="Tutup" class="ml-4 shrink-0 text-green-600 hover:text-green-800">&times;</button>
                     </div>
                 <?php endif; ?>
 
                 <?php if ($flashError): ?>
-                    <div id="flash-error" role="alert" class="mb-6 flex items-center justify-between rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-                        <span><?= e((string) $flashError) ?></span>
-                        <button type="button" onclick="this.parentElement.remove()" aria-label="Tutup" class="ml-4 text-red-600 hover:text-red-800">&times;</button>
+                    <div id="flash-error" role="alert" class="mb-6 flex items-center justify-between gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+                        <span class="flex items-start gap-2"><?= icon('alert', 'h-5 w-5 shrink-0') ?><span><?= e((string) $flashError) ?></span></span>
+                        <button type="button" onclick="this.parentElement.remove()" aria-label="Tutup" class="ml-4 shrink-0 text-red-600 hover:text-red-800">&times;</button>
                     </div>
                 <?php endif; ?>
 

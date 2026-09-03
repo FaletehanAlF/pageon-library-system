@@ -14,7 +14,7 @@
 <?php if (empty($items)): ?>
     <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center">
         <div class="mx-auto max-w-sm">
-            <div class="text-5xl">🛒</div>
+            <span class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-400"><?= icon('cart', 'h-8 w-8') ?></span>
             <p class="mt-4 font-medium">Keranjang masih kosong.</p>
             <p class="mt-1 text-sm text-gray-500">Cari buku di katalog, lalu klik “+ Keranjang” atau “Pinjam”.</p>
             <a href="<?= e(url('/books')) ?>" class="mt-5 inline-flex rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800">Jelajahi Buku &rarr;</a>

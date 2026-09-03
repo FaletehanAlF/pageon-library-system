@@ -437,7 +437,7 @@ final class BorrowingController extends Controller
             }
             Session::flash('success', implode(' ', $msgs));
             if ($newCharges > 0) {
-                Session::flash('error', '⚠️ SEGERA bayar denda ' . format_rupiah($newCharges) . ' ke petugas. Denda telat naik setiap hari dan Anda belum bisa pinjam lagi sebelum lunas.');
+                Session::flash('error', 'SEGERA bayar denda ' . format_rupiah($newCharges) . ' ke petugas. Denda telat naik setiap hari dan Anda belum bisa pinjam lagi sebelum lunas.');
             }
         } catch (Throwable $e) {
             if ($this->db->inTransaction()) {

@@ -14,8 +14,8 @@
 
 <?php if ($page !== 'borrowings'): ?>
 <div class="mb-6 flex gap-2 rounded-2xl border border-gray-200 bg-white p-2 text-sm font-medium">
-    <a href="<?= e(url('/my-borrowings')) ?>" class="flex-1 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? 'aktif') === 'aktif' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>">📥 Sedang Dipinjam</a>
-    <a href="<?= e(url('/riwayat')) ?>" class="flex-1 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? '') === 'riwayat' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>">📜 Riwayat</a>
+    <a href="<?= e(url('/my-borrowings')) ?>" class="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? 'aktif') === 'aktif' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>"><?= icon('inbox', 'h-4 w-4') ?> Sedang Dipinjam</a>
+    <a href="<?= e(url('/riwayat')) ?>" class="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? '') === 'riwayat' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>"><?= icon('archive', 'h-4 w-4') ?> Riwayat</a>
 </div>
 <?php endif; ?>
 
