@@ -1,7 +1,7 @@
-<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+<div class="page-header">
     <div>
-        <h1 class="text-2xl font-bold tracking-tight">Kategori</h1>
-        <p class="mt-1 text-gray-500">Kelola kategori buku.</p>
+        <h1 class="page-title">Kategori</h1>
+        <p class="page-subtitle">Kelola kategori buku.</p>
     </div>
     <button type="button" onclick="document.getElementById('add-category-modal').classList.remove('hidden')" class="inline-flex items-center justify-center rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition">
         + Tambah Kategori
@@ -9,12 +9,12 @@
 </div>
 
 <?php if (empty($categories)): ?>
-    <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center">
+    <div class="empty-state">
         <p class="text-gray-500">Belum ada kategori.</p>
         <button type="button" onclick="document.getElementById('add-category-modal').classList.remove('hidden')" class="mt-4 text-sm font-medium text-gray-900 underline">Tambah kategori pertama</button>
     </div>
 <?php else: ?>
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <?php foreach ($categories as $cat): ?>
             <div class="rounded-2xl border border-gray-200 bg-white p-6">
                 <div class="flex items-start justify-between gap-3">

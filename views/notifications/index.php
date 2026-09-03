@@ -1,9 +1,9 @@
-<div class="mb-8 flex items-center justify-between">
-<div><h1 class="text-2xl font-bold">Notifikasi</h1><p class="text-gray-500 mt-1">Tagihan, pengingat, dan info perpustakaan untuk Anda.</p></div>
-<form method="POST" action="<?= e(url('/notifications/read-all')) ?>"><?= csrf_field() ?><button class="rounded-xl border px-4 py-2 text-sm hover:bg-gray-50">Tandai semua dibaca</button></form>
+<div class="page-header sm:items-end">
+<div><h1 class="page-title">Notifikasi</h1><p class="page-subtitle">Tagihan, pengingat, dan info perpustakaan untuk Anda.</p></div>
+<form method="POST" action="<?= e(url('/notifications/read-all')) ?>"><?= csrf_field() ?><button class="btn btn-secondary btn-sm">Tandai semua dibaca</button></form>
 </div>
 <div class="space-y-3">
-<?php if (empty($items)): ?><div class="rounded-2xl border bg-white p-10 text-center text-gray-500">Tidak ada notifikasi.</div>
+<?php if (empty($items)): ?><div class="empty-state text-gray-500">Tidak ada notifikasi.</div>
 <?php else: ?>
 <?php foreach ($items as $n): ?>
 <?php

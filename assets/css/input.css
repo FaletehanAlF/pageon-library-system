@@ -1,1 +1,173 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ── Base: ritme nyaman di zoom 100% ─────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-[#f4f5f7] text-gray-900 antialiased;
+    font-family: var(--font-sans);
+    font-size: 15.5px;
+    line-height: 1.65;
+    letter-spacing: -0.006em;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-gray-900 text-white;
+  }
+
+  :focus-visible {
+    outline: 2px solid #111827;
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  img {
+    @apply select-none;
+  }
+
+  /* Scrollbar halus agar tidak ganggu layout */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full border-2 border-solid border-transparent bg-clip-padding;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+}
+
+/* ── Komponen reusable: clean & konsisten ─────────────────── */
+@layer components {
+  /* Wadah konten utama: lega di desktop, pas di mobile */
+  .app-container {
+    @apply mx-auto w-full max-w-[76rem] px-4 sm:px-6 lg:px-8;
+  }
+
+  .page-stack {
+    @apply space-y-6 sm:space-y-8;
+  }
+
+  .page-header {
+    @apply flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between;
+  }
+
+  .page-title {
+    @apply text-[1.55rem] sm:text-[1.75rem] font-bold tracking-tight text-gray-900 leading-tight;
+  }
+
+  .page-subtitle {
+    @apply mt-2 max-w-2xl text-[0.95rem] leading-relaxed text-gray-500;
+  }
+
+  /* Kartu standar */
+  .card {
+    @apply rounded-2xl border border-gray-200/90 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.06)];
+  }
+
+  .card-pad {
+    @apply p-5 sm:p-6 lg:p-7;
+  }
+
+  .card-pad-sm {
+    @apply p-4 sm:p-5;
+  }
+
+  /* Tombol */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap;
+  }
+  .btn-primary {
+    @apply bg-gray-900 text-white hover:bg-gray-800 shadow-sm;
+  }
+  .btn-secondary {
+    @apply border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-300;
+  }
+  .btn-ghost {
+    @apply text-gray-500 hover:text-gray-900 hover:bg-gray-100;
+  }
+  .btn-danger {
+    @apply border border-red-200 text-red-600 hover:bg-red-50;
+  }
+  .btn-lg {
+    @apply px-7 py-3.5 text-[0.95rem];
+  }
+  .btn-sm {
+    @apply px-3.5 py-2 text-xs rounded-lg;
+  }
+
+  /* Form */
+  .form-label {
+    @apply mb-2 block text-sm font-semibold text-gray-700;
+  }
+  .form-input {
+    @apply w-full rounded-xl border border-gray-200 bg-gray-50/60 px-4 py-3 text-[0.925rem] leading-relaxed outline-none transition placeholder:text-gray-400 hover:border-gray-300 focus:border-gray-900 focus:bg-white focus:ring-4 focus:ring-gray-900/10;
+  }
+  .form-hint {
+    @apply mt-2 text-xs leading-relaxed text-gray-400;
+  }
+
+  /* Badge / status */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap;
+  }
+
+  /* Tabel: tidak mepet, scroll nyaman di mobile */
+  .table-shell {
+    @apply overflow-hidden rounded-2xl border border-gray-200/90 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.06)];
+  }
+  .table-scroll {
+    @apply overflow-x-auto;
+  }
+  .table-base {
+    @apply w-full text-sm border-collapse min-w-[640px];
+  }
+  .table-base thead tr {
+    @apply border-b border-gray-100 bg-gray-50/80;
+  }
+  .table-base th {
+    @apply px-5 lg:px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 whitespace-nowrap;
+  }
+  .table-base td {
+    @apply px-5 lg:px-6 py-4 align-middle;
+  }
+  .table-base tbody tr {
+    @apply border-b border-gray-50 last:border-0 hover:bg-gray-50/60 transition-colors;
+  }
+
+  /* Navigasi sidebar */
+  .nav-link {
+    @apply flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-[0.9rem] font-medium transition leading-snug;
+  }
+  .nav-section {
+    @apply px-3.5 pt-5 pb-2 text-[0.7rem] font-bold uppercase tracking-[0.08em] text-gray-400;
+  }
+
+  /* Ikon tombol di navbar */
+  .icon-btn {
+    @apply relative flex h-10 w-10 items-center justify-center rounded-xl text-gray-500 transition hover:bg-gray-100 hover:text-gray-900;
+  }
+
+  /* Empty state */
+  .empty-state {
+    @apply flex flex-col items-center rounded-2xl border border-gray-200/90 bg-white px-6 py-12 text-center shadow-[0_1px_2px_rgba(16,24,40,0.06)] sm:py-16;
+  }
+
+  /* Filter bar */
+  .filter-bar {
+    @apply flex flex-col gap-4 rounded-2xl border border-gray-200/90 bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.06)] sm:p-5;
+  }
+}

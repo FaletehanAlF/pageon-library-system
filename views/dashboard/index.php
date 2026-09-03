@@ -1,64 +1,70 @@
-<div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+<div class="page-header">
     <div>
-        <h1 class="text-2xl font-bold tracking-tight">Dashboard</h1>
-        <p class="mt-1 text-gray-500">Selamat datang kembali, <?= e((string) Session::get('user_name', 'User')) ?>.</p>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Selamat datang kembali, <span class="font-semibold text-gray-700"><?= e((string) Session::get('user_name', 'User')) ?></span>. Pantau koleksi dan pinjaman dari satu tempat.</p>
     </div>
     <?php if (isAdmin()): ?>
-        <a href="<?= e(url('/reports')) ?>" class="rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium hover:bg-gray-50">Lihat Laporan</a>
+        <a href="<?= e(url('/reports')) ?>" class="btn btn-secondary shrink-0"><?= icon('chart', 'h-4 w-4') ?> Lihat Laporan</a>
     <?php endif; ?>
 </div>
 
 <?php if (!empty($announcements)): ?>
-<div class="mb-8 space-y-3">
+<div class="space-y-3">
     <?php foreach ($announcements as $ann): ?>
-        <div class="rounded-2xl border border-blue-200 bg-blue-50 p-5">
-            <p class="font-semibold text-blue-900"><?= e($ann['title']) ?></p>
-            <p class="mt-1 text-sm text-blue-800"><?= nl2br(e($ann['message'])) ?></p>
+        <div class="card flex items-start gap-3.5 border-blue-200/80 bg-blue-50/70 px-5 py-4 sm:px-6 sm:py-5">
+            <span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white"><?= icon('bell', 'h-5 w-5') ?></span>
+            <div class="min-w-0">
+                <p class="font-semibold text-blue-950"><?= e($ann['title']) ?></p>
+                <p class="mt-1 text-[0.9rem] leading-relaxed text-blue-900/80"><?= nl2br(e($ann['message'])) ?></p>
+            </div>
         </div>
     <?php endforeach; ?>
 </div>
 <?php endif; ?>
 
-<div class="mb-8 rounded-2xl bg-gray-900 p-6 text-white">
-    <h2 class="text-xl font-bold sm:text-2xl">Mau pinjam buku? Gampang!</h2>
-    <div class="mt-4 grid gap-3 text-sm sm:grid-cols-3">
-        <div class="flex items-start gap-3 rounded-xl bg-white/10 p-4">
-            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white font-bold text-gray-900">1</span>
-            <p><strong>Cari bukunya</strong><br><span class="text-gray-300">Ketik judul di halaman Buku.</span></p>
+<div class="card overflow-hidden !border-gray-900 bg-gray-900 text-white">
+    <div class="p-6 sm:p-8 lg:p-10">
+        <p class="text-xs font-bold uppercase tracking-[0.12em] text-gray-400">Mulai dari sini</p>
+        <h2 class="mt-2 text-xl font-bold tracking-tight sm:text-2xl">Mau pinjam buku? Gampang, 3 langkah saja.</h2>
+        <div class="mt-6 grid gap-3.5 sm:gap-4 md:grid-cols-3">
+            <div class="flex items-start gap-3.5 rounded-2xl bg-white/[0.07] p-4 sm:p-5 ring-1 ring-white/10">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-sm font-extrabold text-gray-900">1</span>
+                <p class="leading-relaxed"><strong class="block">Cari bukunya</strong><span class="text-sm text-gray-300">Ketik judul di halaman Katalog Buku.</span></p>
+            </div>
+            <div class="flex items-start gap-3.5 rounded-2xl bg-white/[0.07] p-4 sm:p-5 ring-1 ring-white/10">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-sm font-extrabold text-gray-900">2</span>
+                <p class="leading-relaxed"><strong class="block">Tekan Pinjam</strong><span class="text-sm text-gray-300">Buku langsung tercatat atas nama Anda.</span></p>
+            </div>
+            <div class="flex items-start gap-3.5 rounded-2xl bg-white/[0.07] p-4 sm:p-5 ring-1 ring-white/10">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-sm font-extrabold text-gray-900">3</span>
+                <p class="leading-relaxed"><strong class="block">Kembalikan tepat waktu</strong><span class="text-sm text-gray-300">Cek tanggalnya di Pinjaman Saya.</span></p>
+            </div>
         </div>
-        <div class="flex items-start gap-3 rounded-xl bg-white/10 p-4">
-            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white font-bold text-gray-900">2</span>
-            <p><strong>Tekan Pinjam</strong><br><span class="text-gray-300">Buku langsung tercatat atas nama Anda.</span></p>
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <a href="<?= e(url('/books')) ?>" class="btn btn-lg bg-white text-gray-900 hover:bg-gray-100"><?= icon('search', 'h-4 w-4') ?> Cari Buku Sekarang</a>
+            <a href="<?= e(url('/my-borrowings')) ?>" class="btn btn-lg border border-white/25 text-white hover:bg-white/10"><?= icon('clipboard', 'h-4 w-4') ?> Pinjaman Saya</a>
+            <a href="<?= e(url('/bantuan')) ?>" class="btn btn-lg border border-white/25 text-white hover:bg-white/10"><?= icon('help', 'h-4 w-4') ?> Bantuan</a>
         </div>
-        <div class="flex items-start gap-3 rounded-xl bg-white/10 p-4">
-            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white font-bold text-gray-900">3</span>
-            <p><strong>Kembalikan tepat waktu</strong><br><span class="text-gray-300">Cek tanggalnya di Pinjaman Saya.</span></p>
-        </div>
-    </div>
-    <div class="mt-5 flex flex-wrap gap-3">
-        <a href="<?= e(url('/books')) ?>" class="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-gray-900 hover:bg-gray-100 transition"><?= icon('search', 'h-4 w-4') ?> Cari Buku Sekarang</a>
-        <a href="<?= e(url('/my-borrowings')) ?>" class="inline-flex items-center gap-2 rounded-xl border border-white/40 px-6 py-3 text-sm font-medium text-white hover:bg-white/10 transition"><?= icon('clipboard', 'h-4 w-4') ?> Pinjaman Saya</a>
-        <a href="<?= e(url('/bantuan')) ?>" class="inline-flex items-center gap-2 rounded-xl border border-white/40 px-6 py-3 text-sm font-medium text-white hover:bg-white/10 transition"><?= icon('help', 'h-4 w-4') ?> Bantuan</a>
     </div>
 </div>
 
 <?php if (!empty($showTips) && !empty($firstSteps)): ?>
-<div class="mb-8 rounded-2xl border border-green-200 bg-white p-5">
-    <div class="flex items-start justify-between gap-3">
+<div class="card card-pad">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-            <h2 class="flex items-center gap-2 font-bold"><?= icon('flag', 'h-5 w-5') ?> Target pemula — selesaikan 3 ini!</h2>
-            <p class="mt-1 text-sm text-gray-500">Centang otomatis begitu Anda melakukannya.</p>
+            <h2 class="flex items-center gap-2 text-[1.05rem] font-bold tracking-tight"><?= icon('flag', 'h-5 w-5') ?> Target pemula — selesaikan 3 ini</h2>
+            <p class="mt-1.5 text-sm leading-relaxed text-gray-500">Centang otomatis begitu Anda melakukannya.</p>
         </div>
-        <form method="POST" action="<?= e(url('/tips/hide')) ?>"><?= csrf_field() ?><button class="text-xs text-gray-400 hover:text-gray-600 hover:underline">Sembunyikan</button></form>
+        <form method="POST" action="<?= e(url('/tips/hide')) ?>" class="shrink-0"><?= csrf_field() ?><button class="text-xs font-medium text-gray-400 transition hover:text-gray-600 hover:underline">Sembunyikan</button></form>
     </div>
-    <div class="mt-4 grid gap-3 sm:grid-cols-3">
+    <div class="mt-5 grid gap-3.5 sm:grid-cols-3">
         <?php foreach ($firstSteps as $idx => $step): ?>
-            <div class="flex items-center gap-3 rounded-xl <?= !empty($step['done']) ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200' ?> p-4">
-                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold <?= !empty($step['done']) ? 'bg-green-600 text-white' : 'bg-white border border-gray-300 text-gray-400' ?>"><?= !empty($step['done']) ? icon('check', 'h-4 w-4') : ($idx + 1) ?></span>
+            <div class="flex items-center gap-3.5 rounded-2xl p-4 sm:p-5 <?= !empty($step['done']) ? 'border border-green-200 bg-green-50/70' : 'border border-gray-200 bg-gray-50/60' ?>">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold <?= !empty($step['done']) ? 'bg-green-600 text-white' : 'border border-gray-300 bg-white text-gray-400' ?>"><?= !empty($step['done']) ? icon('check', 'h-4 w-4') : ($idx + 1) ?></span>
                 <div class="min-w-0">
-                    <p class="text-sm font-medium <?= !empty($step['done']) ? 'text-green-800 line-through' : 'text-gray-800' ?>"><?= e($step['label']) ?></p>
+                    <p class="text-sm font-semibold leading-snug <?= !empty($step['done']) ? 'text-green-800 line-through' : 'text-gray-800' ?>"><?= e($step['label']) ?></p>
                     <?php if (empty($step['done'])): ?>
-                        <a href="<?= e(url($step['href'])) ?>" class="text-xs font-medium text-gray-900 underline"><?= e($step['cta']) ?></a>
+                        <a href="<?= e(url($step['href'])) ?>" class="mt-1 inline-block text-xs font-semibold text-gray-900 underline underline-offset-2"><?= e($step['cta']) ?> &rarr;</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -67,28 +73,37 @@
 </div>
 <?php endif; ?>
 
-<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-    <div class="rounded-2xl border border-gray-200 bg-white p-5">
-        <p class="text-sm text-gray-500">Total Buku</p>
-        <h2 class="text-2xl font-bold"><?= (int) $totalBooks ?></h2>
+<div class="grid gap-4 sm:gap-5 sm:grid-cols-2 xl:grid-cols-4">
+    <div class="card card-pad-sm">
+        <p class="text-sm font-medium text-gray-500">Total Buku</p>
+        <p class="mt-1.5 text-3xl font-extrabold tracking-tight"><?= (int) $totalBooks ?></p>
+        <p class="mt-1 text-xs text-gray-400">koleksi di perpustakaan</p>
     </div>
-    <div class="rounded-2xl border border-gray-200 bg-white p-5">
-        <p class="text-sm text-gray-500">Sedang Dipinjam</p>
-        <h2 class="text-2xl font-bold"><?= (int) $totalBorrowed ?></h2>
+    <div class="card card-pad-sm">
+        <p class="text-sm font-medium text-gray-500">Sedang Dipinjam</p>
+        <p class="mt-1.5 text-3xl font-extrabold tracking-tight"><?= (int) $totalBorrowed ?></p>
+        <p class="mt-1 text-xs text-gray-400">belum dikembalikan</p>
     </div>
-    <div class="rounded-2xl border border-gray-200 bg-white p-5">
-        <p class="text-sm text-gray-500">Terlambat</p>
-        <h2 class="text-2xl font-bold text-red-600"><?= (int) ($totalOverdue ?? 0) ?></h2>
+    <div class="card card-pad-sm">
+        <p class="text-sm font-medium text-gray-500">Terlambat</p>
+        <p class="mt-1.5 text-3xl font-extrabold tracking-tight text-red-600"><?= (int) ($totalOverdue ?? 0) ?></p>
+        <p class="mt-1 text-xs text-gray-400">perlu segera ditindak</p>
     </div>
-    <div class="rounded-2xl border border-gray-200 bg-white p-5">
-        <p class="text-sm text-gray-500">Dikembalikan</p>
-        <h2 class="text-2xl font-bold"><?= (int) $totalReturned ?></h2>
+    <div class="card card-pad-sm">
+        <p class="text-sm font-medium text-gray-500">Dikembalikan</p>
+        <p class="mt-1.5 text-3xl font-extrabold tracking-tight"><?= (int) $totalReturned ?></p>
+        <p class="mt-1 text-xs text-gray-400">transaksi selesai</p>
     </div>
 </div>
 
-<div class="mb-8 rounded-2xl border border-gray-200 bg-white p-6">
-    <h2 class="mb-4 font-semibold">Tren Peminjaman (14 hari)</h2>
-    <div class="h-64"><canvas id="borrowChart"></canvas></div>
+<div class="card card-pad">
+    <div class="mb-5 flex items-center justify-between gap-3">
+        <div>
+            <h2 class="font-bold tracking-tight">Tren Peminjaman</h2>
+            <p class="mt-0.5 text-sm text-gray-500">14 hari terakhir</p>
+        </div>
+    </div>
+    <div class="h-64 sm:h-72"><canvas id="borrowChart"></canvas></div>
 </div>
 
 <?php
@@ -97,20 +112,20 @@ $low = array_slice(array_values($low), 0, 5);
 $showAttention = (isAdmin() && (!empty($overdueBorrowings) || !empty($low)));
 ?>
 <?php if ($showAttention): ?>
-<div class="mb-8 rounded-2xl border border-amber-200 bg-white p-6" role="alert">
-    <h3 class="font-semibold">Perlu Perhatian</h3>
+<div class="card card-pad !border-amber-200 bg-amber-50/40" role="alert">
+    <h3 class="font-bold tracking-tight">Perlu Perhatian</h3>
     <?php if (!empty($overdueBorrowings)): ?>
-    <div class="mt-3 rounded-xl bg-red-50 p-4 text-sm">
-        <p class="font-medium text-red-800">Terlambat (<?= count($overdueBorrowings) ?>) — segera hubungi peminjam.</p>
-        <a href="<?= e(url('/borrowings')) ?>" class="mt-1 inline-block font-medium text-red-800 underline hover:no-underline">Lihat Semua &rarr;</a>
+    <div class="mt-4 rounded-2xl bg-red-50 p-4 text-sm leading-relaxed ring-1 ring-red-100 sm:p-5">
+        <p class="font-semibold text-red-800">Terlambat (<?= count($overdueBorrowings) ?>) — segera hubungi peminjam.</p>
+        <a href="<?= e(url('/borrowings')) ?>" class="mt-2 inline-block font-semibold text-red-800 underline underline-offset-2 hover:no-underline">Lihat Semua &rarr;</a>
     </div>
     <?php endif; ?>
     <?php if (!empty($low)): ?>
-    <div class="mt-3 rounded-xl bg-amber-50 p-4 text-sm">
-        <p class="font-medium text-amber-800">Stok menipis:</p>
-        <ul class="mt-1 list-disc list-inside text-amber-800">
+    <div class="mt-4 rounded-2xl bg-amber-50 p-4 text-sm leading-relaxed ring-1 ring-amber-100 sm:p-5">
+        <p class="font-semibold text-amber-800">Stok menipis:</p>
+        <ul class="mt-2 list-disc space-y-1 pl-5 text-amber-800">
             <?php foreach ($low as $b): ?>
-                <li><a class="underline" href="<?= e(url('/books/' . $b['id'])) ?>"><?= e($b['title']) ?></a> — sisa <?= (int) $b['stock'] ?></li>
+                <li><a class="font-medium underline underline-offset-2" href="<?= e(url('/books/' . $b['id'])) ?>"><?= e($b['title']) ?></a> — sisa <?= (int) $b['stock'] ?></li>
             <?php endforeach; ?>
         </ul>
     </div>
@@ -118,45 +133,45 @@ $showAttention = (isAdmin() && (!empty($overdueBorrowings) || !empty($low)));
 </div>
 <?php endif; ?>
 
-<div class="grid gap-6 lg:grid-cols-2">
-    <div>
-        <div class="mb-4 flex items-center justify-between">
-            <h2 class="text-lg font-semibold">Buku Terbaru</h2>
-            <a href="<?= e(url('/books')) ?>" class="text-sm font-medium text-gray-600 hover:text-gray-900">Lihat Semua &rarr;</a>
+<div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
+    <section>
+        <div class="mb-5 flex items-center justify-between gap-3">
+            <h2 class="text-lg font-bold tracking-tight">Buku Terbaru</h2>
+            <a href="<?= e(url('/books')) ?>" class="text-sm font-semibold text-gray-600 transition hover:text-gray-900">Lihat Semua &rarr;</a>
         </div>
-        <div class="grid gap-4 sm:grid-cols-2">
+        <div class="grid gap-4 sm:grid-cols-2 sm:gap-5">
             <?php foreach (array_slice($latestBooks, 0, 4) as $book): ?>
                 <?php $cUrl = book_cover_url($book); ?>
-                <a href="<?= e(url('/books/' . $book['id'])) ?>" class="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition hover:shadow-md">
-                    <img src="<?= e($cUrl) ?>" class="h-32 w-full object-cover" loading="lazy" alt="Cover <?= e($book['title']) ?>">
-                    <div class="p-4">
-                        <p class="text-xs text-gray-400 uppercase"><?= e($book['category_name'] ?? 'Umum') ?></p>
-                        <h3 class="font-semibold text-sm line-clamp-1"><?= e($book['title']) ?></h3>
-                        <p class="text-xs text-gray-500"><?= e($book['author']) ?></p>
+                <a href="<?= e(url('/books/' . $book['id'])) ?>" class="card group overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md">
+                    <img src="<?= e($cUrl) ?>" class="h-36 w-full object-cover" loading="lazy" alt="Cover <?= e($book['title']) ?>">
+                    <div class="p-4 sm:p-5">
+                        <p class="text-[0.7rem] font-bold uppercase tracking-[0.08em] text-gray-400"><?= e($book['category_name'] ?? 'Umum') ?></p>
+                        <h3 class="mt-1.5 font-semibold leading-snug line-clamp-2"><?= e($book['title']) ?></h3>
+                        <p class="mt-1 text-[0.83rem] text-gray-500"><?= e($book['author']) ?></p>
                     </div>
                 </a>
             <?php endforeach; ?>
         </div>
-    </div>
-    <div>
-        <div class="mb-4 flex items-center justify-between">
-            <h2 class="text-lg font-semibold">Terpopuler</h2>
+    </section>
+    <section>
+        <div class="mb-5 flex items-center justify-between gap-3">
+            <h2 class="text-lg font-bold tracking-tight">Terpopuler</h2>
         </div>
-        <div class="space-y-3">
+        <div class="space-y-3.5">
             <?php foreach (($popularBooks ?? []) as $i => $book): ?>
-                <a href="<?= e(url('/books/' . $book['id'])) ?>" class="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-4 hover:shadow-sm">
-                    <span class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 text-sm font-bold text-white"><?= $i + 1 ?></span>
+                <a href="<?= e(url('/books/' . $book['id'])) ?>" class="card flex items-center gap-4 p-4 transition hover:shadow-sm sm:p-5">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-900 text-sm font-extrabold text-white"><?= $i + 1 ?></span>
                     <div class="min-w-0">
-                        <p class="font-medium truncate"><?= e($book['title']) ?></p>
-                        <p class="text-xs text-gray-500"><?= e($book['author']) ?> · <?= (int) ($book['borrow_count'] ?? 0) ?>x dipinjam</p>
+                        <p class="truncate font-semibold leading-snug"><?= e($book['title']) ?></p>
+                        <p class="mt-0.5 text-[0.83rem] text-gray-500"><?= e($book['author']) ?> · <?= (int) ($book['borrow_count'] ?? 0) ?>x dipinjam</p>
                     </div>
                 </a>
             <?php endforeach; ?>
             <?php if (empty($popularBooks)): ?>
-                <p class="text-sm text-gray-500">Belum ada data peminjaman.</p>
+                <div class="card card-pad-sm text-center text-sm text-gray-500">Belum ada data peminjaman.</div>
             <?php endif; ?>
         </div>
-    </div>
+    </section>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -168,9 +183,9 @@ $showAttention = (isAdmin() && (!empty($overdueBorrowings) || !empty($low)));
         type: 'bar',
         data: {
             labels: <?= json_encode($chartLabels ?? []) ?>,
-            datasets: [{ label: 'Peminjaman', data: <?= json_encode($chartData ?? []) ?>, backgroundColor: '#111827', borderRadius: 6 }]
+            datasets: [{ label: 'Peminjaman', data: <?= json_encode($chartData ?? []) ?>, backgroundColor: '#111827', borderRadius: 6, maxBarThickness: 36 }]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { grid: { display: false } } } }
     });
 })();
 </script>

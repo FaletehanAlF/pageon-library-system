@@ -1,7 +1,7 @@
-<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between no-print">
+<div class="page-header no-print">
     <div>
-        <h1 class="text-2xl font-bold tracking-tight">Laporan Peminjaman</h1>
-        <p class="mt-1 text-gray-500">Filter periode dan status, lalu cetak atau unduh CSV.</p>
+        <h1 class="page-title">Laporan Peminjaman</h1>
+        <p class="page-subtitle">Filter periode dan status, lalu cetak atau unduh CSV.</p>
     </div>
     <div class="flex gap-2">
         <button onclick="window.print()" class="rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800">Print</button>
@@ -38,16 +38,16 @@
     <p class="text-sm">Total transaksi: <?= count($rows) ?> · Estimasi denda berjalan: <?= e(format_rupiah((int) $totalFine)) ?></p>
 </div>
 
-<div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="w-full text-sm">
+<div class="table-shell">
+    <div class="table-scroll">
+        <table class="table-base">
             <thead><tr class="border-b bg-gray-50 text-left text-gray-500">
-                <th class="px-6 py-3 font-medium">Tgl Pinjam</th>
-                <th class="px-6 py-3 font-medium">Peminjam</th>
-                <th class="px-6 py-3 font-medium">Buku</th>
-                <th class="px-6 py-3 font-medium">Jatuh Tempo</th>
-                <th class="px-6 py-3 font-medium">Status</th>
-                <th class="px-6 py-3 font-medium">Denda</th>
+                <th class="px-5 lg:px-6 py-4 font-medium">Tgl Pinjam</th>
+                <th class="px-5 lg:px-6 py-4 font-medium">Peminjam</th>
+                <th class="px-5 lg:px-6 py-4 font-medium">Buku</th>
+                <th class="px-5 lg:px-6 py-4 font-medium">Jatuh Tempo</th>
+                <th class="px-5 lg:px-6 py-4 font-medium">Status</th>
+                <th class="px-5 lg:px-6 py-4 font-medium">Denda</th>
             </tr></thead>
             <tbody>
             <?php if (empty($rows)): ?>
@@ -55,12 +55,12 @@
             <?php else: ?>
                 <?php foreach ($rows as $r): ?>
                     <tr class="border-b border-gray-50">
-                        <td class="px-6 py-3"><?= e($r['borrow_date']) ?></td>
-                        <td class="px-6 py-3"><?= e($r['user_name']) ?></td>
-                        <td class="px-6 py-3"><?= e($r['book_title']) ?></td>
-                        <td class="px-6 py-3"><?= e($r['due_date']) ?></td>
-                        <td class="px-6 py-3"><?= e($r['status']) ?></td>
-                        <td class="px-6 py-3"><?= (int) $r['fine'] > 0 ? e(format_rupiah((int) $r['fine'])) : '—' ?></td>
+                        <td class="px-5 lg:px-6 py-4"><?= e($r['borrow_date']) ?></td>
+                        <td class="px-5 lg:px-6 py-4"><?= e($r['user_name']) ?></td>
+                        <td class="px-5 lg:px-6 py-4"><?= e($r['book_title']) ?></td>
+                        <td class="px-5 lg:px-6 py-4"><?= e($r['due_date']) ?></td>
+                        <td class="px-5 lg:px-6 py-4"><?= e($r['status']) ?></td>
+                        <td class="px-5 lg:px-6 py-4"><?= (int) $r['fine'] > 0 ? e(format_rupiah((int) $r['fine'])) : '—' ?></td>
                     </tr>
                 <?php endforeach; ?>
             <?php endif; ?>

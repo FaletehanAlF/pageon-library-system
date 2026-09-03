@@ -1,4 +1,4 @@
-<div class="mb-8"><h1 class="text-2xl font-bold">Pengumuman</h1><p class="text-gray-500 mt-1">Broadcast ke semua user (juga masuk notifikasi).</p></div>
+<div class="page-header"><div><h1 class="page-title">Pengumuman</h1><p class="page-subtitle">Broadcast ke semua user (juga masuk notifikasi).</p></div></div>
 <div class="mb-6 rounded-2xl border bg-white p-6">
 <h3 class="font-semibold mb-3">Buat Baru</h3>
 <form method="POST" action="<?= e(url('/announcements')) ?>" class="space-y-3"><?= csrf_field() ?>

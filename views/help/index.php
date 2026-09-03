@@ -1,12 +1,14 @@
-<div class="mb-8">
-    <h1 class="text-2xl font-bold tracking-tight">Bantuan — Cara Pakai Pageon</h1>
-    <p class="mt-1 text-gray-500">Panduan singkat dengan bahasa sederhana. Baru pertama kali? Baca <strong>Pertanyaan Umum</strong> di bawah dulu.</p>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Bantuan — Cara Pakai Pageon</h1>
+        <p class="page-subtitle">Panduan singkat dengan bahasa sederhana. Baru pertama kali? Baca <strong class="text-gray-700">Pertanyaan Umum</strong> di bawah dulu.</p>
+    </div>
 </div>
 
-<div class="mb-8 rounded-2xl border border-gray-200 bg-white p-5 sm:p-6">
-    <h2 class="font-semibold">Pertanyaan Umum</h2>
-    <p class="mt-1 text-sm text-gray-500">Klik pertanyaan untuk melihat jawabannya.</p>
-    <div class="mt-3 space-y-2 text-sm text-gray-600">
+<div class="card card-pad">
+    <h2 class="font-bold tracking-tight">Pertanyaan Umum</h2>
+    <p class="mt-1.5 text-sm text-gray-500">Klik pertanyaan untuk melihat jawabannya.</p>
+    <div class="mt-5 space-y-2.5 text-[0.9rem] leading-relaxed text-gray-600">
         <?php
         $faqs = [
             ['Apakah saya harus daftar dulu?', 'Ya. Tekan <strong>Daftar</strong>, isi nama + email + password. Setelah itu Anda bisa langsung pinjam buku.'],
@@ -20,20 +22,20 @@
         ];
         foreach ($faqs as $i => [$q, $a]):
         ?>
-        <details class="group rounded-xl bg-gray-50" <?= $i === 0 ? 'open' : '' ?>>
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-3 p-4 font-medium text-gray-900 [&::-webkit-details-marker]:hidden">
+        <details class="group rounded-2xl bg-gray-50/80 ring-1 ring-gray-100" <?= $i === 0 ? 'open' : '' ?>>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-4 font-semibold text-gray-900 sm:px-5 sm:py-4 [&::-webkit-details-marker]:hidden">
                 <span><?= e($q) ?></span>
                 <svg class="h-4 w-4 shrink-0 text-gray-400 transition group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </summary>
-            <p class="px-4 pb-4"><?= $a ?></p>
+            <p class="px-4 pb-4 sm:px-5 sm:pb-5"><?= $a ?></p>
         </details>
         <?php endforeach; ?>
     </div>
 </div>
 
-<h2 class="mb-4 text-lg font-semibold">Fungsi Tiap Halaman</h2>
+<h2 class="text-lg font-bold tracking-tight">Fungsi Tiap Halaman</h2>
 
-<div class="grid gap-4 lg:grid-cols-2">
+<div class="grid gap-4 sm:gap-5 lg:grid-cols-2">
     <?php
     $guides = [
         ['Dashboard', 'Ringkasan angka (total buku, dipinjam, terlambat), grafik 14 hari, buku terbaru & terpopuler, pengumuman, dan peringatan stok menipis. Mulai hari dari sini.', '/'],
@@ -48,16 +50,16 @@
     ];
     foreach ($guides as [$t, $d, $href]):
     ?>
-        <a href="<?= e(url($href)) ?>" class="block rounded-2xl border border-gray-200 bg-white p-5 transition hover:border-gray-300 hover:shadow-sm">
-            <p class="font-semibold"><?= e($t) ?> <span class="font-normal text-gray-400">&rarr;</span></p>
-            <p class="mt-1 text-sm text-gray-600"><?= e($d) ?></p>
+        <a href="<?= e(url($href)) ?>" class="card card-pad-sm block transition hover:-translate-y-0.5 hover:shadow-md">
+            <p class="font-bold tracking-tight"><?= e($t) ?> <span class="font-normal text-gray-400">&rarr;</span></p>
+            <p class="mt-2 text-[0.9rem] leading-relaxed text-gray-600"><?= e($d) ?></p>
         </a>
     <?php endforeach; ?>
 </div>
 
 <?php if (isAdmin()): ?>
-<h2 class="mt-10 mb-4 text-lg font-semibold">Khusus Admin (2 orang)</h2>
-<div class="grid gap-4 lg:grid-cols-2">
+<h2 class="text-lg font-bold tracking-tight">Khusus Admin</h2>
+<div class="grid gap-4 sm:gap-5 lg:grid-cols-2">
     <?php
     $adminGuides = [
         ['Kelola Peminjaman', 'Lihat semua pinjaman user, kembalikan atas nama user (pilih kondisi baik/rusak/hilang), pantau denda & keterlambatan.', '/borrowings'],
@@ -73,18 +75,18 @@
     ];
     foreach ($adminGuides as [$t, $d, $href]):
     ?>
-        <a href="<?= e(url($href)) ?>" class="block rounded-2xl border border-amber-200 bg-amber-50/50 p-5 transition hover:shadow-sm">
-            <p class="font-semibold"><?= e($t) ?> <span class="font-normal text-gray-400">&rarr;</span></p>
-            <p class="mt-1 text-sm text-gray-600"><?= e($d) ?></p>
+        <a href="<?= e(url($href)) ?>" class="card card-pad-sm block !border-amber-200 !bg-amber-50/50 transition hover:shadow-md">
+            <p class="font-bold tracking-tight"><?= e($t) ?> <span class="font-normal text-gray-400">&rarr;</span></p>
+            <p class="mt-2 text-[0.9rem] leading-relaxed text-gray-600"><?= e($d) ?></p>
         </a>
     <?php endforeach; ?>
 </div>
-<p class="mt-4 text-sm text-gray-500">Catatan owner: pendaftaran admin hanya lewat URL portal rahasia + kode invite (maks 2). Jangan sebarkan URL itu.</p>
+<p class="rounded-2xl bg-gray-100/70 px-5 py-4 text-sm leading-relaxed text-gray-500">Catatan owner: pendaftaran admin hanya lewat URL portal rahasia + kode invite (maks 2). Jangan sebarkan URL itu.</p>
 <?php endif; ?>
 
-<div class="mt-8 rounded-2xl border border-gray-200 bg-white p-6">
-    <h2 class="font-semibold">Alur standar user (4 langkah)</h2>
-    <ol class="mt-2 list-decimal list-inside space-y-1 text-sm text-gray-600">
+<div class="card card-pad">
+    <h2 class="font-bold tracking-tight">Alur standar user (4 langkah)</h2>
+    <ol class="mt-3 list-decimal space-y-2 pl-5 text-[0.9rem] leading-relaxed text-gray-600">
         <li><strong>Cari buku</strong> di halaman Buku → buka Detail.</li>
         <li><strong>Pinjam langsung</strong> atau <strong>+ Keranjang</strong> untuk pinjam beberapa sekaligus → buka Keranjang lalu tekan pinjam.</li>
         <li><strong>Pantau</strong> tanggal kembali di Pinjaman Saya. Jika stok habis, pakai <strong>Reservasi</strong>.</li>

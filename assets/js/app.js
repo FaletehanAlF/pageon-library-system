@@ -59,21 +59,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function openSidebar() {
             sidebar.classList.remove('hidden');
-            sidebar.classList.add('fixed', 'inset-y-0', 'left-0', 'z-40', 'shadow-xl');
+            sidebar.classList.add('flex', 'fixed', 'inset-y-0', 'left-0', 'z-40', 'h-screen', 'overflow-y-auto', 'shadow-xl');
             document.body.appendChild(ensureOverlay());
             document.body.style.overflow = 'hidden';
+            sidebarToggle.setAttribute('aria-expanded', 'true');
         }
 
         function closeSidebar() {
             sidebar.classList.add('hidden');
-            sidebar.classList.remove('fixed', 'inset-y-0', 'left-0', 'z-40', 'shadow-xl');
+            sidebar.classList.remove('flex', 'fixed', 'inset-y-0', 'left-0', 'z-40', 'h-screen', 'overflow-y-auto', 'shadow-xl');
             if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
             document.body.style.overflow = '';
+            sidebarToggle.setAttribute('aria-expanded', 'false');
         }
 
         // Start hidden on small screens
         if (window.innerWidth < 1024) {
             sidebar.classList.add('hidden');
+            sidebar.classList.remove('flex');
         }
 
         sidebarToggle.addEventListener('click', function (e) {
@@ -87,12 +90,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
         window.addEventListener('resize', function () {
             if (window.innerWidth >= 1024) {
-                sidebar.classList.remove('hidden', 'fixed', 'inset-y-0', 'left-0', 'z-40', 'shadow-xl');
+                sidebar.classList.remove('fixed', 'inset-y-0', 'left-0', 'z-40', 'h-screen', 'overflow-y-auto', 'shadow-xl');
                 if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
                 document.body.style.overflow = '';
+            } else {
+                // Kembali ke mode drawer saat mengecil
+                if (!overlay || !overlay.parentNode) {
+                    sidebar.classList.add('hidden');
+                    sidebar.classList.remove('flex');
+                }
             }
         });
     }
+
+    // ── Shortcut "/" untuk fokus ke pencarian buku ──────────
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+        var tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+        var search = document.querySelector('input[type="search"][name="q"]');
+        if (search) {
+            e.preventDefault();
+            search.focus();
+        }
+    });
 
     // ── Modals ──────────────────────────────────────────────
     function closeAllModals() {

@@ -656,7 +656,7 @@ function pagination_links(string $baseUrl, array $query, int $page, int $totalPa
     if ($totalPages <= 1) {
         return '';
     }
-    $html = '<nav class="mt-8 flex items-center justify-center gap-2" aria-label="Pagination">';
+    $html = '<nav class="mt-8 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination">';
     $q = $query;
     $mk = static function (int $p) use ($baseUrl, $q): string {
         $q['page'] = $p;
@@ -666,33 +666,33 @@ function pagination_links(string $baseUrl, array $query, int $page, int $totalPa
 
     // Prev
     if ($page > 1) {
-        $html .= '<a href="' . $mk($page - 1) . '" class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">&larr; Prev</a>';
+        $html .= '<a href="' . $mk($page - 1) . '" class="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition hover:bg-gray-50">&larr; Prev</a>';
     }
 
     $start = max(1, $page - 2);
     $end = min($totalPages, $page + 2);
     if ($start > 1) {
-        $html .= '<a href="' . $mk(1) . '" class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">1</a>';
+        $html .= '<a href="' . $mk(1) . '" class="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition hover:bg-gray-50">1</a>';
         if ($start > 2) {
             $html .= '<span class="px-1 text-gray-400">…</span>';
         }
     }
     for ($i = $start; $i <= $end; $i++) {
         if ($i === $page) {
-            $html .= '<span class="rounded-xl bg-gray-900 px-4 py-2 text-sm font-medium text-white">' . $i . '</span>';
+            $html .= '<span aria-current="page" class="rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-bold text-white shadow-sm">' . $i . '</span>';
         } else {
-            $html .= '<a href="' . $mk($i) . '" class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">' . $i . '</a>';
+            $html .= '<a href="' . $mk($i) . '" class="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition hover:bg-gray-50">' . $i . '</a>';
         }
     }
     if ($end < $totalPages) {
         if ($end < $totalPages - 1) {
             $html .= '<span class="px-1 text-gray-400">…</span>';
         }
-        $html .= '<a href="' . $mk($totalPages) . '" class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">' . $totalPages . '</a>';
+        $html .= '<a href="' . $mk($totalPages) . '" class="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition hover:bg-gray-50">' . $totalPages . '</a>';
     }
 
     if ($page < $totalPages) {
-        $html .= '<a href="' . $mk($page + 1) . '" class="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">Next &rarr;</a>';
+        $html .= '<a href="' . $mk($page + 1) . '" class="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition hover:bg-gray-50">Next &rarr;</a>';
     }
     $html .= '</nav>';
 
