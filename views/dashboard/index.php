@@ -143,11 +143,14 @@ $showAttention = (isAdmin() && (!empty($overdueBorrowings) || !empty($low)));
             <?php foreach (array_slice($latestBooks, 0, 4) as $book): ?>
                 <?php $cUrl = book_cover_url($book); ?>
                 <a href="<?= e(url('/books/' . $book['id'])) ?>" class="card group overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md">
-                    <img src="<?= e($cUrl) ?>" class="h-36 w-full object-cover" loading="lazy" alt="Cover <?= e($book['title']) ?>">
+                    <img src="<?= e($cUrl) ?>" class="aspect-[4/3] w-full bg-gray-100 object-cover" loading="lazy" alt="Cover <?= e($book['title']) ?>">
                     <div class="p-4 sm:p-5">
                         <p class="text-[0.7rem] font-bold uppercase tracking-[0.08em] text-gray-400"><?= e($book['category_name'] ?? 'Umum') ?></p>
                         <h3 class="mt-1.5 font-semibold leading-snug line-clamp-2"><?= e($book['title']) ?></h3>
                         <p class="mt-1 text-[0.83rem] text-gray-500"><?= e($book['author']) ?></p>
+                        <?php if (isset($book['stock'])): ?>
+                            <div class="mt-3"><?= stock_badge((int) $book['stock']) ?></div>
+                        <?php endif; ?>
                     </div>
                 </a>
             <?php endforeach; ?>

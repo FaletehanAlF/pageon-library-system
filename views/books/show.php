@@ -14,11 +14,9 @@
         <div class="lg:col-span-1">
             <div class="card card-pad lg:sticky lg:top-24">
                 <?php $cUrl = book_cover_url($book); ?>
-                <img src="<?= e($cUrl) ?>" alt="Cover <?= e($book['title']) ?>" class="h-72 w-full rounded-2xl object-cover ring-1 ring-gray-100">
+                <img src="<?= e($cUrl) ?>" alt="Cover <?= e($book['title']) ?>" class="aspect-[4/3] w-full rounded-2xl bg-gray-100 object-cover ring-1 ring-gray-100">
                 <div class="mt-5 flex flex-wrap gap-2">
-                    <span class="badge <?= (int) $book['stock'] > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?>">
-                        <?= (int) $book['stock'] > 0 ? icon('check', 'h-3.5 w-3.5') . ' Tersedia · sisa ' . (int) $book['stock'] : icon('clock', 'h-3.5 w-3.5') . ' Stok habis' ?>
-                    </span>
+                    <?= stock_badge((int) ($book['stock'] ?? 0)) ?>
                     <?php if (($rating['count'] ?? 0) > 0): ?>
                         <span class="badge bg-amber-100 text-amber-800"><?= stars((float) ($rating['avg'] ?? 0), 'h-3.5 w-3.5') ?> <?= e((string) $rating['avg']) ?> (<?= (int) $rating['count'] ?>)</span>
                     <?php endif; ?>

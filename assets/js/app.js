@@ -171,6 +171,78 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ── Pratinjau cover buku (tambah/edit) ───────────────────
+    // Aktif otomatis untuk setiap <input type="file" data-cover-input>.
+    // Validasi tipe & ukuran di klien; pratinjau via FileReader.
+    document.querySelectorAll('input[data-cover-input]').forEach(function (input) {
+        var preview = document.getElementById(input.getAttribute('data-preview') || '');
+        var nameEl = document.getElementById(input.getAttribute('data-filename') || '');
+        var errEl = document.getElementById(input.getAttribute('data-error') || '');
+        var clearBtn = document.getElementById(input.getAttribute('data-clear') || '');
+        var wrap = preview && preview.closest ? preview.closest('[data-preview-wrap]') : null;
+        var defaultName = nameEl ? nameEl.textContent : '';
+
+        function showCoverError(msg) {
+            if (errEl) {
+                errEl.textContent = msg;
+                errEl.classList.remove('hidden');
+            }
+        }
+
+        function clearCoverError() {
+            if (errEl) {
+                errEl.textContent = '';
+                errEl.classList.add('hidden');
+            }
+        }
+
+        function resetPicker() {
+            input.value = '';
+            clearCoverError();
+            if (preview) preview.removeAttribute('src');
+            if (wrap) wrap.classList.add('hidden');
+            if (clearBtn) clearBtn.classList.add('hidden');
+            if (nameEl) nameEl.textContent = defaultName;
+        }
+
+        input.addEventListener('change', function () {
+            clearCoverError();
+            var file = input.files && input.files[0];
+            if (!file) {
+                resetPicker();
+                return;
+            }
+            if (['image/jpeg', 'image/png', 'image/webp'].indexOf(file.type) === -1) {
+                showCoverError('Format harus JPG, PNG, atau WebP.');
+                resetPicker();
+                return;
+            }
+            if (file.size > 2 * 1024 * 1024) {
+                showCoverError('Ukuran gambar maksimal 2MB.');
+                resetPicker();
+                return;
+            }
+            if (nameEl) {
+                nameEl.textContent = file.name + ' (' + Math.round(file.size / 1024) + ' KB)';
+            }
+            if (clearBtn) clearBtn.classList.remove('hidden');
+            if (preview && typeof FileReader !== 'undefined') {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    if (wrap) wrap.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else if (wrap) {
+                wrap.classList.remove('hidden');
+            }
+        });
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', resetPicker);
+        }
+    });
+
     // ── Modals ──────────────────────────────────────────────
     function closeAllModals() {
         document.querySelectorAll('[id$="-modal"]').forEach(function (modal) {

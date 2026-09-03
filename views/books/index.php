@@ -89,7 +89,7 @@
             <?php $cUrl = book_cover_url($book); ?>
             <article class="card group flex flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md">
                 <a href="<?= e(url('/books/' . $book['id'])) ?>" class="block focus:outline-none" tabindex="-1" aria-hidden="true">
-                    <img src="<?= e($cUrl) ?>" alt="" class="h-48 w-full object-cover" loading="lazy">
+                    <img src="<?= e($cUrl) ?>" alt="" class="aspect-[4/3] w-full bg-gray-100 object-cover" loading="lazy">
                 </a>
                 <div class="flex flex-1 flex-col p-5">
                     <p class="text-[0.7rem] font-bold uppercase tracking-[0.08em] text-gray-400">
@@ -104,9 +104,7 @@
                         <?= e($book['author']) ?><?= !empty($book['year']) ? ' · ' . (int) $book['year'] : '' ?><?= !empty($book['rack']) ? ' · Rak ' . e($book['rack']) : '' ?>
                     </p>
                     <div class="mt-4 flex flex-col gap-3 border-t border-gray-100 pt-4">
-                        <span class="badge w-fit <?= (int) $book['stock'] > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?>">
-                            <?= (int) $book['stock'] > 0 ? icon('check', 'h-3.5 w-3.5') . ' Tersedia · ' . (int) $book['stock'] : icon('clock', 'h-3.5 w-3.5') . ' Habis · bisa reservasi' ?>
-                        </span>
+                        <?= stock_badge((int) ($book['stock'] ?? 0)) ?>
                         <div class="flex items-center gap-3">
                             <a href="<?= e(url('/books/' . $book['id'])) ?>" class="btn btn-primary btn-sm flex-1">Lihat &amp; Pinjam &rarr;</a>
                             <?php if (isAdmin()): ?>

@@ -456,6 +456,7 @@ function icon(string $name, string $class = 'h-4 w-4'): string
         'cart' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 4.6a1 1 0 00.9 1.4H19M9 22a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>',
         'check' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>',
         'x' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>',
+        'image' => '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 15l-5-5L5 21"/>',
         'check-circle' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>',
         'clock' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>',
         'bell' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>',
@@ -486,6 +487,22 @@ function stars(float|int $rating, string $class = 'h-4 w-4'): string
     }
 
     return $out . '</span>';
+}
+
+/**
+ * Badge stok buku 3 tingkat — satu sumber kebenaran untuk semua kartu.
+ * Hijau = tersedia, amber = hampir habis (sisa ≤ 2), merah = habis.
+ */
+function stock_badge(int $stock): string
+{
+    if ($stock <= 0) {
+        return '<span class="badge bg-red-100 text-red-700">' . icon('clock', 'h-3.5 w-3.5') . ' Habis · bisa reservasi</span>';
+    }
+    if ($stock <= 2) {
+        return '<span class="badge bg-amber-100 text-amber-800">' . icon('alert', 'h-3.5 w-3.5') . ' Sisa ' . $stock . ' · hampir habis</span>';
+    }
+
+    return '<span class="badge bg-green-100 text-green-700">' . icon('check', 'h-3.5 w-3.5') . ' Tersedia · sisa ' . $stock . '</span>';
 }
 
 /**

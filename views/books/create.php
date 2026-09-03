@@ -94,13 +94,27 @@
                     <label for="stock" class="form-label">Stok <span class="text-red-500">*</span></label>
                     <input type="number" id="stock" name="stock" value="<?= old('stock', '1') ?>" min="0" max="9999" required
                         class="form-input">
+                    <p class="form-hint">Jumlah eksemplar. Menentukan badge stok di kartu buku (0 = habis, ≤ 2 = hampir habis).</p>
                 </div>
 
                 <div class="sm:col-span-2">
-                    <label for="cover" class="form-label">Cover Buku</label>
-                    <input type="file" id="cover" name="cover" accept=".jpg,.jpeg,.png,.webp"
-                        class="form-input file:mr-4 file:rounded-lg file:border-0 file:bg-gray-900 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-gray-700">
-                    <p class="form-hint">Format JPG / PNG / WebP, maksimal 2MB.</p>
+                    <span class="form-label" id="cover-label">Cover Buku</span>
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
+                        <div data-preview-wrap class="hidden w-40 shrink-0 overflow-hidden rounded-2xl bg-gray-100 ring-1 ring-gray-200">
+                            <img id="cover-preview" alt="Pratinjau cover buku" class="aspect-[4/3] w-full object-cover">
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex flex-wrap items-center gap-2.5">
+                                <label for="cover" class="btn btn-secondary cursor-pointer"><?= icon('image', 'h-4 w-4') ?> Pilih gambar…</label>
+                                <button type="button" id="cover-clear" class="btn btn-ghost btn-sm hidden"><?= icon('x', 'h-3.5 w-3.5') ?> Batalkan</button>
+                            </div>
+                            <input type="file" id="cover" name="cover" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" class="sr-only" aria-labelledby="cover-label"
+                                data-cover-input data-preview="cover-preview" data-filename="cover-filename" data-error="cover-error" data-clear="cover-clear">
+                            <p id="cover-filename" class="mt-2.5 truncate text-xs text-gray-400">Belum ada gambar dipilih — tanpa gambar, cover otomatis dibuatkan.</p>
+                            <p id="cover-error" class="mt-1.5 hidden text-xs font-semibold text-red-600" role="alert"></p>
+                            <p class="form-hint">Pilih dari file explorer (JPG / PNG / WebP, maksimal 2MB). Setelah buku disimpan, gambar langsung tampil di katalog.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
