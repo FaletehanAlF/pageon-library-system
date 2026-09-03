@@ -10,6 +10,14 @@ final class DashboardController extends Controller
 
         // Pengingat jatuh tempo ≤ 2 hari (anti-duplikat, aman diabaikan bila gagal)
         ensure_due_notifications((int) Session::get('user_id', 0));
+        // Pengingat tagihan denda belum lunas (anti-duplikat)
+        ensure_unpaid_fine_reminder((int) Session::get('user_id', 0));
+        // Auto-migrasi: lengkapi setting baru di database lama (aman, tak menimpa)
+        try {
+            (new Setting())->ensureDefaults();
+        } catch (Throwable) {
+            // abaikan
+        }
 
         $bookModel = new Book();
         $borrowingModel = new Borrowing();

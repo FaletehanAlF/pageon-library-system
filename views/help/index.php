@@ -10,7 +10,9 @@
         <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Bagaimana cara meminjam buku?</p><p class="mt-1">Buka <strong>Buku</strong> → klik bukunya → tekan <strong>Pinjam Langsung</strong>. Mau pinjam banyak? Tekan <strong>+ Keranjang</strong> di tiap buku, lalu buka <strong>Keranjang</strong> dan tekan <strong>Pinjam Semua Sekaligus</strong>.</p></div>
         <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Buku yang saya mau stoknya habis, bagaimana?</p><p class="mt-1">Tekan <strong>Reservasi</strong> untuk ikut antrean. Kalau bukunya kembali, Anda otomatis diprioritaskan dan dapat notifikasi. 🔔</p></div>
         <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Kapan harus mengembalikan?</p><p class="mt-1">Lihat tanggalnya di <strong>Pinjaman Saya</strong>. Butuh waktu lebih lama? Tekan <strong>Perpanjang</strong> <em>sebelum</em> tanggalnya lewat.</p></div>
-        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Apa yang terjadi kalau telat mengembalikan?</p><p class="mt-1">Kena <strong>denda per hari</strong> (besarnya lihat di halaman <strong>Denda</strong>). Selama masih ada tagihan, Anda belum bisa pinjam lagi. Bayar dendanya ke petugas perpustakaan.</p></div>
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Apa yang terjadi kalau telat mengembalikan?</p><p class="mt-1">Kena <strong>denda yang naik setiap hari</strong> (hari ke-1 murah, hari berikutnya makin mahal — besarnya lihat di halaman <strong>Denda</strong>). Selama masih ada tagihan, Anda belum bisa pinjam lagi. <strong>Segera bayar ke petugas</strong> agar tidak makin besar.</p></div>
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Bagaimana kalau bukunya rusak / hilang?</p><p class="mt-1">Petugas mencatat kondisinya saat Anda mengembalikan. Buku <strong>rusak</strong> kena denda kerusakan, buku <strong>hilang</strong> kena ganti rugi — Anda langsung dapat <strong>notifikasi tagihan</strong> dan wajib segera membayar.</p></div>
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Di mana saya lihat buku yang sudah dikembalikan?</p><p class="mt-1">Buka <strong>Riwayat Pinjam</strong> — ada ringkasan tepat waktu / telat dan status denda tiap pinjaman (lunas atau belum).</p></div>
         <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Lupa password?</p><p class="mt-1">Di halaman Masuk, klik <strong>Lupa password?</strong> lalu ikuti langkahnya. Atau minta bantuan admin untuk me-reset password Anda.</p></div>
     </div>
 </div>
@@ -23,8 +25,9 @@
         ['Dashboard', 'Ringkasan angka (total buku, dipinjam, terlambat), grafik 14 hari, buku terbaru & terpopuler, pengumuman, dan peringatan stok menipis. Mulai hari dari sini.', '/'],
         ['Buku', 'Katalog + cari (judul/penulis/penerbit), filter kategori & stok, urutkan. Klik buku untuk detail, pinjam langsung / + keranjang, reservasi (jika habis), ulas, atau wishlist.', '/books'],
         ['Keranjang', 'Kumpulkan beberapa buku dulu, lalu “Pinjam Semua Sekaligus”. Dicek otomatis: batas maks pinjam, denda lunas, stok & antrean reservasi.', '/cart'],
-        ['Peminjaman Saya', 'Daftar pinjaman Anda: batas kembali, denda berjalan, tombol Perpanjang (maks sesuai aturan) dan Kembalikan, plus tombol Struk untuk bukti print.', '/my-borrowings'],
-        ['Denda', 'Lihat tagihan denda (telat / hilang). Lunasi ke petugas. Selama ada tagihan, pinjam & checkout dikunci.', '/fines'],
+        ['Peminjaman Saya', 'Buku yang sedang Anda pinjam: batas kembali, denda berjalan, tombol Perpanjang (maks sesuai aturan) dan Kembalikan, plus tombol Struk untuk bukti print.', '/my-borrowings'],
+        ['Riwayat Pinjam', 'Semua buku yang sudah dikembalikan: tepat waktu atau telat berapa hari, plus status dendanya (lunas / belum).', '/riwayat'],
+        ['Denda', 'Tagihan denda (telat / rusak / hilang). Lunasi SEGERA ke petugas — denda telat naik tiap hari. Selama ada tagihan, pinjam & checkout dikunci.', '/fines'],
         ['Reservasi', 'Antrean saat buku habis. Anda otomatis diprioritaskan saat stok kembali dan dapat notifikasi. Bisa dibatalkan kapan saja.', '/reservations'],
         ['Wishlist', 'Simpan buku incaran. Buka lagi nanti tanpa harus mencari ulang.', '/wishlist'],
         ['Notifikasi', 'Info reservasi siap + pengumuman admin. Bell di atas ikut menghitung yang belum dibaca.', '/notifications'],
@@ -54,7 +57,7 @@
         ['Kelola User', 'Ubah role (kuota admin maks 2), suspend/aktifkan, reset password user yang lupa.', '/users'],
         ['Pengumuman', 'Tulis info (libur, aturan baru). Otomatis masuk notifikasi semua user + dashboard.', '/announcements'],
         ['Log Aktivitas', 'Audit siapa berbuat apa (pinjam, kembali, bayar denda, ubah setting). Filter per aksi.', '/logs'],
-        ['Pengaturan', 'Ubah nama perpustakaan, lama pinjam, denda/hari, maks pinjam & perpanjang, dan ganti rugi buku hilang tanpa edit kode.', '/settings'],
+        ['Pengaturan', 'Ubah nama perpustakaan, lama pinjam, denda/hari + kenaikannya, denda rusak, maks pinjam & perpanjang, dan ganti rugi buku hilang tanpa edit kode.', '/settings'],
     ];
     foreach ($adminGuides as [$t, $d, $href]):
     ?>

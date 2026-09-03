@@ -152,10 +152,41 @@ final class Borrowing extends Model
         $stmt->execute([$userId]);
         $total = 0;
         foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $due) {
-            $total += days_overdue((string) $due) * $perDay;
+            $total += calc_fine((string) $due, $perDay);
         }
 
         return $total;
+    }
+
+    /**
+     * Riwayat: semua pinjaman yang sudah dikembalikan + total denda
+     * yang pernah tercatat per peminjaman (lunas maupun belum).
+     *
+     * @return array<int, array<string,mixed>>
+     */
+    public function getHistoryByUser(int $userId): array
+    {
+        $stmt = $this->db->prepare("
+            SELECT
+                br.*,
+                b.title  AS book_title,
+                b.author AS book_author,
+                COALESCE((
+                    SELECT SUM(fp.amount) FROM fine_payments fp
+                    WHERE fp.borrowing_id = br.id
+                ), 0) AS fine_total,
+                COALESCE((
+                    SELECT SUM(CASE WHEN fp.status = 'unpaid' THEN fp.amount ELSE 0 END)
+                    FROM fine_payments fp WHERE fp.borrowing_id = br.id
+                ), 0) AS fine_unpaid
+            FROM borrowings br
+            INNER JOIN books b ON b.id = br.book_id
+            WHERE br.user_id = ? AND br.status = 'returned'
+            ORDER BY COALESCE(br.return_date, br.due_date) DESC, br.id DESC
+        ");
+        $stmt->execute([$userId]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function renew(int $id, string $newDueDate): bool

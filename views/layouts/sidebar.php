@@ -34,6 +34,7 @@
         $link('/books', 'books', 'Buku', $icoBook);
         $link('/cart', 'cart', 'Keranjang' . (cart_count() > 0 ? ' (' . cart_count() . ')' : ''), $icoCart);
         $link('/my-borrowings', 'my-borrowings', 'Peminjaman Saya', $icoBorrow);
+        $link('/riwayat', 'riwayat', 'Riwayat Pinjam', $icoLog);
         $link('/reservations', 'reservations', 'Reservasi', $icoClock);
         $link('/wishlist', 'wishlist', 'Wishlist', $icoHeart);
         $link('/fines', 'fines', 'Denda', $icoMoney);

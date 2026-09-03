@@ -39,6 +39,7 @@ $router->post('/borrowings', 'BorrowingController@store');
 $router->post('/borrowings/{id}/return', 'BorrowingController@returnBook');
 $router->post('/borrowings/{id}/renew', 'BorrowingController@renew');
 $router->get('/my-borrowings', 'BorrowingController@myBorrowings');
+$router->get('/riwayat', 'BorrowingController@history');
 
 // Cart (keranjang pinjam — semua user login)
 $router->get('/cart', 'CartController@index');

@@ -2,9 +2,26 @@
 
 <?php if (!$isAdminView): ?>
     <div class="mb-8">
-        <h1 class="text-2xl font-bold tracking-tight">Denda Saya</h1>
+        <h1 class="text-2xl font-bold tracking-tight">Denda Saya 💸</h1>
         <p class="mt-1 text-gray-500">Tagihan denda yang belum lunas. Lunasi ke petugas/admin sebelum meminjam lagi.</p>
     </div>
+
+    <?php if ((int) ($myTotal ?? 0) > 0): ?>
+        <div class="mb-6 rounded-2xl border border-red-300 bg-red-600 p-6 text-white" role="alert">
+            <p class="font-bold">⚠️ SEGERA BAYAR ke petugas!</p>
+            <p class="mt-1 text-sm text-red-100">Selama masih ada tagihan, Anda <strong>belum bisa pinjam buku lagi</strong>. Denda keterlambatan <strong>naik setiap hari</strong>, jadi semakin cepat bayar semakin murah.</p>
+            <p class="mt-2 text-2xl font-bold"><?= e(format_rupiah((int) ($myTotal ?? 0))) ?></p>
+        </div>
+    <?php endif; ?>
+
+    <?php if (setting_int('fine_increment', 0) > 0): ?>
+        <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
+            📈 <strong>Denda naik tiap hari!</strong> Hari ke-1 telat = <?= e(format_rupiah(setting_int('fine_per_day', 1000))) ?>,
+            hari ke-2 = <?= e(format_rupiah(setting_int('fine_per_day', 1000) + setting_int('fine_increment', 0))) ?>,
+            hari ke-3 = <?= e(format_rupiah(setting_int('fine_per_day', 1000) + 2 * setting_int('fine_increment', 0))) ?>, dan seterusnya.
+            Contoh: telat 3 hari = <strong><?= e(format_rupiah(fine_preview(3))) ?></strong>.
+        </div>
+    <?php endif; ?>
 
     <div class="mb-6 rounded-2xl border <?= ((int) ($myTotal ?? 0) > 0) ? 'border-red-200 bg-red-50' : 'border-green-200 bg-green-50' ?> p-6">
         <p class="text-sm <?= ((int) ($myTotal ?? 0) > 0) ? 'text-red-700' : 'text-green-700' ?>">Total belum lunas</p>

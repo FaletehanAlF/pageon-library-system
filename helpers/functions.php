@@ -294,11 +294,36 @@ function days_overdue(string $dueDate, ?string $asOf = null): int
     return max(0, $diff);
 }
 
-function calc_fine(string $dueDate, ?int $perDay = null, ?string $asOf = null): int
+/**
+ * Hitung denda keterlambatan PROGRESIF: tiap lewat 1 hari, tarif naik.
+ * Hari ke-1 = base, hari ke-2 = base+inc, hari ke-3 = base+2*inc, dst.
+ * Total(n) = n*base + inc*n*(n-1)/2. Jika inc = 0 → datar seperti dulu.
+ */
+function calc_fine(string $dueDate, ?int $perDay = null, ?int $increment = null, ?string $asOf = null): int
 {
     $perDay ??= setting_int('fine_per_day', 1000);
+    $increment ??= setting_int('fine_increment', 0);
+    $perDay = max(0, $perDay);
+    $increment = max(0, $increment);
 
-    return days_overdue($dueDate, $asOf) * max(0, $perDay);
+    $n = days_overdue($dueDate, $asOf);
+    if ($n <= 0) {
+        return 0;
+    }
+
+    return $n * $perDay + $increment * (int) ($n * ($n - 1) / 2);
+}
+
+/**
+ * Perkiraan denda jika telat tepat $days hari (untuk tampilan info).
+ */
+function fine_preview(int $days, ?int $perDay = null, ?int $increment = null): int
+{
+    $perDay ??= setting_int('fine_per_day', 1000);
+    $increment ??= setting_int('fine_increment', 0);
+    $days = max(0, $days);
+
+    return $days * max(0, $perDay) + max(0, $increment) * (int) ($days * ($days - 1) / 2);
 }
 
 function format_rupiah(int $amount): string
@@ -538,6 +563,37 @@ function ensure_due_notifications(int $userId): void
                 $link
             );
         }
+    } catch (Throwable) {
+        // abaikan
+    }
+}
+
+/**
+ * Pengingat tagihan denda belum lunas (tagih terus sampai dibayar).
+ * Dipanggil saat dashboard dibuka; anti-duplikat (1 notif belum dibaca).
+ */
+function ensure_unpaid_fine_reminder(int $userId): void
+{
+    try {
+        $total = (new FinePayment())->unpaidTotalByUser($userId);
+        if ($total <= 0) {
+            return;
+        }
+        $notif = new Notification();
+        $link = url('/fines');
+        $stmt = Database::getInstance()->prepare(
+            "SELECT 1 FROM notifications WHERE user_id = ? AND is_read = 0 AND link = ? AND title LIKE 'Tagihan denda%' LIMIT 1"
+        );
+        $stmt->execute([$userId, $link]);
+        if ($stmt->fetchColumn()) {
+            return;
+        }
+        $notif->notify(
+            $userId,
+            'Tagihan denda ' . format_rupiah($total),
+            'Anda punya tagihan ' . format_rupiah($total) . ' yang belum dibayar. SEGERA bayar ke petugas — denda telat naik setiap hari dan Anda belum bisa pinjam lagi.',
+            $link
+        );
     } catch (Throwable) {
         // abaikan
     }

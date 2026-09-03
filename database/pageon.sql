@@ -161,8 +161,10 @@ INSERT INTO settings (`key`, `value`) VALUES
 ('library_name', 'Pageon'),
 ('loan_days', '7'),
 ('fine_per_day', '1000'),
+('fine_increment', '500'),
 ('max_loans', '3'),
 ('max_renew', '1'),
+('damage_fee', '20000'),
 ('lost_book_fee', '50000')
 ON DUPLICATE KEY UPDATE `value` = `value`;
 

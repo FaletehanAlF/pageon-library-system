@@ -48,6 +48,14 @@ final class FinePayment extends Model
         return (bool) $stmt->fetchColumn();
     }
 
+    /** Semua tagihan untuk satu peminjaman (untuk halaman riwayat). */
+    public function forBorrowing(int $borrowingId): array
+    {
+        $stmt = $this->db->prepare("SELECT * FROM fine_payments WHERE borrowing_id = ? ORDER BY created_at ASC");
+        $stmt->execute([$borrowingId]);
+        return $stmt->fetchAll();
+    }
+
     public function createUnpaid(int $userId, int $amount, string $type, ?int $borrowingId = null, ?int $bookId = null, ?string $note = null): int
     {
         return $this->create([

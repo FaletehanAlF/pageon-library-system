@@ -20,5 +20,5 @@
         <div class="flex justify-between"><dt class="text-gray-500">Denda berjalan</dt><dd class="font-bold"><?= (int) ($b['fine'] ?? 0) > 0 ? e(format_rupiah((int) $b['fine'])) : 'Rp0' ?></dd></div>
     </dl>
 
-    <p class="mt-6 text-xs text-gray-400">Harap kembalikan sebelum batas waktu agar tidak kena denda <?= e(format_rupiah(setting_int('fine_per_day', 1000))) ?>/hari. Tunjukkan struk ini ke petugas.</p>
+    <p class="mt-6 text-xs text-gray-400">Harap kembalikan sebelum batas waktu agar tidak kena denda mulai <?= e(format_rupiah(setting_int('fine_per_day', 1000))) ?>/hari<?php if (setting_int('fine_increment', 0) > 0): ?> (naik <?= e(format_rupiah(setting_int('fine_increment', 0))) ?> setiap harinya)<?php endif; ?>. Tunjukkan struk ini ke petugas.</p>
 </div>

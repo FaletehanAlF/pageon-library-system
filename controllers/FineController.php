@@ -51,6 +51,15 @@ final class FineController extends Controller
         $model = new FinePayment();
         if ($model->markPaid((int) $id)) {
             log_activity('fine_paid', "Denda #{$id} ditandai lunas");
+            $row = $model->find((int) $id);
+            if ($row !== null) {
+                (new Notification())->notify(
+                    (int) $row['user_id'],
+                    'Denda lunas ✅',
+                    'Tagihan ' . format_rupiah((int) $row['amount']) . ' sudah lunas. Terima kasih — Anda bisa meminjam lagi.',
+                    url('/fines')
+                );
+            }
             Session::flash('success', 'Denda ditandai lunas.');
         } else {
             Session::flash('error', 'Denda tidak ditemukan atau sudah diproses.');
@@ -68,6 +77,15 @@ final class FineController extends Controller
         $model = new FinePayment();
         if ($model->markWaived((int) $id)) {
             log_activity('fine_waived', "Denda #{$id} dibebaskan");
+            $row = $model->find((int) $id);
+            if ($row !== null) {
+                (new Notification())->notify(
+                    (int) $row['user_id'],
+                    'Denda dibebaskan',
+                    'Tagihan ' . format_rupiah((int) $row['amount']) . ' dibebaskan admin. Anda bisa meminjam lagi.',
+                    url('/fines')
+                );
+            }
             Session::flash('success', 'Denda dibebaskan.');
         } else {
             Session::flash('error', 'Denda tidak ditemukan atau sudah diproses.');

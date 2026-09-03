@@ -36,4 +36,35 @@ final class Setting extends Model
 
         return is_array($rows) ? $rows : [];
     }
+
+    /**
+     * Nilai bawaan semua pengaturan. Dipakai auto-migrasi agar
+     * database lama otomatis dapat setting baru tanpa SQL manual.
+     *
+     * @return array<string,string>
+     */
+    public static function defaults(): array
+    {
+        return [
+            'library_name' => 'Pageon',
+            'loan_days' => '7',
+            'fine_per_day' => '1000',
+            'fine_increment' => '500',
+            'max_loans' => '3',
+            'max_renew' => '1',
+            'damage_fee' => '20000',
+            'lost_book_fee' => '50000',
+        ];
+    }
+
+    /**
+     * Tambahkan setting yang belum ada (tidak menimpa yang sudah diubah admin).
+     */
+    public function ensureDefaults(): void
+    {
+        $stmt = $this->db->prepare('INSERT IGNORE INTO `settings` (`key`, `value`) VALUES (?, ?)');
+        foreach (self::defaults() as $k => $v) {
+            $stmt->execute([$k, $v]);
+        }
+    }
 }

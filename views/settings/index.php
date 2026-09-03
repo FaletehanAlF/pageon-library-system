@@ -5,9 +5,11 @@
 <div class="grid grid-cols-2 gap-4">
 <div><label class="text-sm font-medium">Lama Pinjam (hari)</label><input type="number" name="loan_days" value="<?= (int) ($settings['loan_days'] ?? 7) ?>" min="1" max="60" class="mt-1 w-full rounded-xl border bg-gray-50 px-4 py-3 text-sm"></div>
 <div><label class="text-sm font-medium">Denda / hari (Rp)</label><input type="number" name="fine_per_day" value="<?= (int) ($settings['fine_per_day'] ?? 1000) ?>" min="0" max="100000" class="mt-1 w-full rounded-xl border bg-gray-50 px-4 py-3 text-sm"></div>
+<div><label class="text-sm font-medium">Kenaikan denda / hari (Rp)</label><input type="number" name="fine_increment" value="<?= (int) ($settings['fine_increment'] ?? 500) ?>" min="0" max="50000" step="100" class="mt-1 w-full rounded-xl border bg-gray-50 px-4 py-3 text-sm"><p class="mt-1 text-xs text-gray-400">Denda naik tiap hari telat. 0 = datar. Misal 1000 + naik 500: telat 3 hari = Rp4.500.</p></div>
 <div><label class="text-sm font-medium">Max Pinjam Aktif</label><input type="number" name="max_loans" value="<?= (int) ($settings['max_loans'] ?? 3) ?>" min="1" max="20" class="mt-1 w-full rounded-xl border bg-gray-50 px-4 py-3 text-sm"></div>
 <div><label class="text-sm font-medium">Max Perpanjang</label><input type="number" name="max_renew" value="<?= (int) ($settings['max_renew'] ?? 1) ?>" min="0" max="5" class="mt-1 w-full rounded-xl border bg-gray-50 px-4 py-3 text-sm"></div>
 <div class="col-span-2"><label class="text-sm font-medium">Ganti Rugi Buku Hilang (Rp)</label><input type="number" name="lost_book_fee" value="<?= (int) ($settings['lost_book_fee'] ?? 50000) ?>" min="0" max="1000000" step="500" class="mt-1 w-full rounded-xl border bg-gray-50 px-4 py-3 text-sm"><p class="mt-1 text-xs text-gray-400">Ditagihkan otomatis saat pengembalian dengan kondisi “hilang”.</p></div>
+<div class="col-span-2"><label class="text-sm font-medium">Denda Buku Rusak (Rp)</label><input type="number" name="damage_fee" value="<?= (int) ($settings['damage_fee'] ?? 20000) ?>" min="0" max="1000000" step="500" class="mt-1 w-full rounded-xl border bg-gray-50 px-4 py-3 text-sm"><p class="mt-1 text-xs text-gray-400">Ditagihkan otomatis + notifikasi ke user saat pengembalian dengan kondisi “rusak”.</p></div>
 </div>
 <button class="rounded-xl bg-gray-900 px-6 py-3 text-sm text-white">Simpan</button>
 </form>

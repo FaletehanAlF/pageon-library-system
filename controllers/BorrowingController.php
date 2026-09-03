@@ -62,6 +62,47 @@ final class BorrowingController extends Controller
         ]);
     }
 
+    /**
+     * Riwayat peminjaman user: yang sudah dikembalikan + dendanya.
+     */
+    public function history(): void
+    {
+        $this->requireAuth();
+
+        $uid = (int) Session::get('user_id');
+        $rows = (new Borrowing())->getHistoryByUser($uid);
+
+        $total = count($rows);
+        $onTime = 0;
+        $late = 0;
+        $fineTotal = 0;
+        $fineUnpaid = 0;
+        foreach ($rows as &$r) {
+            $retTs = strtotime((string) ($r['return_date'] ?? $r['due_date'])) ?: 0;
+            $dueTs = strtotime((string) $r['due_date']) ?: 0;
+            $r['late_days'] = max(0, (int) floor(($retTs - $dueTs) / 86400));
+            if ($r['late_days'] > 0) {
+                $late++;
+            } else {
+                $onTime++;
+            }
+            $fineTotal += (int) ($r['fine_total'] ?? 0);
+            $fineUnpaid += (int) ($r['fine_unpaid'] ?? 0);
+        }
+        unset($r);
+
+        $this->viewWithLayout('borrowings/history', 'layouts/main', [
+            'title' => 'Riwayat Peminjaman - Pageon',
+            'page' => 'riwayat',
+            'rows' => $rows,
+            'total' => $total,
+            'onTime' => $onTime,
+            'late' => $late,
+            'fineTotal' => $fineTotal,
+            'fineUnpaid' => $fineUnpaid,
+        ]);
+    }
+
     public function store(): void
     {
         $this->requireAuth();
@@ -292,6 +333,7 @@ final class BorrowingController extends Controller
             $bookTitle = $bookModel->find((int) $borrowing['book_id'])['title'] ?? 'Buku';
             $copyModel = new BookCopy();
             $lostFee = 0;
+            $damageFee = 0;
 
             if ($condition === 'hilang') {
                 // Eksemplar hilang: tidak kembali ke stok + denda ganti rugi
@@ -300,10 +342,11 @@ final class BorrowingController extends Controller
                 }
                 $lostFee = setting_int('lost_book_fee', 50000);
             } elseif ($condition === 'rusak') {
-                // Eksemplar rusak: keluar dari sirkulasi, tanpa stok kembali
+                // Eksemplar rusak: keluar dari sirkulasi + denda kerusakan
                 if (!empty($borrowing['copy_id'])) {
                     $copyModel->markDamaged((int) $borrowing['copy_id']);
                 }
+                $damageFee = setting_int('damage_fee', 20000);
             } else {
                 $bookModel->incrementStock((int) $borrowing['book_id']);
                 if (!empty($borrowing['copy_id'])) {
@@ -313,6 +356,7 @@ final class BorrowingController extends Controller
 
             // Catat denda keterlambatan sebagai tagihan (sekali per peminjaman)
             $fineModel = new FinePayment();
+            $lateDays = days_overdue((string) $borrowing['due_date']);
             if ($fine > 0 && !$fineModel->existsUnpaidForBorrowing($borrowingId, 'overdue')) {
                 $fineModel->createUnpaid(
                     (int) $borrowing['user_id'],
@@ -320,7 +364,7 @@ final class BorrowingController extends Controller
                     'overdue',
                     $borrowingId,
                     (int) $borrowing['book_id'],
-                    'Denda telat ' . days_overdue((string) $borrowing['due_date']) . ' hari'
+                    'Denda telat ' . $lateDays . ' hari (progresif, naik tiap hari)'
                 );
             }
             if ($lostFee > 0) {
@@ -331,6 +375,39 @@ final class BorrowingController extends Controller
                     $borrowingId,
                     (int) $borrowing['book_id'],
                     'Ganti rugi buku hilang'
+                );
+            }
+            if ($damageFee > 0 && !$fineModel->existsUnpaidForBorrowing($borrowingId, 'damage')) {
+                $fineModel->createUnpaid(
+                    (int) $borrowing['user_id'],
+                    $damageFee,
+                    'damage',
+                    $borrowingId,
+                    (int) $borrowing['book_id'],
+                    'Denda buku dikembalikan rusak'
+                );
+            }
+
+            $newCharges = $fine + $lostFee + $damageFee;
+
+            // Notifikasi denda ke user — wajib segera dibayar
+            if ($newCharges > 0 || $condition !== 'baik') {
+                $causes = [];
+                if ($fine > 0) {
+                    $causes[] = 'telat ' . $lateDays . ' hari (' . format_rupiah($fine) . ')';
+                }
+                if ($condition === 'rusak') {
+                    $causes[] = 'rusak (' . format_rupiah($damageFee) . ')';
+                }
+                if ($condition === 'hilang') {
+                    $causes[] = 'hilang (' . format_rupiah($lostFee) . ')';
+                }
+                (new Notification())->notify(
+                    (int) $borrowing['user_id'],
+                    'Denda baru ' . format_rupiah($newCharges) . ' — segera bayar',
+                    'Buku "' . $bookTitle . '" dikembalikan ' . implode(', ', $causes)
+                        . '. SEGERA bayar ke petugas — denda telat naik setiap hari dan Anda belum bisa pinjam lagi sebelum lunas.',
+                    url('/fines')
                 );
             }
 
@@ -353,10 +430,13 @@ final class BorrowingController extends Controller
             } elseif ($condition === 'rusak') {
                 $msgs[] = 'Eksemplar dicatat RUSAK dan ditarik dari sirkulasi.';
             }
-            if ($fine > 0 || $lostFee > 0) {
-                $msgs[] = 'Total tagihan denda: ' . format_rupiah($fine + $lostFee) . ' (lihat halaman Denda).';
+            if ($newCharges > 0) {
+                $msgs[] = 'Total tagihan denda: ' . format_rupiah($newCharges) . ' (lihat halaman Denda).';
             }
             Session::flash('success', implode(' ', $msgs));
+            if ($newCharges > 0) {
+                Session::flash('error', '⚠️ SEGERA bayar denda ' . format_rupiah($newCharges) . ' ke petugas. Denda telat naik setiap hari dan Anda belum bisa pinjam lagi sebelum lunas.');
+            }
         } catch (Throwable $e) {
             if ($this->db->inTransaction()) {
                 $this->db->rollBack();
