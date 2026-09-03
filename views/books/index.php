@@ -27,7 +27,7 @@
             >
         </div>
         <div class="md:col-span-3">
-            <select name="category_id" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none focus:border-gray-900 focus:bg-white" aria-label="Filter kategori">
+            <select name="category_id" onchange="this.form.submit()" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none focus:border-gray-900 focus:bg-white" aria-label="Filter kategori">
                 <option value="0">Semua kategori</option>
                 <?php foreach (($categories ?? []) as $c): ?>
                     <option value="<?= (int) $c['id'] ?>" <?= ((int) ($filters['category_id'] ?? 0) === (int) $c['id']) ? 'selected' : '' ?>><?= e($c['name']) ?></option>
@@ -35,14 +35,14 @@
             </select>
         </div>
         <div class="md:col-span-2">
-            <select name="availability" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none focus:border-gray-900 focus:bg-white" aria-label="Filter ketersediaan">
+            <select name="availability" onchange="this.form.submit()" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none focus:border-gray-900 focus:bg-white" aria-label="Filter ketersediaan">
                 <option value="">Semua stok</option>
                 <option value="available" <?= (($filters['availability'] ?? '') === 'available') ? 'selected' : '' ?>>Tersedia</option>
                 <option value="empty" <?= (($filters['availability'] ?? '') === 'empty') ? 'selected' : '' ?>>Habis</option>
             </select>
         </div>
         <div class="md:col-span-2">
-            <select name="sort" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none focus:border-gray-900 focus:bg-white" aria-label="Urutkan">
+            <select name="sort" onchange="this.form.submit()" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm outline-none focus:border-gray-900 focus:bg-white" aria-label="Urutkan">
                 <option value="newest" <?= (($filters['sort'] ?? 'newest') === 'newest') ? 'selected' : '' ?>>Terbaru</option>
                 <option value="oldest" <?= (($filters['sort'] ?? '') === 'oldest') ? 'selected' : '' ?>>Terlama</option>
                 <option value="title_asc" <?= (($filters['sort'] ?? '') === 'title_asc') ? 'selected' : '' ?>>Judul A-Z</option>
@@ -50,7 +50,7 @@
             </select>
         </div>
         <div class="md:col-span-12 flex items-center gap-2">
-            <button type="submit" class="rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800">Filter</button>
+            <button type="submit" class="rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800">🔍 Cari</button>
             <?php if (!empty($filters['q']) || !empty($filters['category_id']) || !empty($filters['availability'])): ?>
                 <a href="<?= e(url('/books')) ?>" class="rounded-xl border border-gray-200 px-5 py-2.5 text-sm text-gray-600 hover:bg-gray-50">Reset</a>
             <?php endif; ?>

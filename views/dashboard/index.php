@@ -42,6 +42,31 @@
     </div>
 </div>
 
+<?php if (!empty($showTips) && !empty($firstSteps)): ?>
+<div class="mb-8 rounded-2xl border border-green-200 bg-white p-6">
+    <div class="flex items-start justify-between gap-3">
+        <div>
+            <h2 class="font-bold">🎯 Target pemula — selesaikan 3 ini!</h2>
+            <p class="mt-1 text-sm text-gray-500">Centang otomatis begitu Anda melakukannya.</p>
+        </div>
+        <form method="POST" action="<?= e(url('/tips/hide')) ?>"><?= csrf_field() ?><button class="text-xs text-gray-400 hover:text-gray-600 hover:underline">Sembunyikan ✕</button></form>
+    </div>
+    <div class="mt-4 grid gap-3 sm:grid-cols-3">
+        <?php foreach ($firstSteps as $step): ?>
+            <div class="flex items-center gap-3 rounded-xl <?= !empty($step['done']) ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200' ?> p-4">
+                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg <?= !empty($step['done']) ? 'bg-green-600 text-white' : 'bg-white border border-gray-300 text-gray-400' ?>"><?= !empty($step['done']) ? '✓' : '○' ?></span>
+                <div class="min-w-0">
+                    <p class="text-sm font-medium <?= !empty($step['done']) ? 'text-green-800 line-through' : 'text-gray-800' ?>"><?= e($step['label']) ?></p>
+                    <?php if (empty($step['done'])): ?>
+                        <a href="<?= e(url($step['href'])) ?>" class="text-xs font-medium text-gray-900 underline"><?= e($step['cta']) ?></a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
     <div class="rounded-2xl border border-gray-200 bg-white p-6">
         <p class="text-sm text-gray-500">Total Buku</p>

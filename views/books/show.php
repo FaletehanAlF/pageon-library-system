@@ -123,7 +123,7 @@
 
                 <?php if (isAuth() && !isAdmin()): ?>
                     <div class="mt-4 rounded-xl bg-blue-50 p-4 text-xs leading-relaxed text-blue-800">
-                        💡 <strong>Baru pertama kali pinjam?</strong> Tekan <strong>Pinjam Langsung</strong> — buku langsung tercatat atas nama Anda.
+                        💡 <strong>Baru pertama kali pinjam?</strong> Tekan <strong>📥 Pinjam Sekarang</strong> — buku langsung tercatat atas nama Anda, gratis.
                         Mau pinjam banyak sekaligus? Tekan <strong>+ Keranjang</strong> di tiap buku, lalu buka
                         <a class="font-medium underline" href="<?= e(url('/cart')) ?>">Keranjang</a>.
                         Batas kembali bisa dilihat di <a class="font-medium underline" href="<?= e(url('/my-borrowings')) ?>">Pinjaman Saya</a>.

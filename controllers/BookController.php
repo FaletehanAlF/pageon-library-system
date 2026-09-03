@@ -221,6 +221,9 @@ final class BookController extends Controller
             'related' => $related,
             'queueCount' => $queueCount,
             'hasReservation' => $hasReservation,
+            'loanDays' => max(1, setting_int('loan_days', 7)),
+            'finePerDay' => setting_int('fine_per_day', 1000),
+            'fineIncrement' => setting_int('fine_increment', 0),
         ]);
     }
 

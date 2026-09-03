@@ -50,7 +50,7 @@
             <span class="font-semibold text-gray-900"><?= count($items) ?> buku</span> di keranjang.
             Pastikan belum melebihi batas <?= (int) ($maxLoans ?? 3) ?> pinjaman aktif.
         </div>
-        <form method="POST" action="<?= e(url('/cart/checkout')) ?>" onsubmit="return confirm('Pinjam <?= count($items) ?> buku ini sekaligus?')">
+        <form method="POST" action="<?= e(url('/cart/checkout')) ?>" onsubmit="return confirm('Pinjam <?= count($items) ?> buku ini sekaligus? Kembalikan sebelum <?= e(format_date(date('Y-m-d', strtotime('+' . max(1, (int) ($loanDays ?? 7)) . ' days')))) ?> agar GRATIS — telat kena denda mulai <?= e(format_rupiah((int) ($finePerDay ?? 1000))) ?>/hari.')">
             <?= csrf_field() ?>
             <button class="rounded-xl bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800">Pinjam Semua Sekaligus</button>
         </form>

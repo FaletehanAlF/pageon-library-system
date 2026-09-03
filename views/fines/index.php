@@ -33,6 +33,17 @@
         <?php endif; ?>
     </div>
 
+    <?php if ((int) ($myTotal ?? 0) > 0): ?>
+    <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-6">
+        <h2 class="font-semibold">💳 Cara membayar (3 langkah)</h2>
+        <ol class="mt-2 list-decimal list-inside space-y-1 text-sm text-gray-600">
+            <li>Datang ke <strong>petugas perpustakaan</strong> dan sebutkan <strong>nama + judul buku</strong> yang didenda.</li>
+            <li>Bayar tunai sebesar nominal di atas, lalu minta struk/bukti.</li>
+            <li>Petugas menandai <strong>Lunas</strong> — tagihan di halaman ini langsung hilang dan Anda bisa pinjam lagi. ✅</li>
+        </ol>
+    </div>
+    <?php endif; ?>
+
     <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">

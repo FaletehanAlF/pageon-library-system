@@ -17,6 +17,7 @@ $router->post('/reset-password', 'AuthController@resetSubmit');
 
 // Dashboard
 $router->get('/', 'DashboardController@index');
+$router->post('/tips/hide', 'DashboardController@hideTips');
 
 // Books
 $router->get('/books', 'BookController@index');

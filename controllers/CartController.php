@@ -22,6 +22,8 @@ final class CartController extends Controller
             'page' => 'cart',
             'items' => $items,
             'maxLoans' => setting_int('max_loans', 3),
+            'loanDays' => max(1, setting_int('loan_days', 7)),
+            'finePerDay' => setting_int('fine_per_day', 1000),
         ]);
     }
 
