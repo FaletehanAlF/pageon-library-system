@@ -29,6 +29,26 @@ final class ProfileController extends Controller
         ]);
     }
 
+    public function card(): void
+    {
+        $this->requireAuth();
+        $user = currentUser();
+        if ($user === null) {
+            redirect('/login');
+        }
+        $db = Database::getInstance();
+        $stmt = $db->prepare('SELECT created_at FROM users WHERE id = ?');
+        $stmt->execute([(int) $user['id']]);
+        $since = (string) ($stmt->fetchColumn() ?: date('Y-m-d'));
+
+        $this->viewWithLayout('profile/card', 'layouts/print', [
+            'title' => 'Kartu Anggota - Pageon',
+            'page' => 'profile',
+            'user' => $user,
+            'since' => $since,
+        ]);
+    }
+
     public function update(): void
     {
         $this->requireAuth();

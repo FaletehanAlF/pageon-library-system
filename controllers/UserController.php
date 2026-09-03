@@ -37,7 +37,15 @@ final class UserController extends Controller
             Session::flash('error', 'Tidak bisa menurunkan role sendiri.');
             redirect('/users');
         }
-        (new User())->update((int) $id, ['role' => $role]);
+        $model = new User();
+        if ($role === 'admin') {
+            $target = $model->find((int) $id);
+            if ($target !== null && ($target['role'] ?? 'user') !== 'admin' && $model->countAdmins() >= $model->maxAdmins()) {
+                Session::flash('error', 'Kuota admin penuh (maks ' . $model->maxAdmins() . ' orang).');
+                redirect('/users');
+            }
+        }
+        $model->update((int) $id, ['role' => $role]);
         Session::flash('success', 'Role diperbarui.');
         redirect('/users');
     }

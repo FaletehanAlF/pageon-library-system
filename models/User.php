@@ -69,4 +69,18 @@ final class User extends Model
     {
         return array_map('intval', $this->db->query('SELECT id FROM users')->fetchAll(PDO::FETCH_COLUMN));
     }
+
+    public function countAdmins(): int
+    {
+        $stmt = $this->db->query("SELECT COUNT(*) FROM users WHERE role = 'admin'");
+
+        return (int) $stmt->fetchColumn();
+    }
+
+    public function maxAdmins(): int
+    {
+        $s = admin_secret();
+
+        return $s !== null ? (int) $s['max_admins'] : 2;
+    }
 }

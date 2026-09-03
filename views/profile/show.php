@@ -20,6 +20,7 @@
             <div class="rounded-xl bg-amber-50 p-3"><p class="text-sm font-bold"><?= e(format_rupiah((int) $stats['fine'])) ?></p><p class="text-xs text-gray-500">Denda</p></div>
         </div>
         <a href="<?= e(url('/my-borrowings')) ?>" class="mt-4 block text-center text-sm font-medium text-gray-900 underline">Lihat peminjaman saya</a>
+        <a href="<?= e(url('/profile/card')) ?>" class="mt-2 block rounded-xl border border-gray-200 px-4 py-2.5 text-center text-sm font-medium hover:bg-gray-50">Cetak Kartu Anggota</a>
     </div>
 
     <div class="lg:col-span-2 space-y-6">

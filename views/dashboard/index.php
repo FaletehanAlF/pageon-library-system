@@ -19,6 +19,14 @@
 </div>
 <?php endif; ?>
 
+<div class="mb-8 rounded-2xl border border-gray-200 bg-white p-5 text-sm text-gray-600">
+    <strong class="text-gray-900">Cara pakai (3 langkah):</strong>
+    1) Cari buku di <a class="underline" href="<?= e(url('/books')) ?>">Buku</a> →
+    2) Pinjam / Reservasi jika habis →
+    3) Pantau &amp; kembalikan di <a class="underline" href="<?= e(url('/my-borrowings')) ?>">Peminjaman Saya</a>.
+    Bingung? Buka <a class="underline font-medium text-gray-900" href="<?= e(url('/bantuan')) ?>">Bantuan</a>.
+</div>
+
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
     <div class="rounded-2xl border border-gray-200 bg-white p-6">
         <p class="text-sm text-gray-500">Total Buku</p>

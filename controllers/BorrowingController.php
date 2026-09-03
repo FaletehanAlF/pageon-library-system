@@ -211,6 +211,33 @@ final class BorrowingController extends Controller
         redirect('/my-borrowings');
     }
 
+    public function receipt(string $id): void
+    {
+        $this->requireAuth();
+        if (!ctype_digit($id)) {
+            abort(404);
+        }
+
+        $borrowingModel = new Borrowing();
+        $rows = $borrowingModel->getAllWithDetails(['borrowings.id' => (int) $id]);
+        $b = $rows[0] ?? null;
+        if ($b === null) {
+            Session::flash('error', 'Data peminjaman tidak ditemukan.');
+            redirect('/my-borrowings');
+        }
+        if (!isAdmin() && (int) $b['user_id'] !== (int) Session::get('user_id')) {
+            abort(403);
+        }
+
+        $b['fine'] = $b['status'] === 'borrowed' ? calc_fine((string) $b['due_date']) : 0;
+
+        $this->viewWithLayout('borrowings/receipt', 'layouts/print', [
+            'title' => 'Struk #' . $b['id'] . ' - Pageon',
+            'page' => 'my-borrowings',
+            'b' => $b,
+        ]);
+    }
+
     public function returnBook(string $id): void
     {
         $this->requireAuth();

@@ -214,6 +214,55 @@ function sanitize_string(mixed $value, int $maxLength = 0): string
     return $str;
 }
 
+/**
+ * Baca config portal admin rahasia (gitignore).
+ * Return null jika file belum dibuat (portal nonaktif).
+ */
+function admin_secret(): ?array
+{
+    static $cache = null;
+    static $loaded = false;
+
+    if ($loaded) {
+        return $cache;
+    }
+    $loaded = true;
+
+    $file = BASE_PATH . '/config/admin-secret.php';
+    if (!file_exists($file)) {
+        return null;
+    }
+    $cfg = require $file;
+    if (!is_array($cfg)) {
+        return null;
+    }
+    $slug = trim((string) ($cfg['slug'] ?? ''), '/');
+    $invite = (string) ($cfg['invite_code'] ?? '');
+    if ($slug === '' || $invite === '' || !preg_match('/^[A-Za-z0-9\-\/]+$/', $slug)) {
+        return null;
+    }
+    $cache = [
+        'slug' => $slug,
+        'invite_code' => $invite,
+        'max_admins' => max(1, (int) ($cfg['max_admins'] ?? 2)),
+    ];
+
+    return $cache;
+}
+
+/**
+ * URL portal admin rahasia, atau null jika belum di-generate.
+ */
+function admin_portal_url(string $sub = ''): ?string
+{
+    $s = admin_secret();
+    if ($s === null) {
+        return null;
+    }
+
+    return url('/' . $s['slug'] . $sub);
+}
+
 function setting(string $key, mixed $default = null): mixed
 {
     static $model = null;

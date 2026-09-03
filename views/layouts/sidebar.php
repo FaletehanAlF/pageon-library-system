@@ -33,6 +33,8 @@
         $link('/reservations', 'reservations', 'Reservasi', $icoClock);
         $link('/wishlist', 'wishlist', 'Wishlist', $icoHeart);
         $link('/notifications', 'notifications', 'Notifikasi', $icoBell);
+        $icoHelp = '<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.3 10a3.7 3.7 0 017.3 0c0 2-2.7 2.4-2.7 4m-.3 3.5h.01M12 21a9 9 0 100-18 9 9 0 000 18z"/></svg>';
+        $link('/bantuan', 'bantuan', 'Bantuan', $icoHelp);
         ?>
 
         <?php if (isAdmin()): ?>

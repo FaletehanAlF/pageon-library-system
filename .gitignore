@@ -9,3 +9,7 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Portal admin rahasia — hanya di laptop owner, JANGAN di-push
+/config/admin-secret.php
+/routes/admin-portal.php

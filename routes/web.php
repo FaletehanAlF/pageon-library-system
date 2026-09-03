@@ -80,4 +80,19 @@ $router->post('/users/{id}/reset-password', 'UserController@resetPassword');
 $router->get('/settings', 'SettingsController@index');
 $router->post('/settings', 'SettingsController@update');
 
+// Bantuan (semua user login)
+$router->get('/bantuan', 'HelpController@index');
+
+// Struk peminjaman (printable, pemilik atau admin)
+$router->get('/borrowings/{id}/receipt', 'BorrowingController@receipt');
+
+// Kartu anggota (printable)
+$router->get('/profile/card', 'ProfileController@card');
+
+// Portal admin rahasia (file gitignore, hanya ada di laptop owner)
+$portalRoutes = BASE_PATH . '/routes/admin-portal.php';
+if (file_exists($portalRoutes)) {
+    require $portalRoutes;
+}
+
 $router->dispatch();

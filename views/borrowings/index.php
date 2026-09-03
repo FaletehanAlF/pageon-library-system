@@ -104,8 +104,9 @@ foreach (($borrowings ?? []) as $tmp) { $totalFine += (int) ($tmp['fine'] ?? 0);
                                 <?php endif; ?>
                             </td>
                             <td class="px-6 py-4 text-right">
+                                <a href="<?= e(url('/borrowings/' . $b['id'] . '/receipt')) ?>" class="mr-2 text-xs font-medium text-gray-500 hover:text-gray-900 underline">Struk</a>
                                 <?php if ($b['status'] === 'borrowed'): ?>
-                                    <div class="flex justify-end gap-2">
+                                    <div class="mt-1 flex justify-end gap-2">
                                         <?php if (!empty($b['can_renew'])): ?>
                                             <form method="POST" action="<?= e(url('/borrowings/' . $b['id'] . '/renew')) ?>" class="inline">
                                                 <?= csrf_field() ?>
