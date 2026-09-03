@@ -1,156 +1,77 @@
 <?php
 
-require_once "config/database.php";
-require_once "models/Book.php";
+declare(strict_types=1);
 
-$bookModel = new Book($pdo);
+/**
+ * Pageon — Library Management System
+ * Front Controller
+ */
 
-$totalBooks = $bookModel->getTotalBooks();
-$latestBooks = $bookModel->getLatestBooks();
+define('BASE_PATH', __DIR__);
 
-$title = "Dashboard";
+// ── Error handling ──────────────────────────────────────────
+// In production, hide errors; in debug mode, show them.
+$appConfig = file_exists(BASE_PATH . '/config/app.php') ? require BASE_PATH . '/config/app.php' : [];
+$debug = (bool) ($appConfig['debug'] ?? false);
 
-require_once "views/layouts/header.php";
-?>
+if ($debug) {
+    ini_set('display_errors', '1');
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', '0');
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+}
 
-<div class="flex min-h-screen">
+// Global exception handler — log and show 500 page
+set_exception_handler(static function (Throwable $e): void {
+    error_log('[Pageon] Uncaught: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
 
-    <?php require_once "views/layouts/sidebar.php"; ?>
+    if (!headers_sent()) {
+        http_response_code(500);
+    }
 
-    <div class="flex flex-1 flex-col">
+    $debugLocal = (bool) (config('app.debug', false) ?? false);
+    if ($debugLocal) {
+        echo '<pre style="padding:2rem;font-family:monospace;white-space:pre-wrap;background:#fff;color:#111">'
+            . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8')
+            . "\n\n" . htmlspecialchars($e->getTraceAsString(), ENT_QUOTES, 'UTF-8')
+            . '</pre>';
+    } else {
+        $view500 = BASE_PATH . '/views/errors/500.php';
+        if (file_exists($view500)) {
+            // Ensure helpers are available for url()/e()
+            if (!function_exists('e')) {
+                require BASE_PATH . '/helpers/functions.php';
+            }
+            require $view500;
+        } else {
+            echo 'Internal Server Error';
+        }
+    }
+    exit;
+});
 
-        <?php require_once "views/layouts/navbar.php"; ?>
+// ── Bootstrap ───────────────────────────────────────────────
+require_once BASE_PATH . '/core/Database.php';
+require_once BASE_PATH . '/core/Session.php';
+require_once BASE_PATH . '/core/Model.php';
+require_once BASE_PATH . '/core/Controller.php';
+require_once BASE_PATH . '/core/Router.php';
+require_once BASE_PATH . '/helpers/functions.php';
+require_once BASE_PATH . '/models/User.php';
+require_once BASE_PATH . '/models/Book.php';
+require_once BASE_PATH . '/models/BookCopy.php';
+require_once BASE_PATH . '/models/Category.php';
+require_once BASE_PATH . '/models/Borrowing.php';
+require_once BASE_PATH . '/models/Setting.php';
+require_once BASE_PATH . '/models/Reservation.php';
+require_once BASE_PATH . '/models/Review.php';
+require_once BASE_PATH . '/models/Wishlist.php';
+require_once BASE_PATH . '/models/Notification.php';
+require_once BASE_PATH . '/models/Announcement.php';
+require_once BASE_PATH . '/middleware/AuthMiddleware.php';
 
-        <main class="flex-1 p-6 lg:p-8">
+Session::start();
 
-            <!-- Header -->
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold tracking-tight">
-                    Welcome Pageon 
-                </h1>
-
-                <p class="mt-1 text-gray-500">
-                    Find your next book and manage your borrowing.
-                </p>
-            </div>
-
-            <!-- Search -->
-            <div class="mb-8">
-                <input
-                    type="text"
-                    placeholder="Search books..."
-                    class="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 outline-none transition focus:border-gray-400"
-                >
-            </div>
-
-            <!-- Statistics -->
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
-                <!-- Total Books -->
-                <div class="rounded-2xl border border-gray-200 bg-white p-6">
-                    <p class="text-sm text-gray-500">
-                        Total Books
-                    </p>
-
-                    <h2 class="mt-2 text-3xl font-bold">
-                        <?= $totalBooks ?>
-                    </h2>
-                </div>
-
-                <!-- Currently Borrowed -->
-                <div class="rounded-2xl border border-gray-200 bg-white p-6">
-                    <p class="text-sm text-gray-500">
-                        Currently Borrowed
-                    </p>
-
-                    <h2 class="mt-2 text-3xl font-bold">
-                        0
-                    </h2>
-                </div>
-
-                <!-- Returned Books -->
-                <div class="rounded-2xl border border-gray-200 bg-white p-6">
-                    <p class="text-sm text-gray-500">
-                        Returned Books
-                    </p>
-
-                    <h2 class="mt-2 text-3xl font-bold">
-                        0
-                    </h2>
-                </div>
-
-            </div>
-
-            <!-- Recently Added -->
-            <div class="mt-10">
-
-                <div class="mb-4 flex items-center justify-between">
-
-                    <h2 class="text-lg font-semibold">
-                        Recently Added
-                    </h2>
-
-                    <a
-                        href="#"
-                        class="text-sm font-medium text-gray-600 hover:text-black"
-                    >
-                        View all
-                    </a>
-
-                </div>
-
-                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-
-                    <?php if (empty($latestBooks)): ?>
-
-                        <div class="col-span-full rounded-2xl border border-gray-200 bg-white p-6">
-                            <p class="text-gray-500">
-                                No books available yet.
-                            </p>
-                        </div>
-
-                    <?php else: ?>
-
-                        <?php foreach ($latestBooks as $book): ?>
-
-                            <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white">
-
-                                <div class="flex h-48 items-center justify-center bg-gray-100">
-                                    <span class="text-sm text-gray-400">
-                                        No Cover
-                                    </span>
-                                </div>
-
-                                <div class="p-4">
-
-                                    <p class="mb-1 text-xs text-gray-500">
-                                        <?= htmlspecialchars($book['category_name']) ?>
-                                    </p>
-
-                                    <h3 class="font-semibold">
-                                        <?= htmlspecialchars($book['title']) ?>
-                                    </h3>
-
-                                    <p class="mt-1 text-sm text-gray-500">
-                                        <?= htmlspecialchars($book['author']) ?>
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                        <?php endforeach; ?>
-
-                    <?php endif; ?>
-
-                </div>
-
-            </div>
-
-        </main>
-
-    </div>
-
-</div>
-
-<?php require_once "views/layouts/footer.php"; ?>
+// ── Dispatch ────────────────────────────────────────────────
+require BASE_PATH . '/routes/web.php';

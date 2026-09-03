@@ -1,12 +1,17 @@
 {
   "name": "pageon",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Pageon — Library Management System",
+  "private": true,
   "scripts": {
-    "dev": "npx @tailwindcss/cli -i ./assets/css/input.css -o ./assets/css/output.css --watch"
+    "dev": "npx @tailwindcss/cli -i ./assets/css/input.css -o ./assets/css/output.css --watch",
+    "build": "npx @tailwindcss/cli -i ./assets/css/input.css -o ./assets/css/output.css --minify"
   },
-  "keywords": [],
+  "keywords": [
+    "library",
+    "php",
+    "tailwindcss"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {

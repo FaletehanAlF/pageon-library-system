@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# If requested resource exists as file or directory, serve it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Otherwise forward to front controller
+RewriteRule ^ index.php [QSA,L]
+
+# Security: deny access to sensitive files
+<FilesMatch "^(config|\.env|\.git)">
+    Require all denied
+</FilesMatch>
