@@ -10,6 +10,10 @@ $router->post('/login', 'AuthController@login');
 $router->get('/register', 'AuthController@registerForm');
 $router->post('/register', 'AuthController@register');
 $router->get('/logout', 'AuthController@logout');
+$router->get('/forgot-password', 'AuthController@forgotForm');
+$router->post('/forgot-password', 'AuthController@forgotSubmit');
+$router->get('/reset-password', 'AuthController@resetForm');
+$router->post('/reset-password', 'AuthController@resetSubmit');
 
 // Dashboard
 $router->get('/', 'DashboardController@index');
@@ -35,6 +39,21 @@ $router->post('/borrowings', 'BorrowingController@store');
 $router->post('/borrowings/{id}/return', 'BorrowingController@returnBook');
 $router->post('/borrowings/{id}/renew', 'BorrowingController@renew');
 $router->get('/my-borrowings', 'BorrowingController@myBorrowings');
+
+// Cart (keranjang pinjam — semua user login)
+$router->get('/cart', 'CartController@index');
+$router->post('/cart/add', 'CartController@add');
+$router->post('/cart/remove', 'CartController@remove');
+$router->post('/cart/clear', 'CartController@clear');
+$router->post('/cart/checkout', 'CartController@checkout');
+
+// Fines / Denda (user lihat tagihan sendiri, admin kelola kas)
+$router->get('/fines', 'FineController@index');
+$router->post('/fines/{id}/pay', 'FineController@pay');
+$router->post('/fines/{id}/waive', 'FineController@waive');
+
+// Activity logs (admin)
+$router->get('/logs', 'LogController@index');
 
 // Profile
 $router->get('/profile', 'ProfileController@show');
