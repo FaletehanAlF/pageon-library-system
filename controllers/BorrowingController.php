@@ -27,7 +27,7 @@ final class BorrowingController extends Controller
         unset($b);
 
         $this->viewWithLayout('borrowings/index', 'layouts/main', [
-            'title' => isAdmin() ? 'Kelola Peminjaman - Pageon' : 'Peminjaman Saya - Pageon',
+            'title' => isAdmin() ? 'Kelola Peminjaman - Pageon' : 'Pinjaman Saya - Pageon',
             'page' => 'borrowings',
             'borrowings' => $borrowings,
             'finePerDay' => $finePerDay,
@@ -54,8 +54,9 @@ final class BorrowingController extends Controller
         unset($b);
 
         $this->viewWithLayout('borrowings/index', 'layouts/main', [
-            'title' => 'Peminjaman Saya - Pageon',
+            'title' => 'Pinjaman Saya - Pageon',
             'page' => 'my-borrowings',
+            'tab' => 'aktif',
             'borrowings' => $borrowings,
             'finePerDay' => $finePerDay,
             'maxLoans' => setting_int('max_loans', 3),
@@ -92,8 +93,9 @@ final class BorrowingController extends Controller
         unset($r);
 
         $this->viewWithLayout('borrowings/history', 'layouts/main', [
-            'title' => 'Riwayat Peminjaman - Pageon',
-            'page' => 'riwayat',
+            'title' => 'Riwayat Pinjaman - Pageon',
+            'page' => 'my-borrowings',
+            'tab' => 'riwayat',
             'rows' => $rows,
             'total' => $total,
             'onTime' => $onTime,

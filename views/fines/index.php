@@ -27,7 +27,7 @@
         <p class="text-sm <?= ((int) ($myTotal ?? 0) > 0) ? 'text-red-700' : 'text-green-700' ?>">Total belum lunas</p>
         <p class="text-2xl font-bold <?= ((int) ($myTotal ?? 0) > 0) ? 'text-red-800' : 'text-green-800' ?>"><?= e(format_rupiah((int) ($myTotal ?? 0))) ?></p>
         <?php if ((int) ($myTotal ?? 0) > 0): ?>
-            <p class="mt-1 text-xs text-red-600">Anda tidak bisa meminjam / checkout keranjang selama masih ada tagihan.</p>
+            <p class="mt-1 text-xs text-red-600">Anda tidak bisa meminjam lagi selama masih ada tagihan.</p>
         <?php else: ?>
             <p class="mt-1 text-xs text-green-700">Bersih. Anda bisa meminjam seperti biasa.</p>
         <?php endif; ?>

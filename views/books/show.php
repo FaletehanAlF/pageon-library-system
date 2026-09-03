@@ -23,10 +23,10 @@
                     <?php endif; ?>
                 </div>
                 <?php if (isAuth()): ?>
-                    <form method="POST" action="<?= e(url('/wishlist/toggle')) ?>" class="mt-3">
+                    <form method="POST" action="<?= e(url('/wishlist/toggle')) ?>" class="mt-3 text-center">
                         <?= csrf_field() ?>
                         <input type="hidden" name="book_id" value="<?= (int) $book['id'] ?>">
-                        <button class="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium hover:bg-gray-50"><?= !empty($inWishlist) ? '♥ Hapus dari Wishlist' : '♡ Tambah ke Wishlist' ?></button>
+                        <button class="text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline"><?= !empty($inWishlist) ? '♥ Hapus dari Wishlist' : '♡ Simpan ke Wishlist' ?></button>
                     </form>
                 <?php endif; ?>
             </div>
@@ -81,12 +81,12 @@
                     <?php if (isAuth()): ?>
                         <?php if (($hasBorrowed ?? false) === true): ?>
                             <span class="inline-flex items-center rounded-xl bg-amber-100 px-6 py-3 text-sm font-medium text-amber-800">Sedang Anda pinjam</span>
-                            <a href="<?= e(url('/my-borrowings')) ?>" class="rounded-xl border border-gray-200 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 transition">Lihat Peminjaman</a>
+                            <a href="<?= e(url('/my-borrowings')) ?>" class="rounded-xl border border-gray-200 px-6 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 transition">Lihat Pinjaman</a>
                         <?php elseif ((int) $book['stock'] > 0): ?>
-                            <form method="POST" action="<?= e(url('/borrowings')) ?>" class="inline">
+                            <form method="POST" action="<?= e(url('/borrowings')) ?>" class="inline" onsubmit="return confirm('Pinjam &quot;<?= e(addslashes($book['title'])) ?>&quot;? Kembalikan sebelum <?= e(format_date(date('Y-m-d', strtotime('+' . max(1, (int) ($loanDays ?? 7)) . ' days')))) ?> agar GRATIS — telat kena denda progresif mulai <?= e(format_rupiah((int) ($finePerDay ?? 1000))) ?>/hari.')">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="book_id" value="<?= (int) $book['id'] ?>">
-                                <button type="submit" class="rounded-xl bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition">Pinjam Langsung</button>
+                                <button type="submit" class="rounded-xl bg-gray-900 px-8 py-3.5 text-base font-bold text-white hover:bg-gray-800 transition">📥 Pinjam Sekarang — Gratis</button>
                             </form>
                             <?php if (cart_has((int) $book['id'])): ?>
                                 <a href="<?= e(url('/cart')) ?>" class="rounded-xl border border-gray-900 px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50 transition">Di Keranjang — Lihat</a>
@@ -97,6 +97,7 @@
                                     <button type="submit" class="rounded-xl border border-gray-200 px-6 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition">+ Keranjang</button>
                                 </form>
                             <?php endif; ?>
+                            <p class="w-full text-xs text-gray-500">✅ Gratis jika dikembalikan sebelum <strong><?= e(format_date(date('Y-m-d', strtotime('+' . max(1, (int) ($loanDays ?? 7)) . ' days')))) ?></strong>. Telat = denda progresif mulai <?= e(format_rupiah((int) ($finePerDay ?? 1000))) ?>/hari<?php if ((int) ($fineIncrement ?? 0) > 0): ?>, naik <?= e(format_rupiah((int) $fineIncrement)) ?> tiap harinya<?php endif; ?>.</p>
                         <?php else: ?>
                             <?php if (!empty($hasReservation)): ?>
                                 <span class="inline-flex rounded-xl bg-blue-100 px-6 py-3 text-sm font-medium text-blue-800">Anda dalam antrean (<?= (int) ($queueCount ?? 0) ?> menunggu)</span>

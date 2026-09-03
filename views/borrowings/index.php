@@ -1,7 +1,7 @@
 <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
         <h1 class="text-2xl font-bold tracking-tight">
-            <?= $page === 'borrowings' ? 'Kelola Peminjaman' : 'Peminjaman Saya' ?>
+            <?= $page === 'borrowings' ? 'Kelola Peminjaman' : 'Pinjaman Saya' ?>
         </h1>
         <p class="mt-1 text-gray-500">
             <?= $page === 'borrowings' ? 'Daftar semua peminjaman buku.' : 'Buku yang sedang Anda pinjam (belum dikembalikan).' ?>
@@ -10,10 +10,14 @@
             <?php endif; ?>
         </p>
     </div>
-    <?php if ($page !== 'borrowings'): ?>
-        <a href="<?= e(url('/riwayat')) ?>" class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition">📜 Riwayat Pinjaman</a>
-    <?php endif; ?>
 </div>
+
+<?php if ($page !== 'borrowings'): ?>
+<div class="mb-6 flex gap-2 rounded-2xl border border-gray-200 bg-white p-2 text-sm font-medium">
+    <a href="<?= e(url('/my-borrowings')) ?>" class="flex-1 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? 'aktif') === 'aktif' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>">📥 Sedang Dipinjam</a>
+    <a href="<?= e(url('/riwayat')) ?>" class="flex-1 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? '') === 'riwayat' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>">📜 Riwayat</a>
+</div>
+<?php endif; ?>
 
 <?php
 $totalFine = 0;
@@ -121,13 +125,17 @@ foreach (($borrowings ?? []) as $tmp) { $totalFine += (int) ($tmp['fine'] ?? 0);
                                                 </button>
                                             </form>
                                         <?php endif; ?>
-                                        <form method="POST" action="<?= e(url('/borrowings/' . $b['id'] . '/return')) ?>" class="inline-flex items-center gap-1" onsubmit="return confirm('Kembalikan buku &quot;<?= e(addslashes($b['book_title'])) ?>&quot;?')">
+                                        <form method="POST" action="<?= e(url('/borrowings/' . $b['id'] . '/return')) ?>" class="inline-flex items-center gap-1" onsubmit="return confirm('<?= isAdmin() ? 'Proses pengembalian buku' : 'Kembalikan buku' ?> &quot;<?= e(addslashes($b['book_title'])) ?>&quot;?<?= isAdmin() ? '' : ' Pastikan bukunya sudah diserahkan ke petugas.' ?>')">
                                             <?= csrf_field() ?>
-                                            <select name="condition" title="Kondisi buku saat kembali" class="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-600 outline-none focus:border-green-500">
+                                            <?php if (isAdmin()): ?>
+                                            <select name="condition" title="Kondisi buku saat kembali (diisi petugas)" class="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-600 outline-none focus:border-green-500">
                                                 <option value="baik">Baik</option>
                                                 <option value="rusak">Rusak</option>
                                                 <option value="hilang">Hilang</option>
                                             </select>
+                                            <?php else: ?>
+                                            <input type="hidden" name="condition" value="baik">
+                                            <?php endif; ?>
                                             <button type="submit" class="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 transition">
                                                 Kembalikan
                                             </button>

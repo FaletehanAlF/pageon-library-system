@@ -1,6 +1,11 @@
 <div class="mb-8">
-    <h1 class="text-2xl font-bold tracking-tight">Riwayat Pinjaman Saya 📜</h1>
+    <h1 class="text-2xl font-bold tracking-tight">Pinjaman Saya</h1>
     <p class="mt-1 text-gray-500">Semua buku yang sudah Anda kembalikan. Total <span class="font-semibold text-gray-700"><?= (int) ($total ?? 0) ?></span> pinjaman selesai.</p>
+</div>
+
+<div class="mb-6 flex gap-2 rounded-2xl border border-gray-200 bg-white p-2 text-sm font-medium">
+    <a href="<?= e(url('/my-borrowings')) ?>" class="flex-1 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? '') === 'aktif' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>">📥 Sedang Dipinjam</a>
+    <a href="<?= e(url('/riwayat')) ?>" class="flex-1 rounded-xl px-4 py-2.5 text-center <?= ($tab ?? '') === 'riwayat' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50' ?>">📜 Riwayat</a>
 </div>
 
 <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
