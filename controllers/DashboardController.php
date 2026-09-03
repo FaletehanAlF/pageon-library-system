@@ -10,6 +10,7 @@ final class DashboardController extends Controller
 
         $bookModel = new Book();
         $borrowingModel = new Borrowing();
+        $announcementModel = new Announcement();
 
         $chart = $borrowingModel->getDailyStats(14);
 
@@ -26,6 +27,7 @@ final class DashboardController extends Controller
             'chartLabels' => $chart['labels'],
             'chartData' => $chart['data'],
             'lowStock' => $bookModel->getAllWithCategory([], 'books.stock ASC'),
+            'announcements' => $announcementModel->active(3),
         ]);
     }
 }

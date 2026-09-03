@@ -8,6 +8,17 @@
     <?php endif; ?>
 </div>
 
+<?php if (!empty($announcements)): ?>
+<div class="mb-8 space-y-3">
+    <?php foreach ($announcements as $ann): ?>
+        <div class="rounded-2xl border border-blue-200 bg-blue-50 p-5">
+            <p class="font-semibold text-blue-900"><?= e($ann['title']) ?></p>
+            <p class="mt-1 text-sm text-blue-800"><?= nl2br(e($ann['message'])) ?></p>
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
     <div class="rounded-2xl border border-gray-200 bg-white p-6">
         <p class="text-sm text-gray-500">Total Buku</p>

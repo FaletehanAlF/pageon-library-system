@@ -70,4 +70,3 @@ final class User extends Model
         return array_map('intval', $this->db->query('SELECT id FROM users')->fetchAll(PDO::FETCH_COLUMN));
     }
 }
-}
