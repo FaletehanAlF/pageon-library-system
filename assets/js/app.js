@@ -103,17 +103,73 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ── Shortcut "/" untuk fokus ke pencarian buku ──────────
-    document.addEventListener('keydown', function (e) {
-        if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
-        var tag = (document.activeElement && document.activeElement.tagName) || '';
-        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
-        var search = document.querySelector('input[type="search"][name="q"]');
-        if (search) {
-            e.preventDefault();
-            search.focus();
+    // ── Pencarian navbar (ikon → panel mengembang) ──────────
+    // Buka/tutup murni lewat atribut data-open; animasi di CSS
+    // (tanpa timeout) sehingga klik cepat tidak menimbulkan bug.
+    var searchRoot = document.getElementById('nav-search-root');
+    var searchToggle = document.getElementById('nav-search-toggle');
+    var searchInput = document.getElementById('nav-search-input');
+
+    function isSearchOpen() {
+        return !!searchRoot && searchRoot.getAttribute('data-open') === 'true';
+    }
+
+    function openSearch(selectText) {
+        if (!searchRoot || !searchInput || !searchToggle) return;
+        searchRoot.setAttribute('data-open', 'true');
+        searchToggle.setAttribute('aria-expanded', 'true');
+        try {
+            searchInput.focus({ preventScroll: true });
+        } catch (err) {
+            searchInput.focus();
         }
-    });
+        if (selectText && searchInput.value) {
+            try { searchInput.select(); } catch (err2) { /* abaikan */ }
+        }
+    }
+
+    function closeSearch(refocusToggle) {
+        if (!searchRoot || !searchToggle) return;
+        searchRoot.setAttribute('data-open', 'false');
+        searchToggle.setAttribute('aria-expanded', 'false');
+        if (refocusToggle) searchToggle.focus();
+    }
+
+    if (searchRoot && searchToggle && searchInput) {
+        searchToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (isSearchOpen()) {
+                closeSearch(false);
+            } else {
+                openSearch(true);
+            }
+        });
+
+        // Klik di luar panel menutupnya (teks yang diketik tetap aman)
+        document.addEventListener('click', function (e) {
+            if (isSearchOpen() && !searchRoot.contains(e.target)) {
+                closeSearch(false);
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            // Escape menutup panel pencarian
+            if (e.key === 'Escape' && isSearchOpen()) {
+                var tag = (document.activeElement && document.activeElement.tagName) || '';
+                if (document.activeElement === searchInput || tag === 'INPUT') {
+                    e.stopPropagation();
+                }
+                closeSearch(true);
+                return;
+            }
+            // Shortcut "/" membuka pencarian (di luar kolom isian)
+            if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+            var activeTag = (document.activeElement && document.activeElement.tagName) || '';
+            if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') return;
+            e.preventDefault();
+            openSearch(true);
+        });
+    }
 
     // ── Modals ──────────────────────────────────────────────
     function closeAllModals() {

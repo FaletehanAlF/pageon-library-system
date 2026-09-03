@@ -10,27 +10,13 @@
     <?php endif; ?>
 </div>
 
-<!-- Filter: dibuat lega + berlabel jelas -->
+<!-- Filter: kategori, stok, urutan (pencarian via ikon di bilah atas) -->
 <div class="filter-bar">
-    <form method="GET" action="<?= e(url('/books')) ?>" role="search" class="grid gap-4 md:grid-cols-12">
-        <div class="md:col-span-5">
-            <label for="q" class="form-label">Pencarian</label>
-            <div class="relative">
-                <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-                <input
-                    type="search"
-                    id="q"
-                    name="q"
-                    value="<?= e($filters['q'] ?? ($keyword ?? '')) ?>"
-                    placeholder="Cari judul, penulis, penerbit…"
-                    class="form-input !pl-11"
-                    aria-label="Cari buku"
-                >
-            </div>
-        </div>
-        <div class="md:col-span-3">
+    <form method="GET" action="<?= e(url('/books')) ?>" role="search" class="grid gap-4 md:grid-cols-3">
+        <?php if (!empty($filters['q'])): ?>
+            <input type="hidden" name="q" value="<?= e((string) $filters['q']) ?>">
+        <?php endif; ?>
+        <div>
             <label for="category_id" class="form-label">Kategori</label>
             <select id="category_id" name="category_id" onchange="this.form.submit()" class="form-input" aria-label="Filter kategori">
                 <option value="0">Semua kategori</option>
@@ -39,7 +25,7 @@
                 <?php endforeach; ?>
             </select>
         </div>
-        <div class="md:col-span-2">
+        <div>
             <label for="availability" class="form-label">Stok</label>
             <select id="availability" name="availability" onchange="this.form.submit()" class="form-input" aria-label="Filter ketersediaan">
                 <option value="">Semua stok</option>
@@ -47,7 +33,7 @@
                 <option value="empty" <?= (($filters['availability'] ?? '') === 'empty') ? 'selected' : '' ?>>Habis</option>
             </select>
         </div>
-        <div class="md:col-span-2">
+        <div>
             <label for="sort" class="form-label">Urutkan</label>
             <select id="sort" name="sort" onchange="this.form.submit()" class="form-input" aria-label="Urutkan">
                 <option value="newest" <?= (($filters['sort'] ?? 'newest') === 'newest') ? 'selected' : '' ?>>Terbaru</option>
@@ -56,14 +42,31 @@
                 <option value="title_desc" <?= (($filters['sort'] ?? '') === 'title_desc') ? 'selected' : '' ?>>Judul Z-A</option>
             </select>
         </div>
-        <div class="flex flex-col gap-2.5 sm:flex-row sm:items-center md:col-span-12">
+        <div class="flex flex-col gap-2.5 sm:flex-row sm:items-center md:col-span-3">
             <?php if (!empty($filters['q']) || !empty($filters['category_id']) || !empty($filters['availability'])): ?>
                 <a href="<?= e(url('/books')) ?>" class="btn btn-secondary"><?= icon('x', 'h-4 w-4') ?> Reset filter</a>
             <?php endif; ?>
-            <p class="text-xs text-gray-400 sm:ml-auto">Tekan <kbd class="rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-semibold">Enter</kbd> untuk mencari, atau tekan <kbd class="rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-semibold">/</kbd> untuk fokus ke pencarian</p>
+            <p class="flex items-center gap-1.5 text-xs text-gray-400 sm:ml-auto"><?= icon('search', 'h-3.5 w-3.5') ?> Gunakan ikon pencarian di bilah atas atau tekan <kbd class="rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-semibold">/</kbd> untuk mencari</p>
         </div>
     </form>
 </div>
+
+<?php if (!empty($filters['q'])): ?>
+    <?php
+    $chipParams = [];
+    if (!empty($filters['category_id'])) $chipParams['category_id'] = (int) $filters['category_id'];
+    if (!empty($filters['availability'])) $chipParams['availability'] = (string) $filters['availability'];
+    if (!empty($filters['sort']) && $filters['sort'] !== 'newest') $chipParams['sort'] = (string) $filters['sort'];
+    $chipClear = url('/books') . ($chipParams !== [] ? '?' . http_build_query($chipParams) : '');
+    ?>
+    <div class="card flex flex-col gap-2.5 px-5 py-4 sm:flex-row sm:items-center sm:justify-between" role="status">
+        <p class="flex min-w-0 items-center gap-2 text-sm text-gray-600">
+            <?= icon('search', 'h-4 w-4 shrink-0 text-gray-400') ?>
+            <span class="truncate">Hasil pencarian untuk <strong class="text-gray-900">“<?= e((string) $filters['q']) ?>”</strong></span>
+        </p>
+        <a href="<?= e($chipClear) ?>" class="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-semibold text-gray-500 transition hover:bg-gray-100 hover:text-gray-900"><?= icon('x', 'h-3.5 w-3.5') ?> Hapus kata kunci</a>
+    </div>
+<?php endif; ?>
 
 <!-- Daftar buku -->
 <?php if (empty($books)): ?>

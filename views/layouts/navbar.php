@@ -9,6 +9,7 @@ try {
     $unread = 0;
 }
 $heading = $pageTitle ?? 'Dashboard';
+$navQ = isset($_GET['q']) ? trim((string) $_GET['q']) : '';
 ?>
 <header class="sticky top-0 z-30 border-b border-gray-200/90 bg-white/90 backdrop-blur">
     <div class="flex h-16 items-center justify-between gap-3 px-4 sm:px-6 lg:h-[72px] lg:px-8">
@@ -33,11 +34,38 @@ $heading = $pageTitle ?? 'Dashboard';
         <!-- Kanan: aksi cepat + profil -->
         <div class="flex shrink-0 items-center gap-1 sm:gap-2">
 
-            <a href="<?= e(url('/books')) ?>" class="mr-1 hidden items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-500 transition hover:border-gray-300 hover:bg-white hover:text-gray-900 md:inline-flex" aria-label="Cari buku">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <span class="text-gray-400">Cari buku…</span>
-                <kbd class="rounded-md border border-gray-200 bg-white px-1.5 py-0.5 text-[11px] font-semibold text-gray-400">/</kbd>
-            </a>
+            <!-- Pencarian: ikon saja, klik untuk mengembang -->
+            <div class="relative" id="nav-search-root" data-open="false">
+                <button type="button" id="nav-search-toggle" class="icon-btn" aria-label="Cari buku" aria-expanded="false" aria-controls="nav-search-panel">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <?php if ($navQ !== ''): ?>
+                        <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-gray-900" aria-hidden="true"></span>
+                    <?php endif; ?>
+                </button>
+
+                <div id="nav-search-panel" class="nav-search-panel absolute right-0 top-[calc(100%+10px)] z-50 w-[min(26rem,calc(100vw-2rem))] rounded-2xl border border-gray-200 bg-white p-2 shadow-xl" role="search">
+                    <form method="GET" action="<?= e(url('/books')) ?>" class="flex items-center gap-1.5 rounded-xl bg-gray-50 px-2 py-1.5 ring-1 ring-transparent transition focus-within:border-gray-900 focus-within:bg-white focus-within:ring-4 focus-within:ring-gray-900/10">
+                        <svg class="ml-2 h-4 w-4 shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input
+                            type="search"
+                            id="nav-search-input"
+                            name="q"
+                            value="<?= e($navQ) ?>"
+                            placeholder="Cari judul, penulis, penerbit…"
+                            autocomplete="off"
+                            aria-label="Kata kunci pencarian buku"
+                            class="nav-search-input w-full bg-transparent px-1 py-2 text-sm text-gray-900 outline-none placeholder:text-gray-400"
+                        >
+                        <?php foreach (['category_id', 'availability', 'sort'] as $k): ?>
+                            <?php if (isset($_GET[$k]) && $_GET[$k] !== '' && $_GET[$k] !== '0'): ?>
+                                <input type="hidden" name="<?= $k ?>" value="<?= e((string) $_GET[$k]) ?>">
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                        <button type="submit" class="btn btn-primary btn-sm shrink-0">Cari</button>
+                    </form>
+                    <p class="px-3 pb-1.5 pt-2 text-xs leading-relaxed text-gray-400">Tekan <kbd class="rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-semibold">Enter</kbd> untuk mencari · <kbd class="rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-semibold">Esc</kbd> untuk menutup</p>
+                </div>
+            </div>
 
             <a href="<?= e(url('/notifications')) ?>" class="icon-btn" aria-label="Notifikasi<?= $unread > 0 ? ', ' . (int) $unread . ' belum dibaca' : '' ?>">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>

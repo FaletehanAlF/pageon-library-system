@@ -171,3 +171,45 @@
     @apply flex flex-col gap-4 rounded-2xl border border-gray-200/90 bg-white p-4 shadow-[0_1px_2px_rgba(16,24,40,0.06)] sm:p-5;
   }
 }
+
+/* ── Panel pencarian navbar: ikon saja, mengembang mulus ────
+   Animasi murni CSS (visibility + opacity + transform) sehingga
+   klik cepat beruntun tidak menimbulkan bug race (tanpa timeout JS). */
+.nav-search-panel {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  transform-origin: top right;
+  transition:
+    opacity 0.2s ease,
+    transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 0.22s;
+  pointer-events: none;
+}
+
+#nav-search-root[data-open="true"] .nav-search-panel {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.24s cubic-bezier(0.34, 1.3, 0.64, 1);
+  pointer-events: auto;
+}
+
+#nav-search-root[data-open="true"] #nav-search-toggle {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+/* Sembunyikan tombol clear bawaan browser agar konsisten */
+.nav-search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-search-panel,
+  #nav-search-root[data-open="true"] .nav-search-panel {
+    transition: none;
+  }
+}
