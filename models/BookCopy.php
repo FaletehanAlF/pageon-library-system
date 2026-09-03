@@ -41,6 +41,34 @@ final class BookCopy extends Model
         $stmt->execute([$copyId]);
     }
 
+    /**
+     * Eksemplar hilang: keluar sirkulasi + stok berkurang permanen.
+     */
+    public function markLost(int $copyId): void
+    {
+        $stmt = $this->db->prepare("UPDATE book_copies SET status = 'lost', `condition` = 'hilang' WHERE id = ?");
+        $stmt->execute([$copyId]);
+    }
+
+    /**
+     * Eksemplar rusak: ditarik dari sirkulasi untuk diperbaiki.
+     */
+    public function markDamaged(int $copyId): void
+    {
+        $stmt = $this->db->prepare("UPDATE book_copies SET status = 'lost', `condition` = 'rusak' WHERE id = ?");
+        $stmt->execute([$copyId]);
+    }
+
+    public function setCondition(int $copyId, string $condition): bool
+    {
+        if (!in_array($condition, ['baik', 'rusak', 'hilang'], true)) {
+            return false;
+        }
+        $status = $condition === 'baik' ? 'available' : 'lost';
+        $stmt = $this->db->prepare("UPDATE book_copies SET `condition` = ?, status = ? WHERE id = ? AND status != 'borrowed'");
+        return $stmt->execute([$condition, $status, $copyId]);
+    }
+
     public function createCopies(int $bookId, int $n): void
     {
         $stmt = $this->db->prepare("INSERT INTO book_copies (book_id, barcode, `condition`, status) VALUES (?, ?, 'baik', 'available')");

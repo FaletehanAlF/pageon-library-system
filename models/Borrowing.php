@@ -75,6 +75,25 @@ final class Borrowing extends Model
         return $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Pinjaman aktif yang jatuh tempo dalam N hari (termasuk yang sudah telat).
+     * @return array<int, array<string,mixed>>
+     */
+    public function getDueSoonByUser(int $userId, int $withinDays = 2): array
+    {
+        $withinDays = max(0, min(30, $withinDays));
+        $stmt = $this->db->prepare("
+            SELECT br.*, b.title AS book_title, b.author AS book_author
+            FROM borrowings br
+            INNER JOIN books b ON b.id = br.book_id
+            WHERE br.user_id = ? AND br.status = 'borrowed'
+              AND br.due_date <= DATE_ADD(CURDATE(), INTERVAL $withinDays DAY)
+            ORDER BY br.due_date ASC
+        ");
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll();
+    }
+
     public function hasActiveBorrowing(int $userId, int $bookId): bool
     {
         $stmt = $this->db->prepare(

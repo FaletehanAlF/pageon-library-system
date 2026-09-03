@@ -46,4 +46,27 @@ final class Notification extends Model
         $stmt = $this->db->prepare('UPDATE notifications SET is_read = 1 WHERE user_id = ? AND is_read = 0');
         $stmt->execute([$userId]);
     }
+
+    /**
+     * Cek notifikasi belum dibaca untuk borrowing tertentu (anti-duplikat pengingat).
+     */
+    public function existsUnread(int $userId, string $borrowingId, string $link): bool
+    {
+        $stmt = $this->db->prepare(
+            "SELECT 1 FROM notifications WHERE user_id = ? AND is_read = 0 AND link = ? AND message LIKE ? LIMIT 1"
+        );
+        // Cari berdasarkan judul buku tidak praktis; gunakan kecocokan pesan berisi ID via link + judul tetap.
+        // Pendekatan: ada notif belum dibaca dengan judul pengingat & link yang sama untuk buku tsb.
+        $stmt->execute([$userId, $link, '%"' . str_replace(['%', '_'], '', $this->titleOf((int) $borrowingId)) . '"%']);
+        return (bool) $stmt->fetchColumn();
+    }
+
+    private function titleOf(int $borrowingId): string
+    {
+        $stmt = $this->db->prepare(
+            'SELECT b.title FROM borrowings br INNER JOIN books b ON b.id = br.book_id WHERE br.id = ? LIMIT 1'
+        );
+        $stmt->execute([$borrowingId]);
+        return (string) ($stmt->fetchColumn() ?: '');
+    }
 }

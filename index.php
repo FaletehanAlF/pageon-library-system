@@ -69,6 +69,9 @@ require_once BASE_PATH . '/models/Review.php';
 require_once BASE_PATH . '/models/Wishlist.php';
 require_once BASE_PATH . '/models/Notification.php';
 require_once BASE_PATH . '/models/Announcement.php';
+require_once BASE_PATH . '/models/FinePayment.php';
+require_once BASE_PATH . '/models/ActivityLog.php';
+require_once BASE_PATH . '/models/PasswordReset.php';
 require_once BASE_PATH . '/controllers/AdminPortalController.php';
 require_once BASE_PATH . '/middleware/AuthMiddleware.php';
 

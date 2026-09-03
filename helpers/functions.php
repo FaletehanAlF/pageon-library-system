@@ -368,6 +368,88 @@ function delete_cover(?string $cover): void
     }
 }
 
+/**
+ * Catat aktivitas ke audit log. Tidak pernah melempar error.
+ */
+function log_activity(string $action, string $detail = ''): void
+{
+    try {
+        if (!isAuth()) {
+            (new ActivityLog())->record(null, $action, $detail);
+            return;
+        }
+        (new ActivityLog())->record((int) Session::get('user_id'), $action, $detail);
+    } catch (Throwable) {
+        // abaikan
+    }
+}
+
+/* ── Keranjang pinjam (session) ───────────────────────────── */
+
+function cart_items(): array
+{
+    $items = Session::get('cart', []);
+    return is_array($items) ? array_values(array_unique(array_map('intval', $items))) : [];
+}
+
+function cart_count(): int
+{
+    return count(cart_items());
+}
+
+function cart_has(int $bookId): bool
+{
+    return in_array($bookId, cart_items(), true);
+}
+
+function cart_add(int $bookId): void
+{
+    $items = cart_items();
+    if (!in_array($bookId, $items, true)) {
+        $items[] = $bookId;
+        Session::set('cart', $items);
+    }
+}
+
+function cart_remove(int $bookId): void
+{
+    Session::set('cart', array_values(array_filter(
+        cart_items(),
+        static fn(int $id): bool => $id !== $bookId
+    )));
+}
+
+function cart_clear(): void
+{
+    Session::remove('cart');
+}
+
+/**
+ * Buat notifikasi pengingat untuk pinjaman yang jatuh tempo ≤ 2 hari.
+ * Dipanggil saat dashboard dibuka; anti-duplikat via link unik.
+ */
+function ensure_due_notifications(int $userId): void
+{
+    try {
+        $borrowing = new Borrowing();
+        $notif = new Notification();
+        foreach ($borrowing->getDueSoonByUser($userId, 2) as $b) {
+            $link = url('/my-borrowings');
+            if ($notif->existsUnread($userId, (string) $b['id'], $link)) {
+                continue;
+            }
+            $notif->notify(
+                $userId,
+                'Jatuh tempo segera',
+                'Buku "' . $b['book_title'] . '" jatuh tempo ' . format_date((string) $b['due_date']) . '. Segera kembalikan atau perpanjang.',
+                $link
+            );
+        }
+    } catch (Throwable) {
+        // abaikan
+    }
+}
+
 function pagination_links(string $baseUrl, array $query, int $page, int $totalPages): string
 {
     if ($totalPages <= 1) {

@@ -102,6 +102,12 @@ final class BorrowingController extends Controller
             redirect('/my-borrowings');
         }
 
+        $unpaidFines = (new FinePayment())->unpaidTotalByUser($userId);
+        if ($unpaidFines > 0) {
+            Session::flash('error', 'Anda memiliki denda belum lunas sebesar ' . format_rupiah($unpaidFines) . '. Lunasi dulu di halaman Denda.');
+            redirect('/fines');
+        }
+
         if ($borrowingModel->hasActiveBorrowing($userId, $bookId)) {
             Session::flash('error', 'Anda sudah meminjam buku ini dan belum mengembalikannya.');
             redirect("/books/{$bookId}");
@@ -153,6 +159,7 @@ final class BorrowingController extends Controller
 
             $this->db->commit();
 
+            log_activity('borrow', "Pinjam buku #{$bookId} ({$book['title']})");
             Session::flash('success', 'Buku berhasil dipinjam. Harap kembalikan sebelum ' . format_date($dueDate) . '.');
             redirect('/my-borrowings');
         } catch (Throwable $e) {
@@ -204,6 +211,7 @@ final class BorrowingController extends Controller
         $newDue = date('Y-m-d', strtotime((string) $borrowing['due_date'] . " +{$loanDays} days"));
 
         if ($borrowingModel->renew((int) $id, $newDue)) {
+            log_activity('renew', "Perpanjang #{$id} sampai {$newDue}");
             Session::flash('success', 'Diperpanjang sampai ' . format_date($newDue) . '.');
         } else {
             Session::flash('error', 'Gagal memperpanjang.');
@@ -267,6 +275,10 @@ final class BorrowingController extends Controller
         }
 
         $fine = calc_fine((string) $borrowing['due_date']);
+        $condition = $_POST['condition'] ?? 'baik';
+        if (!in_array($condition, ['baik', 'rusak', 'hilang'], true)) {
+            $condition = 'baik';
+        }
 
         try {
             $this->db->beginTransaction();
@@ -277,30 +289,74 @@ final class BorrowingController extends Controller
             }
 
             $bookModel = new Book();
-            $bookModel->incrementStock((int) $borrowing['book_id']);
+            $bookTitle = $bookModel->find((int) $borrowing['book_id'])['title'] ?? 'Buku';
+            $copyModel = new BookCopy();
+            $lostFee = 0;
 
-            if (!empty($borrowing['copy_id'])) {
-                $copyModel = new BookCopy();
-                $copyModel->markAvailable((int) $borrowing['copy_id']);
+            if ($condition === 'hilang') {
+                // Eksemplar hilang: tidak kembali ke stok + denda ganti rugi
+                if (!empty($borrowing['copy_id'])) {
+                    $copyModel->markLost((int) $borrowing['copy_id']);
+                }
+                $lostFee = setting_int('lost_book_fee', 50000);
+            } elseif ($condition === 'rusak') {
+                // Eksemplar rusak: keluar dari sirkulasi, tanpa stok kembali
+                if (!empty($borrowing['copy_id'])) {
+                    $copyModel->markDamaged((int) $borrowing['copy_id']);
+                }
+            } else {
+                $bookModel->incrementStock((int) $borrowing['book_id']);
+                if (!empty($borrowing['copy_id'])) {
+                    $copyModel->markAvailable((int) $borrowing['copy_id']);
+                }
+            }
+
+            // Catat denda keterlambatan sebagai tagihan (sekali per peminjaman)
+            $fineModel = new FinePayment();
+            if ($fine > 0 && !$fineModel->existsUnpaidForBorrowing($borrowingId, 'overdue')) {
+                $fineModel->createUnpaid(
+                    (int) $borrowing['user_id'],
+                    $fine,
+                    'overdue',
+                    $borrowingId,
+                    (int) $borrowing['book_id'],
+                    'Denda telat ' . days_overdue((string) $borrowing['due_date']) . ' hari'
+                );
+            }
+            if ($lostFee > 0) {
+                $fineModel->createUnpaid(
+                    (int) $borrowing['user_id'],
+                    $lostFee,
+                    'lost',
+                    $borrowingId,
+                    (int) $borrowing['book_id'],
+                    'Ganti rugi buku hilang'
+                );
             }
 
             // Promote next reservation to ready + notify
             $resModel = new Reservation();
             $next = $resModel->firstWaiting((int) $borrowing['book_id']);
-            if ($next !== null) {
+            if ($next !== null && $condition === 'baik') {
                 $resModel->update((int) $next['id'], ['status' => 'ready']);
                 $notif = new Notification();
-                $bookTitle = $bookModel->find((int) $borrowing['book_id'])['title'] ?? 'Buku';
                 $notif->notify((int) $next['user_id'], 'Reservasi siap', "Buku \"{$bookTitle}\" sudah tersedia. Segera pinjam.", url('/books/' . $borrowing['book_id']));
             }
 
             $this->db->commit();
 
-            if ($fine > 0) {
-                Session::flash('success', 'Buku dikembalikan dengan denda ' . format_rupiah($fine) . '.');
-            } else {
-                Session::flash('success', 'Buku berhasil dikembalikan.');
+            log_activity('return', "Kembalikan #{$borrowingId} ({$bookTitle}), kondisi: {$condition}");
+
+            $msgs = ['Buku berhasil dikembalikan.'];
+            if ($condition === 'hilang') {
+                $msgs[] = 'Eksemplar dicatat HILANG, tidak kembali ke stok.';
+            } elseif ($condition === 'rusak') {
+                $msgs[] = 'Eksemplar dicatat RUSAK dan ditarik dari sirkulasi.';
             }
+            if ($fine > 0 || $lostFee > 0) {
+                $msgs[] = 'Total tagihan denda: ' . format_rupiah($fine + $lostFee) . ' (lihat halaman Denda).';
+            }
+            Session::flash('success', implode(' ', $msgs));
         } catch (Throwable $e) {
             if ($this->db->inTransaction()) {
                 $this->db->rollBack();

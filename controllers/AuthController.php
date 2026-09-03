@@ -152,6 +152,111 @@ final class AuthController extends Controller
         }
     }
 
+    public function forgotForm(): void
+    {
+        if (isAuth()) {
+            redirect('/');
+        }
+        $this->viewWithLayout('auth/forgot', 'layouts/auth', [
+            'title' => 'Lupa Password - Pageon',
+        ]);
+    }
+
+    public function forgotSubmit(): void
+    {
+        if (isAuth()) {
+            redirect('/');
+        }
+        if (!verify_csrf()) {
+            Session::flash('error', 'Sesi kadaluarsa, silakan coba lagi.');
+            redirect('/forgot-password');
+        }
+
+        $email = strtolower(sanitize_string($_POST['email'] ?? '', 100));
+        $errors = $this->validate(['email' => 'required|email']);
+        if ($errors !== []) {
+            Session::flash('errors', $errors);
+            redirect('/forgot-password');
+        }
+
+        $userModel = new User();
+        $user = $userModel->findByEmail($email);
+
+        // Pesan sama apapun hasilnya agar email tidak bisa ditebak
+        if ($user === null) {
+            Session::flash('success', 'Jika email terdaftar, kode reset telah dibuat. Minta kode ke petugas/admin atau gunakan kode di bawah (mode demo).');
+            redirect('/forgot-password');
+        }
+
+        $token = bin2hex(random_bytes(16));
+        (new PasswordReset())->createForUser((int) $user['id'], $token);
+        log_activity('password_forgot', "Kode reset dibuat untuk {$email}");
+
+        // Mode demo/lokal tanpa email: tampilkan kode sekali saja
+        Session::flash('reset_code', $token);
+        Session::flash('success', 'Kode reset dibuat dan berlaku 30 menit. Masukkan kode di halaman reset password.');
+        redirect('/reset-password');
+    }
+
+    public function resetForm(): void
+    {
+        if (isAuth()) {
+            redirect('/');
+        }
+        $this->viewWithLayout('auth/reset', 'layouts/auth', [
+            'title' => 'Reset Password - Pageon',
+            'prefill' => sanitize_string($_GET['code'] ?? '', 64),
+        ]);
+    }
+
+    public function resetSubmit(): void
+    {
+        if (isAuth()) {
+            redirect('/');
+        }
+        if (!verify_csrf()) {
+            Session::flash('error', 'Sesi kadaluarsa, silakan coba lagi.');
+            redirect('/reset-password');
+        }
+
+        $token = trim((string) ($_POST['token'] ?? ''));
+        $password = (string) ($_POST['password'] ?? '');
+        $confirmation = (string) ($_POST['password_confirmation'] ?? '');
+
+        $errors = [];
+        if ($token === '') {
+            $errors['token'] = 'Kode reset wajib diisi.';
+        }
+        if (strlen($password) < 6) {
+            $errors['password'] = 'Password minimal 6 karakter.';
+        } elseif (strlen($password) > 72) {
+            $errors['password'] = 'Password maksimal 72 karakter.';
+        }
+        if ($password !== $confirmation) {
+            $errors['password_confirmation'] = 'Konfirmasi password tidak cocok.';
+        }
+        if ($errors !== []) {
+            Session::flash('errors', $errors);
+            redirect('/reset-password');
+        }
+
+        $resetModel = new PasswordReset();
+        $row = $resetModel->findValid($token);
+        if ($row === null) {
+            Session::flash('error', 'Kode salah, kadaluarsa, atau sudah dipakai.');
+            redirect('/reset-password');
+        }
+
+        (new User())->update((int) $row['user_id'], [
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+        ]);
+        $resetModel->markUsed((int) $row['id']);
+        log_activity('password_reset', 'Password direset via kode (user #' . $row['user_id'] . ')');
+
+        Session::flash('success', 'Password berhasil diubah. Silakan login.');
+        redirect('/login');
+    }
+
     public function logout(): void
     {
         Session::destroy();

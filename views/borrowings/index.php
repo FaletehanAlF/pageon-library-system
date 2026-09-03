@@ -115,8 +115,13 @@ foreach (($borrowings ?? []) as $tmp) { $totalFine += (int) ($tmp['fine'] ?? 0);
                                                 </button>
                                             </form>
                                         <?php endif; ?>
-                                        <form method="POST" action="<?= e(url('/borrowings/' . $b['id'] . '/return')) ?>" class="inline" onsubmit="return confirm('Kembalikan buku &quot;<?= e(addslashes($b['book_title'])) ?>&quot;?')">
+                                        <form method="POST" action="<?= e(url('/borrowings/' . $b['id'] . '/return')) ?>" class="inline-flex items-center gap-1" onsubmit="return confirm('Kembalikan buku &quot;<?= e(addslashes($b['book_title'])) ?>&quot;?')">
                                             <?= csrf_field() ?>
+                                            <select name="condition" title="Kondisi buku saat kembali" class="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-xs text-gray-600 outline-none focus:border-green-500">
+                                                <option value="baik">Baik</option>
+                                                <option value="rusak">Rusak</option>
+                                                <option value="hilang">Hilang</option>
+                                            </select>
                                             <button type="submit" class="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 transition">
                                                 Kembalikan
                                             </button>
