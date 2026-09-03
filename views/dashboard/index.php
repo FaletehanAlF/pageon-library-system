@@ -19,12 +19,27 @@
 </div>
 <?php endif; ?>
 
-<div class="mb-8 rounded-2xl border border-gray-200 bg-white p-5 text-sm text-gray-600">
-    <strong class="text-gray-900">Cara pakai:</strong>
-    1) Cari buku di <a class="underline" href="<?= e(url('/books')) ?>">Buku</a> →
-    2) Pinjam langsung / + <a class="underline" href="<?= e(url('/cart')) ?>">Keranjang</a> / Reservasi jika habis →
-    3) Pantau &amp; kembalikan di <a class="underline" href="<?= e(url('/my-borrowings')) ?>">Peminjaman Saya</a> · cek <a class="underline" href="<?= e(url('/fines')) ?>">Denda</a>.
-    Bingung? Buka <a class="underline font-medium text-gray-900" href="<?= e(url('/bantuan')) ?>">Bantuan</a>.
+<div class="mb-8 rounded-2xl bg-gray-900 p-6 text-white sm:p-8">
+    <h2 class="text-xl font-bold sm:text-2xl">Mau pinjam buku? Gampang! 📚</h2>
+    <div class="mt-4 grid gap-3 text-sm sm:grid-cols-3">
+        <div class="flex items-start gap-3 rounded-xl bg-white/10 p-4">
+            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white font-bold text-gray-900">1</span>
+            <p><strong>Cari bukunya</strong><br><span class="text-gray-300">Ketik judul di halaman Buku.</span></p>
+        </div>
+        <div class="flex items-start gap-3 rounded-xl bg-white/10 p-4">
+            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white font-bold text-gray-900">2</span>
+            <p><strong>Tekan Pinjam</strong><br><span class="text-gray-300">Buku langsung tercatat atas nama Anda.</span></p>
+        </div>
+        <div class="flex items-start gap-3 rounded-xl bg-white/10 p-4">
+            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white font-bold text-gray-900">3</span>
+            <p><strong>Kembalikan tepat waktu</strong><br><span class="text-gray-300">Cek tanggalnya di Pinjaman Saya.</span></p>
+        </div>
+    </div>
+    <div class="mt-5 flex flex-wrap gap-3">
+        <a href="<?= e(url('/books')) ?>" class="rounded-xl bg-white px-6 py-3 text-sm font-bold text-gray-900 hover:bg-gray-100 transition">🔍 Cari Buku Sekarang</a>
+        <a href="<?= e(url('/my-borrowings')) ?>" class="rounded-xl border border-white/40 px-6 py-3 text-sm font-medium text-white hover:bg-white/10 transition">📋 Pinjaman Saya</a>
+        <a href="<?= e(url('/bantuan')) ?>" class="rounded-xl border border-white/40 px-6 py-3 text-sm font-medium text-white hover:bg-white/10 transition">❓ Bantuan</a>
+    </div>
 </div>
 
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
@@ -84,13 +99,9 @@ $low = array_slice(array_values($low), 0, 5);
         </div>
         <div class="grid gap-4 sm:grid-cols-2">
             <?php foreach (array_slice($latestBooks, 0, 4) as $book): ?>
-                <?php $cUrl = cover_url($book['cover'] ?? null); ?>
+                <?php $cUrl = book_cover_url($book); ?>
                 <a href="<?= e(url('/books/' . $book['id'])) ?>" class="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition hover:shadow-md">
-                    <?php if ($cUrl): ?>
-                        <img src="<?= e($cUrl) ?>" class="h-32 w-full object-cover" loading="lazy" alt="">
-                    <?php else: ?>
-                        <div class="flex h-32 items-center justify-center bg-gray-100 text-3xl">📖</div>
-                    <?php endif; ?>
+                    <img src="<?= e($cUrl) ?>" class="h-32 w-full object-cover" loading="lazy" alt="Cover <?= e($book['title']) ?>">
                     <div class="p-4">
                         <p class="text-xs text-gray-400 uppercase"><?= e($book['category_name'] ?? 'Umum') ?></p>
                         <h3 class="font-semibold text-sm line-clamp-1"><?= e($book['title']) ?></h3>

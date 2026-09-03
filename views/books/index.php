@@ -1,7 +1,7 @@
 <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
-        <h1 class="text-2xl font-bold tracking-tight">Daftar Buku</h1>
-        <p class="mt-1 text-gray-500">Kelola koleksi buku perpustakaan.<?= isset($totalCount) ? ' Total: <span class="font-semibold text-gray-700">' . (int) $totalCount . '</span> buku.' : '' ?></p>
+        <h1 class="text-2xl font-bold tracking-tight">Cari &amp; Pinjam Buku 📖</h1>
+        <p class="mt-1 text-gray-500">Klik salah satu buku untuk melihat detail, lalu tekan <strong>Pinjam</strong>.<?= isset($totalCount) ? ' Ada <span class="font-semibold text-gray-700">' . (int) $totalCount . '</span> buku.' : '' ?></p>
     </div>
     <?php if (isAdmin()): ?>
         <a href="<?= e(url('/books/create')) ?>" class="inline-flex items-center justify-center rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition">
@@ -63,7 +63,7 @@
     <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-12 text-center">
         <div class="mx-auto max-w-sm">
             <p class="text-gray-500">
-                <?= !empty($filters['q']) ? 'Tidak ada buku ditemukan untuk pencarian tersebut.' : 'Belum ada buku tersedia.' ?>
+                <?= !empty($filters['q']) ? '😕 Tidak ketemu. Coba kata lain yang lebih pendek, misalnya judul atau nama penulisnya saja.' : '📭 Belum ada buku tersedia.' ?>
             </p>
             <?php if (isAdmin() && empty($filters['q'])): ?>
                 <a href="<?= e(url('/books/create')) ?>" class="mt-4 inline-flex rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800">Tambah Buku Pertama</a>
@@ -74,16 +74,10 @@
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
         <?php foreach ($books as $book): ?>
-            <?php $cUrl = cover_url($book['cover'] ?? null); ?>
+            <?php $cUrl = book_cover_url($book); ?>
             <div class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition hover:shadow-md">
                 <a href="<?= e(url('/books/' . $book['id'])) ?>" class="block focus:outline-none">
-                    <?php if ($cUrl): ?>
-                        <img src="<?= e($cUrl) ?>" alt="Cover <?= e($book['title']) ?>" class="h-44 w-full object-cover" loading="lazy">
-                    <?php else: ?>
-                        <div class="flex h-44 items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100" aria-hidden="true">
-                            <span class="text-5xl">📖</span>
-                        </div>
-                    <?php endif; ?>
+                    <img src="<?= e($cUrl) ?>" alt="Cover <?= e($book['title']) ?>" class="h-44 w-full object-cover" loading="lazy">
                 </a>
                 <div class="flex flex-1 flex-col p-4">
                     <p class="mb-1 text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -99,10 +93,10 @@
                     </p>
                     <div class="mt-3 flex items-center justify-between">
                         <span class="inline-block rounded-full <?= (int) $book['stock'] > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?> px-2.5 py-1 text-xs font-medium">
-                            <?= (int) $book['stock'] > 0 ? 'Stok: ' . (int) $book['stock'] : 'Habis' ?>
+                            <?= (int) $book['stock'] > 0 ? '✅ Bisa dipinjam' : '⏳ Habis — bisa reservasi' ?>
                         </span>
                         <div class="flex items-center gap-2">
-                            <a href="<?= e(url('/books/' . $book['id'])) ?>" class="text-xs font-medium text-gray-500 hover:text-gray-900">Detail</a>
+                            <a href="<?= e(url('/books/' . $book['id'])) ?>" class="rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-700">Lihat &amp; Pinjam →</a>
                             <?php if (isAdmin()): ?>
                                 <span class="text-gray-200">·</span>
                                 <a href="<?= e(url('/books/' . $book['id'] . '/edit')) ?>" class="text-xs font-medium text-gray-500 hover:text-gray-900">Edit</a>

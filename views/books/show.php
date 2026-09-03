@@ -12,17 +12,11 @@
 
         <div class="lg:col-span-1">
             <div class="rounded-2xl border border-gray-200 bg-white p-6">
-                <?php $cUrl = cover_url($book['cover'] ?? null); ?>
-                <?php if ($cUrl): ?>
-                    <img src="<?= e($cUrl) ?>" alt="Cover <?= e($book['title']) ?>" class="h-64 w-full rounded-xl object-cover">
-                <?php else: ?>
-                    <div class="flex h-64 items-center justify-center rounded-xl bg-gradient-to-br from-gray-50 to-gray-100" aria-hidden="true">
-                        <span class="text-7xl">📖</span>
-                    </div>
-                <?php endif; ?>
+                <?php $cUrl = book_cover_url($book); ?>
+                <img src="<?= e($cUrl) ?>" alt="Cover <?= e($book['title']) ?>" class="h-64 w-full rounded-xl object-cover">
                 <div class="mt-4 flex flex-wrap gap-2">
                     <span class="inline-block rounded-full <?= (int) $book['stock'] > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' ?> px-3 py-1 text-sm font-medium">
-                        <?= (int) $book['stock'] > 0 ? 'Tersedia (Stok: ' . (int) $book['stock'] . ')' : 'Tidak Tersedia' ?>
+                        <?= (int) $book['stock'] > 0 ? '✅ Bisa dipinjam (sisa ' . (int) $book['stock'] . ')' : '⏳ Stok habis' ?>
                     </span>
                     <?php if (($rating['count'] ?? 0) > 0): ?>
                         <span class="inline-block rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-800">★ <?= e((string) $rating['avg']) ?> (<?= (int) $rating['count'] ?>)</span>
@@ -125,6 +119,15 @@
                         </form>
                     <?php endif; ?>
                 </div>
+
+                <?php if (isAuth() && !isAdmin()): ?>
+                    <div class="mt-4 rounded-xl bg-blue-50 p-4 text-xs leading-relaxed text-blue-800">
+                        💡 <strong>Baru pertama kali pinjam?</strong> Tekan <strong>Pinjam Langsung</strong> — buku langsung tercatat atas nama Anda.
+                        Mau pinjam banyak sekaligus? Tekan <strong>+ Keranjang</strong> di tiap buku, lalu buka
+                        <a class="font-medium underline" href="<?= e(url('/cart')) ?>">Keranjang</a>.
+                        Batas kembali bisa dilihat di <a class="font-medium underline" href="<?= e(url('/my-borrowings')) ?>">Pinjaman Saya</a>.
+                    </div>
+                <?php endif; ?>
 
                 <?php if (isAdmin() && !empty($copies)): ?>
                     <div class="mt-6 rounded-xl bg-gray-50 p-4">

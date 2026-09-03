@@ -23,14 +23,10 @@
 <?php else: ?>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <?php foreach ($items as $b): ?>
-            <?php $cUrl = cover_url($b['cover'] ?? null); ?>
+            <?php $cUrl = book_cover_url($b); ?>
             <div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white">
                 <a href="<?= e(url('/books/' . $b['id'])) ?>">
-                    <?php if ($cUrl): ?>
-                        <img src="<?= e($cUrl) ?>" alt="Cover <?= e($b['title']) ?>" class="h-40 w-full object-cover" loading="lazy">
-                    <?php else: ?>
-                        <div class="flex h-40 items-center justify-center bg-gray-100 text-4xl">📖</div>
-                    <?php endif; ?>
+                    <img src="<?= e($cUrl) ?>" alt="Cover <?= e($b['title']) ?>" class="h-40 w-full object-cover" loading="lazy">
                 </a>
                 <div class="flex flex-1 flex-col p-4">
                     <p class="text-xs font-medium uppercase tracking-wider text-gray-400"><?= e($b['category_name'] ?? 'Umum') ?></p>

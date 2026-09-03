@@ -318,6 +318,99 @@ function cover_url(?string $cover): ?string
 }
 
 /**
+ * URL cover buku — pakai file upload bila ada, kalau tidak ada
+ * buatkan gambar SVG otomatis (judul + penulis + warna per buku).
+ * Jadi semua buku selalu punya gambar tanpa perlu upload & tanpa ubah SQL.
+ *
+ * @param array<string,mixed> $book  Baris buku (id, title, author, category_name, cover)
+ */
+function book_cover_url(array $book): string
+{
+    $uploaded = cover_url(isset($book['cover']) ? (string) $book['cover'] : null);
+    if ($uploaded !== null) {
+        return $uploaded;
+    }
+
+    $title = trim((string) ($book['title'] ?? 'Tanpa Judul'));
+    if ($title === '') {
+        $title = 'Tanpa Judul';
+    }
+    $author = trim((string) ($book['author'] ?? ''));
+    $category = trim((string) ($book['category_name'] ?? ''));
+    $seed = isset($book['id']) ? (int) $book['id'] : (isset($book['book_id']) ? (int) $book['book_id'] : abs(crc32($title)));
+
+    // Palet gradien (tetap untuk tiap buku karena dipilih dari id)
+    $palettes = [
+        ['#1e3a8a', '#3b82f6'],
+        ['#065f46', '#10b981'],
+        ['#7c2d12', '#f59e0b'],
+        ['#701a75', '#d946ef'],
+        ['#7f1d1d', '#ef4444'],
+        ['#0c4a6e', '#06b6d4'],
+        ['#3b0764', '#8b5cf6'],
+        ['#422006', '#eab308'],
+    ];
+    [$c1, $c2] = $palettes[$seed % count($palettes)];
+
+    // Inisial besar dari huruf pertama judul
+    $initial = mb_strtoupper(mb_substr($title, 0, 1, 'UTF-8'), 'UTF-8');
+
+    // Bungkus judul jadi beberapa baris pendek
+    $words = preg_split('/\s+/u', $title, -1, PREG_SPLIT_NO_EMPTY) ?: [$title];
+    $lines = [];
+    $current = '';
+    foreach ($words as $w) {
+        $candidate = $current === '' ? $w : $current . ' ' . $w;
+        if (mb_strlen($candidate, 'UTF-8') > 16 && $current !== '') {
+            $lines[] = $current;
+            $current = $w;
+        } else {
+            $current = $candidate;
+        }
+        if (count($lines) === 3) {
+            break;
+        }
+    }
+    if ($current !== '' && count($lines) < 4) {
+        $lines[] = $current;
+    }
+    $lines = array_slice($lines, 0, 4);
+
+    $esc = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES | ENT_XML1, 'UTF-8');
+    $y = 330;
+    $titleSvg = '';
+    foreach ($lines as $line) {
+        $titleSvg .= '<text x="200" y="' . $y . '" text-anchor="middle" font-family="Georgia, serif" font-size="30" font-weight="bold" fill="#ffffff">' . $esc(mb_substr($line, 0, 22, 'UTF-8')) . '</text>';
+        $y += 38;
+    }
+
+    $authorSvg = $author !== ''
+        ? '<text x="200" y="510" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#e5e7eb">' . $esc(mb_substr($author, 0, 30, 'UTF-8')) . '</text>'
+        : '';
+    $catSvg = $category !== ''
+        ? '<text x="200" y="80" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" letter-spacing="3" fill="#e5e7eb">' . $esc(mb_strtoupper(mb_substr($category, 0, 20, 'UTF-8'), 'UTF-8')) . '</text>'
+        : '';
+
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600">'
+        . '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
+        . '<stop offset="0" stop-color="' . $c1 . '"/><stop offset="1" stop-color="' . $c2 . '"/>'
+        . '</linearGradient></defs>'
+        . '<rect width="400" height="600" fill="url(#g)"/>'
+        . '<circle cx="340" cy="60" r="90" fill="#ffffff" opacity="0.12"/>'
+        . '<circle cx="40" cy="540" r="110" fill="#000000" opacity="0.15"/>'
+        . '<rect x="28" y="28" width="344" height="544" rx="14" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="3"/>'
+        . $catSvg
+        . '<text x="200" y="250" text-anchor="middle" font-family="Georgia, serif" font-size="130" font-weight="bold" fill="#ffffff" opacity="0.9">' . $esc($initial) . '</text>'
+        . '<line x1="120" y1="290" x2="280" y2="290" stroke="#ffffff" stroke-opacity="0.6" stroke-width="2"/>'
+        . $titleSvg
+        . $authorSvg
+        . '<text x="200" y="560" text-anchor="middle" font-family="Verdana, sans-serif" font-size="14" fill="#e5e7eb" opacity="0.8">Pageon Library</text>'
+        . '</svg>';
+
+    return 'data:image/svg+xml;base64,' . base64_encode($svg);
+}
+
+/**
  * Handle book cover upload. Returns filename or null. Throws on invalid.
  * @return array{filename: ?string, error: ?string}
  */

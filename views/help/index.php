@@ -1,7 +1,21 @@
 <div class="mb-8">
-    <h1 class="text-2xl font-bold tracking-tight">Bantuan — Fungsi Tiap Halaman</h1>
-    <p class="mt-1 text-gray-500">Panduan singkat agar tidak bingung memakai Pageon.</p>
+    <h1 class="text-2xl font-bold tracking-tight">Bantuan — Cara Pakai Pageon ❓</h1>
+    <p class="mt-1 text-gray-500">Panduan singkat dengan bahasa sederhana. Baru pertama kali? Baca <strong>Pertanyaan Umum</strong> di bawah dulu.</p>
 </div>
+
+<div class="mb-8 rounded-2xl border border-gray-200 bg-white p-6">
+    <h2 class="font-semibold">❓ Pertanyaan Umum</h2>
+    <div class="mt-3 space-y-3 text-sm text-gray-600">
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Apakah saya harus daftar dulu?</p><p class="mt-1">Ya. Tekan <strong>Daftar</strong>, isi nama + email + password. Setelah itu Anda bisa langsung pinjam buku.</p></div>
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Bagaimana cara meminjam buku?</p><p class="mt-1">Buka <strong>Buku</strong> → klik bukunya → tekan <strong>Pinjam Langsung</strong>. Mau pinjam banyak? Tekan <strong>+ Keranjang</strong> di tiap buku, lalu buka <strong>Keranjang</strong> dan tekan <strong>Pinjam Semua Sekaligus</strong>.</p></div>
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Buku yang saya mau stoknya habis, bagaimana?</p><p class="mt-1">Tekan <strong>Reservasi</strong> untuk ikut antrean. Kalau bukunya kembali, Anda otomatis diprioritaskan dan dapat notifikasi. 🔔</p></div>
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Kapan harus mengembalikan?</p><p class="mt-1">Lihat tanggalnya di <strong>Pinjaman Saya</strong>. Butuh waktu lebih lama? Tekan <strong>Perpanjang</strong> <em>sebelum</em> tanggalnya lewat.</p></div>
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Apa yang terjadi kalau telat mengembalikan?</p><p class="mt-1">Kena <strong>denda per hari</strong> (besarnya lihat di halaman <strong>Denda</strong>). Selama masih ada tagihan, Anda belum bisa pinjam lagi. Bayar dendanya ke petugas perpustakaan.</p></div>
+        <div class="rounded-xl bg-gray-50 p-4"><p class="font-medium text-gray-900">Lupa password?</p><p class="mt-1">Di halaman Masuk, klik <strong>Lupa password?</strong> lalu ikuti langkahnya. Atau minta bantuan admin untuk me-reset password Anda.</p></div>
+    </div>
+</div>
+
+<h2 class="mb-4 text-lg font-semibold">📖 Fungsi Tiap Halaman</h2>
 
 <div class="grid gap-4 lg:grid-cols-2">
     <?php
